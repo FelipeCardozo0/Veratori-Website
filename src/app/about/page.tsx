@@ -324,6 +324,14 @@ function Timeline() {
 
   return (
     <section className="relative py-28 sm:py-36 overflow-hidden">
+      <div 
+        className="absolute inset-0"
+        style={{
+          background: isDark
+            ? 'linear-gradient(to bottom, #42a5f5 0%, #1976d2 5%, #1565c0 10%, #0288d1 15%, #0277bd 20%, #0097a7 25%, #00838f 30%, #00695c 35%, #00897b 40%, #00796b 45%, #388e3c 50%, #2e7d32 55%, #1b5e20 60%, #0d4f8c 70%, #0a3d6b 80%, #00264d 88%, #001a33 92%, #000d1a 96%, #000051 98%, #000020 100%)'
+            : 'linear-gradient(to bottom, #e3f2fd 0%, #bbdefb 5%, #90caf9 10%, #64b5f6 15%, #42a5f5 20%, #2196f3 25%, #1e88e5 30%, #1976d2 35%, #1565c0 40%, #0288d1 45%, #0097a7 50%, #00897b 55%, #00796b 60%, #388e3c 65%, #2e7d32 70%, #1b5e20 75%, #0d4f8c 82%, #0a3d6b 88%, #00264d 93%, #001a33 96%, #000d1a 98%, #000051 99%, #000020 100%)'
+        }}
+      />
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeading
           tag="Our Journey"
@@ -612,41 +620,51 @@ function TeamGrid() {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   PARTNERS — Real restaurant brands, marquee + cards
+   PARTNERS — Real NYC fast-casual brands, marquee + cards
    ═══════════════════════════════════════════════════════════ */
 const clientBrands = [
-  { name: "Poke Bowl", Icon: Fish },
-  { name: "Crack Rice", Icon: Flame },
-  { name: "Sakura Teriyaki Japan", Icon: Cherry },
-  { name: "Black Burger", Icon: Beef },
-  { name: "Los Tacos Hermanos", Icon: Salad },
+  { name: "Poké Bowl", Icon: Fish, logo: "/partners/poke-bowl.png" },
+  { name: "Crack Rice", Icon: Flame, logo: "/partners/crack-rice.png" },
+  { name: "Sakura of Japan Teriyaki", Icon: Cherry, logo: "/partners/sakura-teriyaki.png" },
+  { name: "Black Burger", Icon: Beef, logo: "/partners/black-burger.png" },
+  { name: "Los Tacos Hermanos", Icon: Salad, logo: "/partners/los-tacos-hermanos.png" },
 ];
 
 const clientCards = [
   {
-    name: "Poke Bowl",
-    desc: "Leading Hawaiian poke chain in NYC, streamlining fresh ingredient inventory across all locations.",
+    name: "Poké Bowl",
+    tagline: "Hawaiian-style poke · Est. 2017 · 12+ NYC locations",
+    desc: "Optimizing fresh fish and produce inventory across multiple spots — from Times Square to Hell's Kitchen — to minimize waste in fast-paced poke bowl service.",
     Icon: Fish,
+    logo: "/partners/poke-bowl.png",
   },
   {
     name: "Crack Rice",
-    desc: "Multiple locations optimized for crispy rice production and reduced ingredient waste with real-time tracking.",
+    tagline: "By Poke Bowl United · 5+ NYC locations",
+    desc: "Streamlining addictive crispy rice production and toppings inventory — from Union Square to Canal St — for efficient, crave-worthy appetizers.",
     Icon: Flame,
+    logo: "/partners/crack-rice.png",
   },
   {
-    name: "Sakura Teriyaki Japan",
-    desc: "Authentic Japanese fast-casual dining with precise portion control and stock management powered by Veratori.",
+    name: "Sakura of Japan Teriyaki",
+    tagline: "Japanese fast-casual · John St & 8th Ave",
+    desc: "Enhancing teriyaki bowl efficiency with precise chicken, shrimp, and veggie stock management in high-volume urban eateries.",
     Icon: Cherry,
+    logo: "/partners/sakura-teriyaki.png",
   },
   {
     name: "Black Burger",
-    desc: "Premium burger concept with efficient meat, produce, and bun inventory tracking for minimal spoilage.",
+    tagline: "Premium burgers · SoHo & Manhattan",
+    desc: "Boosting Angus beef and topping inventory for smash burgers, reducing overstock in NYC's competitive burger scene — Canal St and beyond.",
     Icon: Beef,
+    logo: "/partners/black-burger.png",
   },
   {
     name: "Los Tacos Hermanos",
-    desc: "Authentic Mexican tacos with optimized fresh produce and protein usage across every preparation stage.",
+    tagline: "Authentic Mexican · 8th Ave & Canal St",
+    desc: "Optimizing fresh tortilla, meat, and salsa supplies for burritos and birria tacos in bustling Manhattan locations.",
     Icon: Salad,
+    logo: "/partners/los-tacos-hermanos.png",
   },
 ];
 
@@ -657,13 +675,22 @@ function PartnersSection() {
 
   return (
     <section className="relative py-28 sm:py-36 overflow-hidden">
-      {/* Distinct tri-brand gradient background */}
+      {/* Distinct layered diagonal gradient background */}
       <div
         className="absolute inset-0"
         style={{
           background: isDark
-            ? "linear-gradient(135deg, rgba(38,64,206,0.12) 0%, rgba(95,151,79,0.12) 50%, rgba(171,206,225,0.12) 100%), #0E1526"
-            : "linear-gradient(135deg, rgba(38,64,206,0.06) 0%, rgba(95,151,79,0.06) 50%, rgba(171,206,225,0.06) 100%), #F2F6F9",
+            ? "linear-gradient(160deg, rgba(38,64,206,0.14) 0%, rgba(14,21,38,1) 30%, rgba(95,151,79,0.12) 60%, rgba(171,206,225,0.10) 100%)"
+            : "linear-gradient(160deg, rgba(38,64,206,0.07) 0%, rgba(242,246,249,1) 30%, rgba(95,151,79,0.06) 60%, rgba(171,206,225,0.08) 100%)",
+        }}
+      />
+      {/* Subtle cross-hatch pattern */}
+      <div
+        className="absolute inset-0 opacity-[0.03] pointer-events-none"
+        style={{
+          backgroundImage: `repeating-linear-gradient(45deg, ${
+            isDark ? "rgba(255,255,255,0.15)" : "rgba(14,21,38,0.1)"
+          } 0px, transparent 1px, transparent 16px)`,
         }}
       />
 
@@ -672,33 +699,34 @@ function PartnersSection() {
           tag="Our Clients"
           title="Trusted by"
           highlight="Industry Leaders"
-          subtitle="Powering inventory intelligence for some of New York's most exciting food brands."
+          subtitle="Powering inventory intelligence for some of New York's most exciting fast-casual food brands."
         />
 
-        {/* ── Marquee logos ── */}
+        {/* ── Marquee logos — grayscale to sage tint on hover ── */}
         <InfiniteMarquee speed={28} className="mb-16">
           {clientBrands.map((brand) => (
             <div
               key={brand.name}
-              className={`flex-shrink-0 mx-6 flex items-center gap-3 px-6 py-4 rounded-xl border transition-colors duration-300 ${
+              className={`flex-shrink-0 mx-6 flex items-center gap-4 px-7 py-4 rounded-xl border transition-all duration-300 ${
                 isDark
-                  ? "border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.05]"
-                  : "border-midnight/[0.06] bg-white/60 hover:bg-white"
+                  ? "border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.06] hover:border-sage/20"
+                  : "border-midnight/[0.06] bg-white/60 hover:bg-white hover:border-sage/20"
               } group`}
             >
-              <brand.Icon
-                className={`w-5 h-5 flex-shrink-0 transition-colors duration-300 ${
-                  isDark
-                    ? "text-white/25 group-hover:text-sage"
-                    : "text-midnight/25 group-hover:text-sage"
-                }`}
-                strokeWidth={1.6}
-              />
+              <div className="relative w-8 h-8 flex-shrink-0 rounded-lg overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-400">
+                <Image
+                  src={brand.logo}
+                  alt={brand.name}
+                  fill
+                  className="object-contain group-hover:scale-105 transition-transform duration-300"
+                  sizes="32px"
+                />
+              </div>
               <span
                 className={`text-base font-semibold tracking-wide whitespace-nowrap transition-colors duration-300 ${
                   isDark
-                    ? "text-white/20 group-hover:text-white/60"
-                    : "text-midnight/20 group-hover:text-midnight/60"
+                    ? "text-white/20 group-hover:text-sage"
+                    : "text-midnight/20 group-hover:text-sage"
                 }`}
               >
                 {brand.name}
@@ -707,10 +735,10 @@ function PartnersSection() {
           ))}
         </InfiniteMarquee>
 
-        {/* ── Client feature cards ── */}
+        {/* ── Client feature cards — 2-3 columns with logo, description, hover lift/glow ── */}
         <div
           ref={ref}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           {clientCards.map((p, i) => (
             <motion.div
@@ -718,25 +746,38 @@ function PartnersSection() {
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className={`partner-card-glow rounded-2xl border p-6 ${
+              className={`partner-card-glow rounded-2xl border p-7 ${
                 isDark
                   ? "bg-white/[0.03] border-white/[0.06] hover:bg-white/[0.06]"
                   : "bg-white border-midnight/[0.06] hover:shadow-xl"
               } transition-all duration-300`}
             >
-              <div className="bg-electric/10 text-electric w-11 h-11 rounded-xl flex items-center justify-center mb-4">
-                <p.Icon className="w-5 h-5" strokeWidth={1.8} />
+              <div className="flex items-center gap-4 mb-4">
+                <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-electric/10 flex items-center justify-center flex-shrink-0">
+                  <Image
+                    src={p.logo}
+                    alt={p.name}
+                    fill
+                    className="object-contain p-1.5"
+                    sizes="48px"
+                  />
+                </div>
+                <div>
+                  <h3
+                    className={`text-base font-bold ${
+                      isDark ? "text-white" : "text-midnight"
+                    }`}
+                  >
+                    {p.name}
+                  </h3>
+                  <p className="text-xs text-sage font-medium mt-0.5">
+                    {p.tagline}
+                  </p>
+                </div>
               </div>
-              <h3
-                className={`text-base font-bold mb-2 ${
-                  isDark ? "text-white" : "text-midnight"
-                }`}
-              >
-                {p.name}
-              </h3>
               <p
                 className={`text-sm leading-relaxed ${
-                  isDark ? "text-white/45" : "text-midnight/45"
+                  isDark ? "text-white/50" : "text-midnight/50"
                 }`}
               >
                 {p.desc}
