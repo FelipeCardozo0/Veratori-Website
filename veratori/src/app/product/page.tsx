@@ -5,12 +5,12 @@ import { motion, useInView } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { ArrowRight, TrendingDown, Boxes, Bell, BarChart3, LayoutDashboard, ShieldCheck, BrainCircuit, ShieldAlert, ScanLine, Zap } from "lucide-react";
+import { ArrowRight, TrendingDown, Boxes, Bell, BarChart3, LayoutDashboard, ShieldCheck, BrainCircuit, ShieldAlert, ScanLine, Zap, Camera, Cpu, Database, AlertCircle, Monitor, Building2, Clock, Mail, TrendingUp } from "lucide-react";
 import { useTheme } from "@/components/ThemeProvider";
 import SectionHeading from "@/components/SectionHeading";
 import InfiniteMarquee from "@/components/InfiniteMarquee";
+import { equal } from "node:assert";
 
-const Warehouse3D = dynamic(() => import("@/components/Warehouse3D"), { ssr: false });
 const ObjectDetection = dynamic(() => import("@/components/ObjectDetection"), { ssr: false });
 
 /* ═══════════════════════════════════════════════════════
@@ -367,64 +367,26 @@ function FeatureGrid() {
 }
 
 /* ═══════════════════════════════════════════════════════
-   3D WAREHOUSE
-   ═══════════════════════════════════════════════════════ */
-function Warehouse3DSection() {
-  const { isDark } = useTheme();
-  return (
-    <section className="relative py-28 overflow-hidden">
-      <div className={`absolute inset-0 ${isDark ? "bg-gradient-to-b from-midnight to-midnight-light" : "bg-gradient-to-b from-mist to-white"}`} />
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          tag="Visualize"
-          title="See Your Warehouse in"
-          highlight="3D"
-          subtitle="Interactive spatial intelligence gives you a bird's-eye view of every shelf."
-        />
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className={`rounded-2xl overflow-hidden border h-[400px] sm:h-[500px] ${
-            isDark ? "bg-midnight-light border-white/[0.06]" : "bg-white border-midnight/[0.06] shadow-xl"
-          }`}
-        >
-          <Suspense
-            fallback={
-              <div className="w-full h-full flex items-center justify-center">
-                <span className={isDark ? "text-white/30" : "text-midnight/30"}>Loading 3D…</span>
-              </div>
-            }
-          >
-            <Warehouse3D />
-          </Suspense>
-        </motion.div>
-      </div>
-    </section>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════
    ADVANCED INTELLIGENCE — Predictive, Security, LiDAR
    ═══════════════════════════════════════════════════════ */
 const intelligenceCards = [
   {
     title: "AI Predictive Analytics",
-    desc: "Anticipate sales and revenue with AI-driven forecasting tailored for food retail. Reduce overstock, minimize waste, and optimize ordering based on real-time trends, seasonality, and historical data.",
+    desc: "Leverage automated sales detection and historical trends to forecast demand with precision. AI-driven insights reduce overstock, minimize waste, and optimize ordering based on validated sales patterns and seasonality.",
     Icon: BrainCircuit,
     accent: "sage" as const,
     img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=700&q=80",
   },
   {
     title: "24/7 AI-Powered Security",
-    desc: "Transform existing cameras into intelligent monitors. Continuous anomaly detection, intrusion alerts, and operational oversight for total warehouse security without additional hardware.",
+    desc: "Continuous monitoring with anomaly detection for operational security. Real-time alerts notify you of unusual patterns, ensuring warehouse integrity and preventing losses through automated surveillance.",
     Icon: ShieldAlert,
     accent: "electric" as const,
     img: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=700&q=80",
   },
   {
     title: "LiDAR Integration",
-    desc: "Precise 3D spatial mapping for accurate inventory volume measurement, automated rack scanning, and optimized space utilization. Bird\u2019s-eye accuracy meets real-world efficiency.",
+    desc: "Optional 3D spatial mapping for enhanced volume measurement and space optimization. Advanced scanning capabilities provide additional precision for complex warehouse layouts.",
     Icon: ScanLine,
     accent: "sky" as const,
     img: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=700&q=80",
@@ -455,7 +417,7 @@ function AdvancedIntelligence() {
           tag="Advanced Intelligence"
           title="Predictive Insights &"
           highlight="Spatial Precision"
-          subtitle="AI forecasting, real-time security monitoring, and LiDAR-powered 3D mapping — integrated into one platform."
+          subtitle="AI forecast ing, real-time security monitoring, and LiDAR-powered 3D mapping — integrated into one platform."
         />
 
         {/* Cards */}
@@ -570,6 +532,217 @@ function AdvancedIntelligence() {
 }
 
 /* ═══════════════════════════════════════════════════════
+   HOW IT WORKS — Animated flowchart
+   ═══════════════════════════════════════════════════════ */
+const workflowSteps = [
+  {
+    title: "Camera Capture",
+    desc: "Real-time video feed from edge cameras captures inventory continuously.",
+    Icon: Camera,
+    color: "electric",
+  },
+  {
+    title: "Real-Time YOLO Detection",
+    desc: "NVIDIA Jetson edge devices run YOLO inference at 15-30 FPS, detecting 40+ product classes with GPU-accelerated precision.",
+    Icon: Cpu,
+    color: "sage",
+  },
+  {
+    title: "Inventory Tracking & Smoothing",
+    desc: "Temporal smoothing algorithms ensure accurate counts by filtering detection noise and tracking product movements across snapshots.",
+    Icon: TrendingUp,
+    color: "electric",
+  },
+  {
+    title: "Persistent Insights & Alerts",
+    desc: "SQLite storage with 30-day retention tracks freshness timestamps, expiration monitoring, and automated sales attribution. Low stock and expiration warnings trigger email notifications.",
+    Icon: AlertCircle,
+    color: "sage",
+  },
+  {
+    title: "Secure Web Dashboard",
+    desc: "Centralized dashboard aggregates data across locations, delivering daily manager summaries and actionable insights before full franchise data arrives.",
+    Icon: Monitor,
+    color: "electric",
+  },
+];
+
+function HowItWorks() {
+  const { isDark } = useTheme();
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+
+  return (
+    <section className="relative py-28 sm:py-36 overflow-hidden">
+      <div className={`absolute inset-0 ${isDark ? "bg-midnight" : "bg-mist"}`} />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-sage/[0.03] blur-[160px]" />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <SectionHeading
+          tag="How It Works"
+          title="How"
+          highlight="Veratori Works"
+          subtitle="Edge-based computer vision meets intelligent tracking for real-time inventory accuracy."
+        />
+
+        {/* Flowchart cards */}
+        <div ref={ref} className="mt-16 space-y-8">
+          {workflowSteps.map((step, i) => {
+            const accentMap = {
+              sage: { bg: "bg-sage/10", text: "text-sage", border: "border-sage/20" },
+              electric: { bg: "bg-electric/10", text: "text-electric", border: "border-electric/20" },
+            };
+            const accent = accentMap[step.color as keyof typeof accentMap];
+
+            return (
+              <motion.div
+                key={step.title}
+                initial={{ opacity: 0, x: i % 2 === 0 ? -40 : 40 }}
+                animate={inView ? { opacity: 1, x: 0 } : {}}
+                transition={{ duration: 0.6, delay: i * 0.15 }}
+                className={`group relative rounded-2xl border p-6 sm:p-8 ${
+                  isDark
+                    ? "bg-white/[0.02] border-white/[0.06] hover:bg-white/[0.05] hover:shadow-xl"
+                    : "bg-white border-midnight/[0.06] hover:shadow-xl"
+                } transition-all duration-300`}
+              >
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                  {/* Icon */}
+                  <div className={`flex-shrink-0 w-16 h-16 rounded-xl flex items-center justify-center ${accent.bg} ${accent.text} group-hover:scale-110 transition-transform duration-300`}>
+                    <step.Icon className="w-8 h-8" strokeWidth={1.8} />
+                  </div>
+
+                  {/* Content */}
+                  <div className="flex-1">
+                    <h3 className={`text-xl font-bold mb-2 ${isDark ? "text-white" : "text-midnight"}`}>
+                      {step.title}
+                    </h3>
+                    <p className={`text-sm leading-relaxed ${isDark ? "text-white/50" : "text-midnight/50"}`}>
+                      {step.desc}
+                    </p>
+                  </div>
+
+                  {/* Arrow connector (hidden on last) */}
+                  {i < workflowSteps.length - 1 && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={inView ? { opacity: 1, scale: 1 } : {}}
+                      transition={{ delay: i * 0.15 + 0.3 }}
+                      className="hidden sm:flex flex-shrink-0 items-center justify-center w-12 h-12 rounded-full bg-electric/10"
+                    >
+                      <ArrowRight className={`w-5 h-5 ${accent.text}`} />
+                    </motion.div>
+                  )}
+                </div>
+
+                {/* Hover glow */}
+                <div className={`absolute inset-0 rounded-2xl ${accent.border} opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none`} style={{ boxShadow: `0 0 24px ${step.color === "sage" ? "rgba(95,151,79,0.15)" : "rgba(38,64,206,0.15)"}` }} />
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/* Detailed descriptions */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.8 }}
+          className={`mt-16 grid grid-cols-1 md:grid-cols-2 gap-6`}
+        >
+          <div className={`rounded-xl border p-6 ${
+            isDark ? "bg-white/[0.02] border-white/[0.06]" : "bg-white border-midnight/[0.06]"
+          }`}>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-lg bg-electric/10 text-electric flex items-center justify-center">
+                <Cpu className="w-5 h-5" />
+              </div>
+              <h4 className={`text-lg font-bold ${isDark ? "text-white" : "text-midnight"}`}>
+                Edge AI Processing
+              </h4>
+            </div>
+            <p className={`text-sm leading-relaxed ${isDark ? "text-white/50" : "text-midnight/50"}`}>
+              Real-time computer vision runs on NVIDIA Jetson edge devices, delivering efficient GPU inference at 15-30 FPS. YOLO detection identifies 40+ product classes with temporal smoothing for accurate counts, eliminating the need for cloud processing delays.
+            </p>
+          </div>
+
+          <div className={`rounded-xl border p-6 ${
+            isDark ? "bg-white/[0.02] border-white/[0.06]" : "bg-white border-midnight/[0.06]"
+          }`}>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-lg bg-sage/10 text-sage flex items-center justify-center">
+                <Clock className="w-5 h-5" />
+              </div>
+              <h4 className={`text-lg font-bold ${isDark ? "text-white" : "text-midnight"}`}>
+                Freshness & Sales Tracking
+              </h4>
+            </div>
+            <p className={`text-sm leading-relaxed ${isDark ? "text-white/50" : "text-midnight/50"}`}>
+              Product freshness tracking uses first-seen timestamps with configurable expiration monitoring. Automatic sales attribution validates decreases across snapshots, while the alert system triggers low stock warnings and expiration notifications via email.
+            </p>
+          </div>
+
+          <div className={`rounded-xl border p-6 ${
+            isDark ? "bg-white/[0.02] border-white/[0.06]" : "bg-white border-midnight/[0.06]"
+          }`}>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-lg bg-electric/10 text-electric flex items-center justify-center">
+                <Database className="w-5 h-5" />
+              </div>
+              <h4 className={`text-lg font-bold ${isDark ? "text-white" : "text-midnight"}`}>
+                Persistent Storage
+              </h4>
+            </div>
+            <p className={`text-sm leading-relaxed ${isDark ? "text-white/50" : "text-midnight/50"}`}>
+              SQLite storage maintains 30-day retention with graceful restart recovery. All inventory data persists locally on edge devices, ensuring continuity even during network interruptions.
+            </p>
+          </div>
+
+          <div className={`rounded-xl border p-6 ${
+            isDark ? "bg-white/[0.02] border-white/[0.06]" : "bg-white border-midnight/[0.06]"
+          }`}>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-lg bg-sage/10 text-sage flex items-center justify-center">
+                <ShieldAlert className="w-5 h-5" />
+              </div>
+              <h4 className={`text-lg font-bold ${isDark ? "text-white" : "text-midnight"}`}>
+                24/7 Monitoring
+              </h4>
+            </div>
+            <p className={`text-sm leading-relaxed ${isDark ? "text-white/50" : "text-midnight/50"}`}>
+              Continuous anomaly detection monitors operational security, alerting teams to unusual patterns or system issues. Automated surveillance ensures warehouse integrity around the clock.
+            </p>
+          </div>
+        </motion.div>
+
+        {/* Multi-Location Intelligence */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 1.0 }}
+          className={`mt-12 rounded-2xl border p-8 ${
+            isDark ? "bg-gradient-to-br from-electric/[0.08] to-sage/[0.08] border-white/[0.06]" : "bg-gradient-to-br from-electric/[0.04] to-sage/[0.04] border-midnight/[0.06]"
+          }`}
+        >
+          <div className="flex items-start gap-4">
+            <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-sage/15 text-sage flex items-center justify-center">
+              <Building2 className="w-6 h-6" />
+            </div>
+            <div>
+              <h4 className={`text-xl font-bold mb-2 ${isDark ? "text-white" : "text-midnight"}`}>
+                Multi-Location Intelligence
+              </h4>
+              <p className={`text-base leading-relaxed ${isDark ? "text-white/60" : "text-midnight/60"}`}>
+                Daily manager summaries deliver actionable insights before full franchise data arrives. Aggregate inventory, sales trends, and alerts across all locations for centralized oversight. Multi-location aggregation enables franchise-wide visibility with real-time updates from each edge device.
+              </p>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════
    TF.js DETECTION DEMO
    ═══════════════════════════════════════════════════════ */
 function DetectionSection() {
@@ -584,6 +757,14 @@ function DetectionSection() {
           highlight="Object Detection"
           subtitle="Experience real-time inventory recognition using TensorFlow.js — runs entirely in your browser."
         />
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className={`text-xs text-center mb-6 ${isDark ? "text-white/40" : "text-midnight/40"}`}
+        >
+          Live demo simulates our production YOLO system running on edge hardware.
+        </motion.p>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -691,8 +872,8 @@ export default function ProductPage() {
       <ProductHero />
       <WasteComparison />
       <FeatureGrid />
-      <Warehouse3DSection />
       <AdvancedIntelligence />
+      <HowItWorks />
       <DetectionSection />
       <DashboardMockup />
     </>
