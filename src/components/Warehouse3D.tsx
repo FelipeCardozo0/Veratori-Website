@@ -139,10 +139,11 @@ function RotatingLight() {
 }
 
 /* ═══════════════════════════════════════════════════════
-   LiDAR POINT CLOUD — simulated scan effect
+   LiDAR POINT CLOUD — simulated scan effect with scanning animation
    ═══════════════════════════════════════════════════════ */
 function LidarPointCloud({ pointCount = 2000 }: { pointCount?: number }) {
   const ref = useRef<THREE.Points>(null);
+  const scanPlaneRef = useRef<THREE.Mesh>(null);
 
   const { positions, colors } = useMemo(() => {
     const pos = new Float32Array(pointCount * 3);
@@ -176,30 +177,51 @@ function LidarPointCloud({ pointCount = 2000 }: { pointCount?: number }) {
       const mat = ref.current.material as THREE.PointsMaterial;
       mat.opacity = 0.12 + Math.sin(t * 0.5) * 0.04;
     }
+    // Scanning plane animation - vertical sweep
+    if (scanPlaneRef.current) {
+      const t = clock.elapsedTime;
+      scanPlaneRef.current.position.y = (Math.sin(t * 0.8) * 1.5) + 1.5;
+      const mat = scanPlaneRef.current.material as THREE.MeshStandardMaterial;
+      mat.opacity = 0.15 + Math.sin(t * 0.8) * 0.1;
+    }
   });
 
   return (
-    <points ref={ref}>
-      <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          args={[positions, 3]}
+    <>
+      <points ref={ref}>
+        <bufferGeometry>
+          <bufferAttribute
+            attach="attributes-position"
+            args={[positions, 3]}
+          />
+          <bufferAttribute
+            attach="attributes-color"
+            args={[colors, 3]}
+          />
+        </bufferGeometry>
+        <pointsMaterial
+          size={0.04}
+          vertexColors
+          transparent
+          opacity={0.15}
+          sizeAttenuation
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
         />
-        <bufferAttribute
-          attach="attributes-color"
-          args={[colors, 3]}
+      </points>
+      {/* Scanning plane effect */}
+      <mesh ref={scanPlaneRef} position={[0, 1.5, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[12, 8]} />
+        <meshStandardMaterial
+          color="#2640CE"
+          transparent
+          opacity={0.15}
+          emissive="#2640CE"
+          emissiveIntensity={0.3}
+          side={THREE.DoubleSide}
         />
-      </bufferGeometry>
-      <pointsMaterial
-        size={0.04}
-        vertexColors
-        transparent
-        opacity={0.15}
-        sizeAttenuation
-        depthWrite={false}
-        blending={THREE.AdditiveBlending}
-      />
-    </points>
+      </mesh>
+    </>
   );
 }
 

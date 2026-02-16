@@ -3,18 +3,8 @@
 import { useRef, useEffect, useState } from "react";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import Image from "next/image";
-import Link from "next/link";
-import {
-  ArrowRight,
-  Fish,
-  Flame,
-  Cherry,
-  Beef,
-  Salad,
-} from "lucide-react";
 import { useTheme } from "@/components/ThemeProvider";
 import SectionHeading from "@/components/SectionHeading";
-import InfiniteMarquee from "@/components/InfiniteMarquee";
 
 /* ═══════════════════════════════════════════════════════════
    HERO PARTICLES — Lightweight Framer Motion floating dots
@@ -324,14 +314,7 @@ function Timeline() {
 
   return (
     <section className="relative py-28 sm:py-36 overflow-hidden">
-      <div 
-        className="absolute inset-0"
-        style={{
-          background: isDark
-            ? 'linear-gradient(to bottom, #42a5f5 0%, #1976d2 5%, #1565c0 10%, #0288d1 15%, #0277bd 20%, #0097a7 25%, #00838f 30%, #00695c 35%, #00897b 40%, #00796b 45%, #388e3c 50%, #2e7d32 55%, #1b5e20 60%, #0d4f8c 70%, #0a3d6b 80%, #00264d 88%, #001a33 92%, #000d1a 96%, #000051 98%, #000020 100%)'
-            : 'linear-gradient(to bottom, #e3f2fd 0%, #bbdefb 5%, #90caf9 10%, #64b5f6 15%, #42a5f5 20%, #2196f3 25%, #1e88e5 30%, #1976d2 35%, #1565c0 40%, #0288d1 45%, #0097a7 50%, #00897b 55%, #00796b 60%, #388e3c 65%, #2e7d32 70%, #1b5e20 75%, #0d4f8c 82%, #0a3d6b 88%, #00264d 93%, #001a33 96%, #000d1a 98%, #000051 99%, #000020 100%)'
-        }}
-      />
+      <div className={`absolute inset-0 ${isDark ? "bg-midnight" : "bg-mist"}`} />
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeading
           tag="Our Journey"
@@ -620,237 +603,6 @@ function TeamGrid() {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   PARTNERS — Real NYC fast-casual brands, marquee + cards
-   ═══════════════════════════════════════════════════════════ */
-const clientBrands = [
-  { name: "Poké Bowl", Icon: Fish, logo: "/partners/poke-bowl.png" },
-  { name: "Crack Rice", Icon: Flame, logo: "/partners/crack-rice.png" },
-  { name: "Sakura of Japan Teriyaki", Icon: Cherry, logo: "/partners/sakura-teriyaki.png" },
-  { name: "Black Burger", Icon: Beef, logo: "/partners/black-burger.png" },
-  { name: "Los Tacos Hermanos", Icon: Salad, logo: "/partners/los-tacos-hermanos.png" },
-];
-
-const clientCards = [
-  {
-    name: "Poké Bowl",
-    tagline: "Hawaiian-style poke · Est. 2017 · 12+ NYC locations",
-    desc: "Optimizing fresh fish and produce inventory across multiple spots — from Times Square to Hell's Kitchen — to minimize waste in fast-paced poke bowl service.",
-    Icon: Fish,
-    logo: "/partners/poke-bowl.png",
-  },
-  {
-    name: "Crack Rice",
-    tagline: "By Poke Bowl United · 5+ NYC locations",
-    desc: "Streamlining addictive crispy rice production and toppings inventory — from Union Square to Canal St — for efficient, crave-worthy appetizers.",
-    Icon: Flame,
-    logo: "/partners/crack-rice.png",
-  },
-  {
-    name: "Sakura of Japan Teriyaki",
-    tagline: "Japanese fast-casual · John St & 8th Ave",
-    desc: "Enhancing teriyaki bowl efficiency with precise chicken, shrimp, and veggie stock management in high-volume urban eateries.",
-    Icon: Cherry,
-    logo: "/partners/sakura-teriyaki.png",
-  },
-  {
-    name: "Black Burger",
-    tagline: "Premium burgers · SoHo & Manhattan",
-    desc: "Boosting Angus beef and topping inventory for smash burgers, reducing overstock in NYC's competitive burger scene — Canal St and beyond.",
-    Icon: Beef,
-    logo: "/partners/black-burger.png",
-  },
-  {
-    name: "Los Tacos Hermanos",
-    tagline: "Authentic Mexican · 8th Ave & Canal St",
-    desc: "Optimizing fresh tortilla, meat, and salsa supplies for burritos and birria tacos in bustling Manhattan locations.",
-    Icon: Salad,
-    logo: "/partners/los-tacos-hermanos.png",
-  },
-];
-
-function PartnersSection() {
-  const { isDark } = useTheme();
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
-
-  return (
-    <section className="relative py-28 sm:py-36 overflow-hidden">
-      {/* Distinct layered diagonal gradient background */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background: isDark
-            ? "linear-gradient(160deg, rgba(38,64,206,0.14) 0%, rgba(14,21,38,1) 30%, rgba(95,151,79,0.12) 60%, rgba(171,206,225,0.10) 100%)"
-            : "linear-gradient(160deg, rgba(38,64,206,0.07) 0%, rgba(242,246,249,1) 30%, rgba(95,151,79,0.06) 60%, rgba(171,206,225,0.08) 100%)",
-        }}
-      />
-      {/* Subtle cross-hatch pattern */}
-      <div
-        className="absolute inset-0 opacity-[0.03] pointer-events-none"
-        style={{
-          backgroundImage: `repeating-linear-gradient(45deg, ${
-            isDark ? "rgba(255,255,255,0.15)" : "rgba(14,21,38,0.1)"
-          } 0px, transparent 1px, transparent 16px)`,
-        }}
-      />
-
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          tag="Our Clients"
-          title="Trusted by"
-          highlight="Industry Leaders"
-          subtitle="Powering inventory intelligence for some of New York's most exciting fast-casual food brands."
-        />
-
-        {/* ── Marquee logos — grayscale to sage tint on hover ── */}
-        <InfiniteMarquee speed={28} className="mb-16">
-          {clientBrands.map((brand) => (
-            <div
-              key={brand.name}
-              className={`flex-shrink-0 mx-6 flex items-center gap-4 px-7 py-4 rounded-xl border transition-all duration-300 ${
-                isDark
-                  ? "border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.06] hover:border-sage/20"
-                  : "border-midnight/[0.06] bg-white/60 hover:bg-white hover:border-sage/20"
-              } group`}
-            >
-              <div className="relative w-8 h-8 flex-shrink-0 rounded-lg overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-400">
-                <Image
-                  src={brand.logo}
-                  alt={brand.name}
-                  fill
-                  className="object-contain group-hover:scale-105 transition-transform duration-300"
-                  sizes="32px"
-                />
-              </div>
-              <span
-                className={`text-base font-semibold tracking-wide whitespace-nowrap transition-colors duration-300 ${
-                  isDark
-                    ? "text-white/20 group-hover:text-sage"
-                    : "text-midnight/20 group-hover:text-sage"
-                }`}
-              >
-                {brand.name}
-              </span>
-            </div>
-          ))}
-        </InfiniteMarquee>
-
-        {/* ── Client feature cards — 2-3 columns with logo, description, hover lift/glow ── */}
-        <div
-          ref={ref}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-        >
-          {clientCards.map((p, i) => (
-            <motion.div
-              key={p.name}
-              initial={{ opacity: 0, y: 30 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              className={`partner-card-glow rounded-2xl border p-7 ${
-                isDark
-                  ? "bg-white/[0.03] border-white/[0.06] hover:bg-white/[0.06]"
-                  : "bg-white border-midnight/[0.06] hover:shadow-xl"
-              } transition-all duration-300`}
-            >
-              <div className="flex items-center gap-4 mb-4">
-                <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-electric/10 flex items-center justify-center flex-shrink-0">
-                  <Image
-                    src={p.logo}
-                    alt={p.name}
-                    fill
-                    className="object-contain p-1.5"
-                    sizes="48px"
-                  />
-                </div>
-                <div>
-                  <h3
-                    className={`text-base font-bold ${
-                      isDark ? "text-white" : "text-midnight"
-                    }`}
-                  >
-                    {p.name}
-                  </h3>
-                  <p className="text-xs text-sage font-medium mt-0.5">
-                    {p.tagline}
-                  </p>
-                </div>
-              </div>
-              <p
-                className={`text-sm leading-relaxed ${
-                  isDark ? "text-white/50" : "text-midnight/50"
-                }`}
-              >
-                {p.desc}
-              </p>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════
-   FINAL CTA
-   ═══════════════════════════════════════════════════════════ */
-function FinalCTA() {
-  const { isDark } = useTheme();
-
-  return (
-    <section className="relative py-28 sm:py-36 overflow-hidden">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-electric/[0.05] blur-[120px]" />
-
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="relative z-10 max-w-3xl mx-auto px-4 text-center"
-      >
-        <h2
-          className={`text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-6 ${
-            isDark ? "text-white" : "text-midnight"
-          }`}
-        >
-          Join Us in Reducing{" "}
-          <span className="bg-gradient-to-r from-electric to-sage bg-clip-text text-transparent">
-            Waste
-          </span>
-        </h2>
-        <p
-          className={`text-base sm:text-lg mb-10 leading-relaxed ${
-            isDark ? "text-white/50" : "text-midnight/50"
-          }`}
-        >
-          Every business that joins Veratori makes the global food system more
-          efficient and more ethical. Let us show you how.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link href="/contact">
-            <motion.span
-              whileHover={{ scale: 1.03, y: -1 }}
-              whileTap={{ scale: 0.98 }}
-              className="inline-flex items-center gap-2 px-8 py-4 bg-electric text-white font-semibold rounded-xl glow-electric glow-electric-hover transition-all duration-300 cursor-pointer"
-            >
-              Get in Touch
-              <ArrowRight className="w-4 h-4" />
-            </motion.span>
-          </Link>
-          <Link href="/product">
-            <motion.span
-              whileHover={{ scale: 1.03, y: -1 }}
-              whileTap={{ scale: 0.98 }}
-              className="inline-block px-8 py-4 border border-sage/30 text-sage rounded-xl font-semibold hover:bg-sage/[0.08] transition-all duration-300 cursor-pointer"
-            >
-              Explore the Platform
-            </motion.span>
-          </Link>
-        </div>
-      </motion.div>
-    </section>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════
    PAGE ASSEMBLY — Full-page diagonal gradient + grain
    ═══════════════════════════════════════════════════════════ */
 export default function AboutPage() {
@@ -865,8 +617,6 @@ export default function AboutPage() {
       <Timeline />
       <ValuesCards />
       <TeamGrid />
-      <PartnersSection />
-      <FinalCTA />
     </div>
   );
 }

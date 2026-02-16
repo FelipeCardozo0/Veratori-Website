@@ -11,7 +11,6 @@ import SectionHeading from "@/components/SectionHeading";
 import InfiniteMarquee from "@/components/InfiniteMarquee";
 import { equal } from "node:assert";
 
-const Warehouse3D = dynamic(() => import("@/components/Warehouse3D"), { ssr: false });
 const ObjectDetection = dynamic(() => import("@/components/ObjectDetection"), { ssr: false });
 
 /* ═══════════════════════════════════════════════════════
@@ -306,14 +305,7 @@ function FeatureGrid() {
 
   return (
     <section className="relative py-28 sm:py-36 overflow-hidden">
-      <div 
-        className="absolute inset-0"
-        style={{
-          background: isDark
-            ? 'linear-gradient(to bottom, #ff8a50 0%, #ff6b35 5%, #ff5722 15%, #e64a19 25%, #d84315 35%, #bf360c 50%, #8d2f0a 65%, #5d1f07 75%, #3e2723 85%, #2c1810 92%, #1a0000 97%, #0a0000 100%)'
-            : 'linear-gradient(to bottom, #fff3e0 0%, #ffe0b2 5%, #ffcc80 10%, #ffb74d 15%, #ffa726 20%, #ff9800 25%, #fb8c00 30%, #f57c00 35%, #ef6c00 40%, #e65100 50%, #bf360c 60%, #8d2f0a 70%, #5d1f07 80%, #3e2723 88%, #2c1810 94%, #1a0000 98%, #0a0000 100%)'
-        }}
-      />
+      <div className={`absolute inset-0 ${isDark ? "bg-midnight" : "bg-mist"}`} />
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeading
           tag="Features"
@@ -369,44 +361,6 @@ function FeatureGrid() {
             );
           })}
         </div>
-      </div>
-    </section>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════
-   3D WAREHOUSE
-   ═══════════════════════════════════════════════════════ */
-function Warehouse3DSection() {
-  const { isDark } = useTheme();
-  return (
-    <section className="relative py-28 overflow-hidden">
-      <div className={`absolute inset-0 ${isDark ? "bg-gradient-to-b from-midnight to-midnight-light" : "bg-gradient-to-b from-mist to-white"}`} />
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          tag="Visualize"
-          title="See Your Warehouse in"
-          highlight="3D"
-          subtitle="Interactive spatial intelligence gives you a bird's-eye view of every shelf."
-        />
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className={`rounded-2xl overflow-hidden border h-[400px] sm:h-[500px] ${
-            isDark ? "bg-midnight-light border-white/[0.06]" : "bg-white border-midnight/[0.06] shadow-xl"
-          }`}
-        >
-          <Suspense
-            fallback={
-              <div className="w-full h-full flex items-center justify-center">
-                <span className={isDark ? "text-white/30" : "text-midnight/30"}>Loading 3D…</span>
-              </div>
-            }
-          >
-            <Warehouse3D />
-          </Suspense>
-        </motion.div>
       </div>
     </section>
   );
@@ -918,7 +872,6 @@ export default function ProductPage() {
       <ProductHero />
       <WasteComparison />
       <FeatureGrid />
-      <Warehouse3DSection />
       <AdvancedIntelligence />
       <HowItWorks />
       <DetectionSection />

@@ -107,7 +107,7 @@ function Hero() {
         />
 
         <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.6 }} className={`text-base sm:text-lg md:text-xl max-w-3xl mx-auto mb-10 leading-relaxed ${isDark ? "text-white/60" : "text-midnight/60"}`}>
-          A secure, reliable platform that reduces food waste, optimizes space, and empowers precise operations for food retail and logistics worldwide.
+          Real-time edge AI for instant inventory accuracy. Daily manager insights across franchises. 24/7 monitoring with automated alerts. A secure, reliable platform that reduces food waste, optimizes space, and empowers precise operations for food retail and logistics worldwide.
         </motion.p>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.9 }} className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -136,22 +136,22 @@ function Hero() {
 /* ═══════════════════ KEY CAPABILITIES ═══════════════════ */
 const capabilities = [
   {
-    title: "Predictive Analytics",
-    desc: "AI-driven forecasting anticipates demand, reduces overstock, and minimizes waste based on real-time trends.",
+    title: "Real-Time Edge AI",
+    desc: "Instant inventory accuracy with NVIDIA Jetson-powered YOLO detection running at 15-30 FPS. Edge processing eliminates cloud delays for immediate insights.",
     Icon: BrainCircuit,
     accent: "sage",
     href: "/product",
   },
   {
-    title: "LiDAR 3D Mapping",
-    desc: "Precise spatial scanning for accurate volume measurement, rack optimization, and real-time space utilization.",
+    title: "Daily Manager Insights",
+    desc: "Actionable summaries deliver franchise-wide intelligence before full data arrives. Aggregate inventory, sales trends, and alerts across all locations.",
     Icon: ScanLine,
     accent: "electric",
     href: "/product",
   },
   {
-    title: "24/7 AI Monitoring",
-    desc: "Transform existing cameras into intelligent security systems with continuous anomaly detection and alerts.",
+    title: "24/7 Monitoring & Alerts",
+    desc: "Continuous anomaly detection with automated alerts for low stock, expiration warnings, and operational security. Email notifications keep teams informed.",
     Icon: ShieldAlert,
     accent: "sky",
     href: "/product",

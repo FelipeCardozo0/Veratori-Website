@@ -12,6 +12,7 @@ const navLinks = [
   { label: "Product", href: "/product" },
   { label: "About Us", href: "/about" },
   { label: "Mission", href: "/mission" },
+  { label: "Pricing", href: "/pricing" },
   { label: "Contact", href: "/contact" },
 ];
 

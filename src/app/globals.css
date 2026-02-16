@@ -124,6 +124,66 @@ html { scroll-behavior: smooth; }
   transform: translateY(-5px);
 }
 
+/* ─── Pricing page — inventory grid background ─── */
+.pricing-bg-dark {
+  background:
+    linear-gradient(135deg, #0E1526 0%, rgba(171,206,225,0.06) 100%),
+    #0E1526;
+}
+.pricing-bg-light {
+  background:
+    linear-gradient(135deg, #F2F6F9 0%, rgba(38,64,206,0.04) 100%),
+    #F2F6F9;
+}
+.pricing-grid-pattern {
+  position: relative;
+}
+.pricing-grid-pattern::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  opacity: 0.025;
+  background-image:
+    linear-gradient(rgba(171,206,225,0.6) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(171,206,225,0.6) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─── Pricing card hover glow ─── */
+.pricing-card-glow {
+  transition: box-shadow 0.35s ease, transform 0.35s ease;
+}
+.pricing-card-glow:hover {
+  box-shadow: 0 0 32px rgba(38,64,206,0.20), 0 12px 40px rgba(38,64,206,0.10);
+  transform: translateY(-6px);
+}
+
+/* ─── Pricing toggle switch ─── */
+.pricing-toggle {
+  position: relative;
+  width: 56px;
+  height: 28px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.pricing-toggle-knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: white;
+  transition: transform 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+.pricing-toggle.active .pricing-toggle-knob {
+  transform: translateX(28px);
+}
+
 /* ─── TF.js Detection canvas ─── */
 .detection-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 
