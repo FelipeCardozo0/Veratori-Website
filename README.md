@@ -6,28 +6,27 @@
 [![Flutter](https://img.shields.io/badge/Flutter-3.0+-02569B?logo=flutter)](https://flutter.dev/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-**Cutting-edge SaaS platform for ethical inventory management in food retail and logistics**
+Veratori is a comprehensive inventory management platform for food retail and logistics. The system combines real-time AI object detection, multi-franchise management, mobile restock documentation, and advanced analytics to reduce food waste by up to 40% while optimizing space utilization and operational efficiency.
 
-AI-driven forecasting • Real-time object detection • Multi-franchise management • Mobile restock app • 40% waste reduction
-
-[Quick Start](#quick-start) • [Features](#features) • [Architecture](#architecture) • [Mobile App](#mobile-app) • [Documentation](#documentation)
+**Quick Links**: [Quick Start](#quick-start) | [Features](#features) | [Architecture](#architecture) | [Mobile App](#mobile-app) | [Documentation](#documentation)
 
 ---
 
 ## Overview
 
-Veratori is a comprehensive inventory management platform that combines real-time AI detection, multi-franchise management, mobile restock documentation, and advanced analytics to reduce food waste by up to 40% while optimizing space utilization and delivering precise, waste-free operations.
+Veratori integrates multiple components to deliver a complete inventory management solution:
 
-![Veratori Platform Overview](docs/images/platform-overview.png)
-
-### Key Capabilities
-
-- **Real-time AI Detection**: YOLO v8+ object detection with GPU acceleration
-- **Multi-Franchise Dashboard**: Executive control room for managing multiple locations
-- **Mobile Restock App**: Flutter-based employee app for documenting restock actions
+- **Real-time AI Detection**: YOLO v8+ object detection with GPU acceleration for accurate product identification
+- **Multi-Franchise Dashboard**: Centralized executive control room for managing multiple locations
+- **Mobile Restock App**: Flutter-based employee application for documenting restock actions
 - **Advanced Analytics**: Trend analysis, forecasting, and operational intelligence
-- **Automated Alerts**: Low-stock and expiration monitoring with notifications
+- **Automated Alerts**: Low-stock and expiration monitoring with real-time notifications
 - **Sales Attribution**: Automatic sales detection and tracking
+
+**Result**: Up to 40% reduction in food waste, optimized space utilization, and precise waste-free operations.
+
+![Platform Overview](docs/images/platform-overview.png)
+*Veratori platform architecture and component integration*
 
 ---
 
@@ -43,55 +42,117 @@ Veratori is a comprehensive inventory management platform that combines real-tim
 **Multi-Franchise Management**
 - Centralized control room for all locations
 - Cross-franchise comparison and benchmarking
-- Role-based access control (Owner, Regional Manager, Supervisor, Employee)
+- Weighted aggregation for accurate metrics
 
 **Executive Dashboard**
 - Real-time KPI tracking and analytics
-- Sales trends and inventory turnover analysis
 - Predictive stockout estimation
-- Financial impact estimation
+- Financial impact analysis
+- Operational risk assessment
 
-**System Monitoring**
-- Live activity feed with real-time events
-- System health monitoring (GPU usage, latency, database health)
-- Automated alerts for low-stock and expiration
-- WebSocket-based real-time updates
+**Role-Based Access Control**
+- Owner, Regional Manager, Supervisor, Employee roles
+- Franchise-scoped data access
+- Secure session-based authentication
+
+**Live Operational Intelligence**
+- Real-time activity feed
+- System health monitoring (GPU, latency, database)
+- WebSocket-based updates
+
+**Automated Alerts**
+- Low-stock notifications
+- Expiration monitoring
+- Configurable thresholds per product
+
+**Sales Attribution**
+- Automatic sales detection
+- SKU-level accuracy
+- EST timestamp tracking
 
 **Data Persistence**
 - SQLite database with audit trails
-- Inventory snapshots and sales attribution
-- Complete operational history
+- Inventory snapshots and history
+- Sales logs and alert records
+
+![Dashboard Screenshot](docs/images/dashboard-screenshot.png)
+*Executive control room dashboard with real-time KPIs and analytics*
 
 ### Mobile App (Flutter)
 
 **Employee Restock Submissions**
-- Photo-based restock documentation (minimum 3 photos)
-- Real-time YOLO detection preview before submission
-- Submission management with status tracking
-- Push notifications for manager reviews
-- Cross-platform support (iOS and Android)
-- Offline capability for intermittent connectivity
+- Photo-based restock documentation
+- Minimum 3 photos per submission (front, left, right)
+- Optional additional angles
 
-![Mobile App Interface](docs/images/mobile-app-screenshot.png)
+**YOLO Detection Preview**
+- Real-time product detection before submission
+- Visual bounding boxes with detected quantities
+- Employee verification and retake capability
+
+**Submission Management**
+- View all submissions with status tracking
+- Filter by date, status, and product
+- Detection results display
+
+**Push Notifications**
+- Manager review updates
+- Status change notifications
+- Unread count tracking
+
+**Cross-Platform Support**
+- iOS and Android deployment
+- Offline capability
+- Session persistence
+
+![Mobile App Screenshot](docs/images/mobile-app-screenshot.png)
+*Flutter mobile app interface for employee restock submissions*
 
 ### Web Dashboard
 
 **Business Control Room**
 - Executive KPI strip with real-time metrics
-- Franchise comparison with side-by-side analysis
-- Advanced analytics with interactive charts
-- Forecast snapshot with predictive insights
-- Risk and attention panel for operational issues
-- Restock moderation workflow for managers
-- Export and reporting (PDF and Excel)
+- Period-over-period comparisons
+- Delta indicators and trend analysis
 
-![Web Dashboard](docs/images/dashboard-screenshot.png)
+**Franchise Comparison**
+- Side-by-side performance analysis
+- Best performer highlighting
+- Comparative KPIs
+
+**Advanced Analytics**
+- Sales trends and forecasting
+- Inventory turnover rates
+- Alert frequency analysis
+- Uptime stability metrics
+
+**Forecast Snapshot**
+- Predictive stockout estimation
+- Estimated restock windows
+- Trend confidence indicators
+
+**Risk & Attention Panel**
+- Highlighted operational issues
+- Quantified impact estimates
+- Actionable recommendations
+
+**Restock Moderation**
+- Manager review and approval workflow
+- Status management (Pending, Approved, Flagged, Adjustment Required)
+- Feedback system
+- Photo gallery view
+
+**Export & Reporting**
+- PDF business reports
+- Excel data exports
+- Scheduled report delivery
+
+![Analytics Dashboard](docs/images/analytics-dashboard.png)
+*Advanced analytics with trend analysis and forecasting*
 
 ---
 
 ## Architecture
-
-### System Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -127,7 +188,8 @@ Veratori is a comprehensive inventory management platform that combines real-tim
 └─────────────────────────────────────────────────────────────┘
 ```
 
-![Architecture Diagram](docs/images/architecture-diagram.png)
+![System Architecture](docs/images/system-architecture.png)
+*Complete system architecture diagram*
 
 ### Tech Stack
 
@@ -163,27 +225,36 @@ Veratori is a comprehensive inventory management platform that combines real-tim
 
 Employee-facing mobile application for documenting restock actions through structured photo submissions.
 
-**Key Features:**
+**Features**
 - Photo capture (minimum 3 photos: front, left, right)
 - Real-time YOLO detection preview
 - Submission management with status tracking
 - Push notifications for manager reviews
 - Role-based access (employees only see their franchise)
 
-**Setup:**
+**Setup**
+
 ```bash
 cd Poke-Bowl---updated-January/veratori_restock_flutter
 flutter pub get
 flutter run
 ```
 
-**Configuration:**
+**Configuration**
+
 Update `lib/services/api_service.dart` with your backend URL:
+
 ```dart
 _baseUrl = 'http://YOUR_SERVER_IP:8080';
 ```
 
-See [veratori_restock_flutter/README.md](Poke-Bowl---updated-January/veratori_restock_flutter/README.md) for full documentation.
+For production, use HTTPS:
+
+```dart
+_baseUrl = 'https://your-domain.com';
+```
+
+See [veratori_restock_flutter/README.md](Poke-Bowl---updated-January/veratori_restock_flutter/README.md) for complete documentation.
 
 ---
 
@@ -199,12 +270,14 @@ See [veratori_restock_flutter/README.md](Poke-Bowl---updated-January/veratori_re
 ### Installation
 
 **1. Clone Repository**
+
 ```bash
 git clone https://github.com/FelipeCardozo0/Veratori.git
 cd Veratori/Poke-Bowl---updated-January
 ```
 
 **2. Backend Setup**
+
 ```bash
 # Install dependencies
 pip3 install -r requirements.txt
@@ -220,11 +293,13 @@ python3 main.py
 ```
 
 **3. Access Web Dashboard**
+
 ```
 http://localhost:8080
 ```
 
 **4. Production Deployment (Auto-start)**
+
 ```bash
 cd deployment
 sudo bash setup_autostart.sh
@@ -232,6 +307,9 @@ sudo reboot
 ```
 
 **Full installation guide**: [QUICKSTART.md](QUICKSTART.md)
+
+![Installation Process](docs/images/installation-process.png)
+*Step-by-step installation and deployment process*
 
 ---
 
@@ -243,36 +321,32 @@ Veratori/
 │   ├── backend/                        # Python backend
 │   │   ├── main.py                     # Entry point
 │   │   ├── camera.py                   # Camera handler
-│   │   ├── detector.py                 # YOLO inference
-│   │   ├── inventory.py                # Inventory tracking
-│   │   ├── server.py                   # Web server + APIs
-│   │   ├── restock_manager.py          # Restock submission manager
-│   │   └── auth.py                     # Authentication
-│   ├── frontend/                        # Web dashboard
-│   │   ├── home.html                   # Executive control room
-│   │   ├── index.html                  # Main dashboard
-│   │   ├── upload.html                 # Upload + moderation
-│   │   ├── analytics.html              # Analytics page
-│   │   └── login.html                  # Authentication
-│   ├── veratori_restock_flutter/       # Mobile app
+│   │   ├── detector.py                # YOLO inference
+│   │   ├── inventory.py               # Inventory tracking
+│   │   ├── server.py                  # Web server + APIs
+│   │   ├── restock_manager.py         # Restock submission manager
+│   │   └── auth.py                    # Authentication
+│   ├── frontend/                       # Web dashboard
+│   │   ├── home.html                  # Executive control room
+│   │   ├── index.html                 # Main dashboard
+│   │   ├── upload.html                # Upload + moderation
+│   │   ├── analytics.html             # Analytics page
+│   │   └── login.html                 # Authentication
+│   ├── veratori_restock_flutter/      # Mobile app
 │   │   ├── lib/
-│   │   │   ├── screens/                 # App screens
-│   │   │   ├── login_screen.dart
-│   │   │   ├── upload_restock_screen.dart
-│   │   │   ├── submissions_screen.dart
-│   │   │   └── notifications_screen.dart
-│   │   │   ├── services/               # API services
-│   │   │   └── providers/              # State management
+│   │   │   ├── screens/               # App screens
+│   │   │   ├── services/              # API services
+│   │   │   └── providers/             # State management
 │   │   └── pubspec.yaml
-│   ├── config/                         # Configuration
+│   ├── config/                        # Configuration
 │   │   └── config.yaml
-│   ├── deployment/                     # Deployment scripts
+│   ├── deployment/                    # Deployment scripts
 │   │   ├── setup_jetson.sh
 │   │   └── setup_autostart.sh
-│   └── best.pt                          # Pre-trained YOLO model
-├── src/                                 # Next.js marketing site
-│   └── app/                            # Marketing pages
-└── docs/                               # Documentation
+│   └── best.pt                         # Pre-trained YOLO model
+├── src/                                # Next.js marketing site
+│   └── app/                           # Marketing pages
+└── docs/                              # Documentation
 ```
 
 ---
@@ -305,34 +379,15 @@ Veratori/
 
 | Metric | Typical | Optimized |
 |--------|---------|-----------|
-| FPS | 18-22 | 25-30 |
-| Latency | 60ms | <50ms |
-| Inference | 35ms | 30ms |
-| CPU Usage | 40% | 35% |
-| GPU Usage | 35% | 40% |
-| Memory | 200MB | 180MB |
+| **FPS** | 18-22 | 25-30 |
+| **Latency** | 60ms | <50ms |
+| **Inference** | 35ms | 30ms |
+| **CPU Usage** | 40% | 35% |
+| **GPU Usage** | 35% | 40% |
+| **Memory** | 200MB | 180MB |
 
----
-
-## Brand Palette
-
-- **Deep Midnight** `#0E1526` — primary dark base
-- **Sage Operation** `#5F974F` — ethical green
-- **Electric Blue** `#2640CE` — action/alerts
-- **Sky Tint** `#ABCEE1` — light accents
-- **Mist** `#F2F6F9` — cool white background
-
----
-
-## Documentation
-
-| Document | Description |
-|----------|-------------|
-| [QUICKSTART.md](QUICKSTART.md) | 10-minute setup guide |
-| [ARCHITECTURE.md](ARCHITECTURE.md) | Technical architecture |
-| [SYSTEM_DIAGRAM.md](SYSTEM_DIAGRAM.md) | Visual system diagrams |
-| [DEPLOYMENT_CHECKLIST.md](DEPLOYMENT_CHECKLIST.md) | Production deployment |
-| [veratori_restock_flutter/README.md](Poke-Bowl---updated-January/veratori_restock_flutter/README.md) | Mobile app documentation |
+![Performance Metrics](docs/images/performance-metrics.png)
+*System performance benchmarks and optimization results*
 
 ---
 
@@ -378,24 +433,28 @@ server:
 ## Usage
 
 ### Start Backend
+
 ```bash
 cd backend
 python3 main.py
 ```
 
 ### Start as Service
+
 ```bash
 sudo systemctl start veratori-inventory
 sudo systemctl status veratori-inventory
 ```
 
 ### View Logs
+
 ```bash
 sudo journalctl -u veratori-inventory -f
 tail -f /tmp/veratori_inventory.log
 ```
 
 ### Mobile App
+
 ```bash
 cd veratori_restock_flutter
 flutter run
@@ -406,12 +465,14 @@ flutter run
 ## Troubleshooting
 
 ### Camera not detected
+
 ```bash
 v4l2-ctl --list-devices
 # Update config.yaml with correct device index
 ```
 
 ### Low FPS
+
 ```bash
 # Enable max performance
 sudo nvpmodel -m 0
@@ -419,15 +480,29 @@ sudo jetson_clocks
 ```
 
 ### Service won't start
+
 ```bash
 # Check logs
 sudo journalctl -u veratori-inventory -n 50
 ```
 
 ### Mobile app connection issues
+
 - Verify backend server is running
 - Check API base URL in `api_service.dart`
 - Ensure firewall allows connections
+
+---
+
+## Documentation
+
+| Document | Description |
+|----------|-------------|
+| **[QUICKSTART.md](QUICKSTART.md)** | 10-minute setup guide |
+| **[ARCHITECTURE.md](ARCHITECTURE.md)** | Technical architecture |
+| **[SYSTEM_DIAGRAM.md](SYSTEM_DIAGRAM.md)** | Visual system diagrams |
+| **[DEPLOYMENT_CHECKLIST.md](DEPLOYMENT_CHECKLIST.md)** | Production deployment |
+| **[veratori_restock_flutter/README.md](Poke-Bowl---updated-January/veratori_restock_flutter/README.md)** | Mobile app documentation |
 
 ---
 

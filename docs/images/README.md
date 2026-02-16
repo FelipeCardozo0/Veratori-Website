@@ -1,27 +1,32 @@
 # Documentation Images
 
-This directory contains images for the Veratori platform documentation.
+This directory contains images and screenshots for the Veratori platform documentation.
 
 ## Required Images
 
-The following images are referenced in the README:
+The following images should be added to this directory:
 
-1. **platform-overview.png** - Overview diagram of the Veratori platform showing all components
-2. **mobile-app-screenshot.png** - Screenshot of the Flutter mobile app interface
-3. **dashboard-screenshot.png** - Screenshot of the web dashboard
-4. **architecture-diagram.png** - Detailed architecture diagram
+1. **platform-overview.png** - High-level platform architecture diagram showing all components
+2. **dashboard-screenshot.png** - Screenshot of the executive control room dashboard
+3. **mobile-app-screenshot.png** - Screenshot of the Flutter mobile app interface
+4. **analytics-dashboard.png** - Screenshot of the analytics page with charts and metrics
+5. **system-architecture.png** - Detailed system architecture diagram
+6. **installation-process.png** - Visual guide for installation steps
+7. **performance-metrics.png** - Performance benchmarks and optimization results
+8. **dashboard-preview.png** - Preview image for the GitHub repository
+9. **mobile-app-preview.png** - Preview image of the mobile app
 
 ## Image Specifications
 
-- **Format**: PNG or SVG
-- **Resolution**: Minimum 1200px width for screenshots
-- **Style**: Professional, clean, consistent with brand palette
+- **Format**: PNG or JPG
+- **Recommended Size**: 1200x800 pixels for screenshots, 1600x900 for diagrams
+- **File Size**: Optimize to under 500KB per image
+- **Style**: Professional, clean, consistent color scheme matching Veratori brand
 
-## Placeholder Images
+## Adding Images
 
-Until actual screenshots are available, you can use placeholder images or create diagrams using tools like:
-- Draw.io / diagrams.net
-- Figma
-- Excalidraw
-- Screenshots from the actual application
-
+1. Capture screenshots from the running application
+2. Create architecture diagrams using tools like draw.io or Lucidchart
+3. Optimize images for web (compress if needed)
+4. Add images to this directory
+5. Update README.md to reference the images
