@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { useState, useRef, useEffect } from "react";
+import { motion, useInView, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Check,
   ArrowRight,
@@ -25,245 +26,98 @@ import {
   Mail,
   TrendingUp,
 } from "lucide-react";
-import { useTheme } from "@/components/ThemeProvider";
-import SectionHeading from "@/components/SectionHeading";
+import SectionHeading from "@/components/ui/SectionHeading";
 
 
 /* ═══════════════════════════════════════════════════════════
    PRICING DATA
    ═══════════════════════════════════════════════════════════ */
-const tiers = [
-  {
-    name: "Starter",
-    yearly: 470,
-    description:
-      "Perfect for small businesses starting their inventory optimization journey.",
-    features: [
-      { text: "Basic inventory tracking", Icon: Package },
-      { text: "Waste alerts & notifications", Icon: Bell },
-      { text: "Up to 2 locations", Icon: Gauge },
-      { text: "Standard reporting dashboard", Icon: BarChart3 },
-      { text: "Email support", Icon: Headphones },
-    ],
-    accent: "electric",
-    popular: false,
-  },
-  {
-    name: "Professional",
-    yearly: 950,
-    description:
-      "For growing teams that need edge AI detection, multi-location oversight, and deeper integrations.",
-    features: [
-      { text: "AI demand forecasting", Icon: BrainCircuit },
-      { text: "Multi-location aggregation", Icon: Building2 },
-      { text: "Freshness & expiration tracking", Icon: Clock },
-      { text: "Automated sales detection", Icon: TrendingUp },
-      { text: "Up to 10 locations", Icon: Gauge },
-      { text: "Advanced analytics & insights", Icon: BarChart3 },
-      { text: "Multi-user collaboration", Icon: Users },
-      { text: "Priority support", Icon: Headphones },
-    ],
-    accent: "sage",
-    popular: true,
-  },
-  {
-    name: "Enterprise",
-    yearly: 2870,
-    description:
-      "Full-scale edge deployment with dedicated support, 24/7 monitoring, and custom API access.",
-    features: [
-      { text: "24/7 security monitoring", Icon: Shield },
-      { text: "Multi-location aggregation", Icon: Building2 },
-      { text: "Freshness & expiration tracking", Icon: Clock },
-      { text: "Automated sales detection", Icon: TrendingUp },
-      { text: "Custom alerts & email notifications", Icon: Mail },
-      { text: "Custom API access", Icon: Code2 },
-      { text: "Unlimited locations", Icon: Gauge },
-      { text: "Dedicated account manager", Icon: Headphones },
-      { text: "SSO & role-based access", Icon: Lock },
-      { text: "Custom integrations", Icon: Database },
-      { text: "Real-time 3D warehouse mapping", Icon: Zap },
-    ],
-    accent: "electric",
-    popular: false,
-  },
-];
+const pricingInfo = {
+  title: "Value-Based Pricing",
+  subtitle: "Simple, transparent, and performance-based. Pay for the measurable value we create for your operations.",
+  details: [
+    { label: "One-time installation fee", highlight: true },
+    { label: "First month free", highlight: false },
+    { label: "Pricing: 20%–40% of Value Created", highlight: true },
+    { label: "~$1,500 per month per location", highlight: false },
+  ],
+};
 
-/* ═══════════════════════════════════════════════════════════
-   PRICING HERO
-   ═══════════════════════════════════════════════════════════ */
-function PricingHero() {
-  const { isDark } = useTheme();
 
-  return (
-    <section className="relative pt-36 sm:pt-44 pb-8 overflow-hidden">
-      {/* Ambient blurs */}
-      <div className="absolute top-16 right-[-6rem] w-[420px] h-[420px] rounded-full bg-electric/[0.04] blur-[120px]" />
-      <div className="absolute bottom-0 left-[-4rem] w-[350px] h-[350px] rounded-full bg-sage/[0.04] blur-[100px]" />
-
-      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center">
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-xs sm:text-sm font-semibold text-sage uppercase tracking-[0.2em] mb-5"
-        >
-          Pricing
-        </motion.p>
-
-        <motion.h1
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.08 }}
-          className={`text-4xl sm:text-5xl md:text-6xl lg:text-[4.25rem] font-bold tracking-tight leading-[1.08] ${
-            isDark ? "text-white" : "text-midnight"
-          }`}
-        >
-          Choose Your{" "}
-          <span className="bg-gradient-to-r from-electric to-sage bg-clip-text text-transparent">
-            Veratori Plan
-          </span>
-        </motion.h1>
-
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className={`mt-6 text-base sm:text-lg md:text-xl max-w-2xl mx-auto leading-relaxed ${
-            isDark ? "text-white/55" : "text-midnight/55"
-          }`}
-        >
-          Yearly billing for ethical inventory management
-          tailored to your business size.
-        </motion.p>
-      </div>
-    </section>
-  );
-}
 
 /* ═══════════════════════════════════════════════════════════
    PRICING CARDS
    ═══════════════════════════════════════════════════════════ */
 function PricingCards() {
-  const { isDark } = useTheme();
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
 
   return (
-    <section className="relative py-12 sm:py-20 overflow-hidden">
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div
-          ref={ref}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8"
+    <section id="plans" className="relative py-[6%] overflow-hidden">
+      <div className="relative z-10 max-w-2xl mx-auto px-[5.2%]">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={inView ? { opacity: 1, scale: 1 } : {}}
+          transition={{ duration: 0.6 }}
+          className="pricing-card-glow relative rounded-3xl border border-sage/30 bg-white/[0.04] p-[clamp(32px,4vw,64px)] overflow-hidden backdrop-blur-[24px] saturate-[1.4] text-center"
         >
-          {tiers.map((tier, i) => {
-            const accentColor =
-              tier.accent === "sage" ? "sage" : "electric";
+          {/* Accent decoration */}
+          <div className="absolute top-0 right-0 w-[50%] h-[50%] bg-sage/15 blur-[80px] rounded-full pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-[50%] h-[50%] bg-electric/15 blur-[80px] rounded-full pointer-events-none" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-white/[0.01] pointer-events-none noise-overlay opacity-30" />
 
-            return (
-              <motion.div
-                key={tier.name}
-                initial={{ opacity: 0, y: 40 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: i * 0.15 }}
-                className={`pricing-card-glow relative rounded-2xl border overflow-hidden ${
-                  tier.popular
-                    ? isDark
-                      ? "border-sage/30 bg-white/[0.04]"
-                      : "border-sage/30 bg-white shadow-xl"
-                    : isDark
-                    ? "border-white/[0.06] bg-white/[0.02]"
-                    : "border-midnight/[0.06] bg-white shadow-md"
-                } transition-all duration-300`}
-              >
-                {/* Popular badge */}
-                {tier.popular && (
-                  <div className="absolute top-0 left-0 right-0 bg-gradient-to-r from-sage to-sage-light text-white text-center text-xs font-bold uppercase tracking-widest py-2">
-                    Most Popular
-                  </div>
-                )}
+          <h3 className="text-[clamp(24px,2.5vw,32px)] font-bold mb-[clamp(24px,3vw,40px)] text-white">
+            Value-Based Partnership
+          </h3>
 
-                <div className={`p-8 ${tier.popular ? "pt-12" : ""}`}>
-                  {/* Title */}
-                  <h3
-                    className={`text-xl font-bold mb-2 ${
-                      isDark ? "text-white" : "text-midnight"
+          <div className="space-y-[clamp(32px,4vw,48px)] mb-[clamp(40px,5vw,56px)]">
+            {/* Implementation Fee & Free Month Group */}
+            <div className="space-y-[clamp(8px,1vw,12px)]">
+              {pricingInfo.details.slice(0, 2).map((detail, idx) => (
+                <div
+                  key={idx}
+                  className={`transition-all duration-300 ${detail.highlight
+                    ? "text-[clamp(20px,2vw,28px)] font-bold text-white leading-tight"
+                    : "text-[clamp(16px,1.4vw,20px)] text-white/60 font-medium"
                     }`}
-                  >
-                    {tier.name}
-                  </h3>
-                  <p
-                    className={`text-sm mb-6 leading-relaxed ${
-                      isDark ? "text-white/45" : "text-midnight/45"
-                    }`}
-                  >
-                    {tier.description}
-                  </p>
-
-                  {/* Price */}
-                  <div className="mb-8">
-                    <div className="flex items-baseline gap-1">
-                      <span
-                        className={`text-5xl font-bold tracking-tight ${
-                          isDark ? "text-white" : "text-midnight"
-                        }`}
-                      >
-                        ${tier.yearly}
-                      </span>
-                      <span
-                        className={`text-sm font-medium ${
-                          isDark ? "text-white/40" : "text-midnight/40"
-                        }`}
-                      >
-                        /yr
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Features */}
-                  <ul className="space-y-3.5 mb-8">
-                    {tier.features.map((f) => (
-                      <li key={f.text} className="flex items-start gap-3">
-                        <div
-                          className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                            accentColor === "sage"
-                              ? "bg-sage/15 text-sage"
-                              : "bg-electric/15 text-electric"
-                          }`}
-                        >
-                          <Check className="w-3 h-3" strokeWidth={2.5} />
-                        </div>
-                        <span
-                          className={`text-sm leading-snug ${
-                            isDark ? "text-white/65" : "text-midnight/65"
-                          }`}
-                        >
-                          {f.text}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  {/* CTA */}
-                  <Link href="/contact">
-                    <motion.span
-                      whileHover={{ scale: 1.02, y: -1 }}
-                      whileTap={{ scale: 0.98 }}
-                      className={`w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-sm transition-all duration-300 cursor-pointer ${
-                        tier.popular
-                          ? "bg-sage text-white glow-sage glow-sage-hover"
-                          : "bg-electric text-white glow-electric glow-electric-hover"
-                      }`}
-                    >
-                      Get Started
-                      <ArrowRight className="w-4 h-4" />
-                    </motion.span>
-                  </Link>
+                >
+                  {detail.label}
                 </div>
-              </motion.div>
-            );
-          })}
-        </div>
+              ))}
+            </div>
+
+            {/* Value-Based Pricing Group */}
+            <div className="space-y-[clamp(8px,1vw,12px)]">
+              {pricingInfo.details.slice(2, 4).map((detail, idx) => (
+                <div
+                  key={idx + 2}
+                  className={`transition-all duration-300 ${detail.highlight
+                    ? "text-[clamp(20px,2vw,28px)] font-bold text-white leading-tight"
+                    : "text-[clamp(16px,1.4vw,20px)] text-white/60 font-medium"
+                    }`}
+                >
+                  {detail.label}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* CTA */}
+          <Link href="/contact" className="inline-block relative z-10">
+            <motion.span
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+              className="inline-flex items-center gap-[0.5em] px-[clamp(32px,3vw,48px)] py-[clamp(16px,2vw,20px)] bg-sage text-white font-bold rounded-2xl glow-sage glow-sage-hover transition-all duration-300 cursor-pointer text-[clamp(16px,1.2vw,20px)] shadow-2xl"
+            >
+              Start Optimizing
+              <ArrowRight className="w-[1.2em] h-[1.2em]" />
+            </motion.span>
+          </Link>
+
+          <p className="mt-[clamp(24px,2vw,32px)] text-[clamp(12px,1vw,14px)] text-white/30 italic">
+            *Value created is calculated based on waste reduction, labor savings, and inventory accuracy.
+          </p>
+        </motion.div>
       </div>
     </section>
   );
@@ -315,38 +169,31 @@ const comparisonFeatures = [
 ];
 
 function ComparisonTable() {
-  const { isDark } = useTheme();
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
 
   const renderCell = (value: boolean | string) => {
     if (typeof value === "string") {
       return (
-        <span
-          className={`text-sm font-medium ${
-            isDark ? "text-white/70" : "text-midnight/70"
-          }`}
-        >
+        <span className="text-[clamp(12px,1vw,14px)] font-medium text-white/70">
           {value}
         </span>
       );
     }
     return value ? (
-      <div className="w-5 h-5 rounded-full bg-sage/15 flex items-center justify-center mx-auto">
-        <Check className="w-3 h-3 text-sage" strokeWidth={2.5} />
+      <div className="w-[clamp(16px,1.5vw,20px)] h-[clamp(16px,1.5vw,20px)] rounded-full bg-sage/15 flex items-center justify-center mx-auto">
+        <Check className="w-[10px] h-[10px] text-sage" strokeWidth={2.5} />
       </div>
     ) : (
-      <span
-        className={`text-sm ${isDark ? "text-white/15" : "text-midnight/15"}`}
-      >
+      <span className="text-[clamp(12px,1vw,14px)] text-white/15">
         —
       </span>
     );
   };
 
   return (
-    <section className="relative py-20 sm:py-28 overflow-hidden">
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="relative py-[8%] overflow-hidden">
+      <div className="relative z-10 max-w-5xl mx-auto px-[5.2%]">
         <SectionHeading
           tag="Compare Plans"
           title="Feature"
@@ -362,35 +209,17 @@ function ComparisonTable() {
           transition={{ duration: 0.6 }}
           className="hidden md:block"
         >
-          <div
-            className={`rounded-2xl border overflow-hidden ${
-              isDark
-                ? "border-white/[0.06] bg-white/[0.02]"
-                : "border-midnight/[0.06] bg-white shadow-lg"
-            }`}
-          >
+          <div className="rounded-2xl border overflow-hidden border-white/[0.06] bg-white/[0.02] backdrop-blur-[24px] saturate-[1.4]">
             {/* Header */}
-            <div
-              className={`grid grid-cols-4 ${
-                isDark ? "bg-white/[0.03]" : "bg-mist"
-              }`}
-            >
-              <div className="p-5">
-                <span
-                  className={`text-sm font-semibold ${
-                    isDark ? "text-white/50" : "text-midnight/50"
-                  }`}
-                >
+            <div className="grid grid-cols-4 bg-white/[0.03]">
+              <div className="p-[clamp(12px,1.5vw,20px)]">
+                <span className="text-[clamp(12px,1vw,14px)] font-semibold text-white/50">
                   Features
                 </span>
               </div>
               {["Starter", "Professional", "Enterprise"].map((t) => (
-                <div key={t} className="p-5 text-center">
-                  <span
-                    className={`text-sm font-bold ${
-                      isDark ? "text-white" : "text-midnight"
-                    }`}
-                  >
+                <div key={t} className="p-[clamp(12px,1.5vw,20px)] text-center">
+                  <span className="text-[clamp(12px,1.1vw,14px)] font-bold text-white">
                     {t}
                   </span>
                 </div>
@@ -400,42 +229,31 @@ function ComparisonTable() {
             {/* Rows */}
             {comparisonFeatures.map((cat) => (
               <div key={cat.category}>
-                <div
-                  className={`px-5 py-3 ${
-                    isDark ? "bg-electric/[0.04]" : "bg-electric/[0.03]"
-                  }`}
-                >
-                  <span className="text-xs font-bold uppercase tracking-widest text-electric">
+                <div className="px-[clamp(16px,2vw,20px)] py-[clamp(8px,1vw,12px)] bg-electric/[0.04]">
+                  <span className="text-[clamp(10px,0.85vw,12px)] font-bold uppercase tracking-widest text-electric">
                     {cat.category}
                   </span>
                 </div>
                 {cat.features.map((f, idx) => (
                   <div
                     key={f.name}
-                    className={`grid grid-cols-4 ${
-                      idx < cat.features.length - 1
-                        ? isDark
-                          ? "border-b border-white/[0.04]"
-                          : "border-b border-midnight/[0.04]"
-                        : ""
-                    }`}
+                    className={`grid grid-cols-4 ${idx < cat.features.length - 1
+                      ? "border-b border-white/[0.04]"
+                      : ""
+                      }`}
                   >
-                    <div className="p-4 pl-5">
-                      <span
-                        className={`text-sm ${
-                          isDark ? "text-white/60" : "text-midnight/60"
-                        }`}
-                      >
+                    <div className="p-[clamp(12px,1.5vw,16px)] pl-[clamp(16px,2vw,20px)] flex items-center">
+                      <span className="text-[clamp(12px,1vw,14px)] text-white/60">
                         {f.name}
                       </span>
                     </div>
-                    <div className="p-4 text-center">
+                    <div className="p-[clamp(12px,1.5vw,16px)] text-center flex items-center justify-center">
                       {renderCell(f.starter)}
                     </div>
-                    <div className="p-4 text-center">
+                    <div className="p-[clamp(12px,1.5vw,16px)] text-center flex items-center justify-center">
                       {renderCell(f.pro)}
                     </div>
-                    <div className="p-4 text-center">
+                    <div className="p-[clamp(12px,1.5vw,16px)] text-center flex items-center justify-center">
                       {renderCell(f.enterprise)}
                     </div>
                   </div>
@@ -446,7 +264,7 @@ function ComparisonTable() {
         </motion.div>
 
         {/* Mobile accordions */}
-        <div className="md:hidden space-y-4">
+        <div className="md:hidden space-y-[clamp(12px,1.5vw,16px)] mt-[clamp(24px,3vw,32px)]">
           {comparisonFeatures.map((cat) => (
             <MobileComparisonAccordion key={cat.category} category={cat} />
           ))}
@@ -456,45 +274,27 @@ function ComparisonTable() {
   );
 }
 
-/* ─── Mobile comparison accordion item ─── */
 function MobileComparisonAccordion({
   category,
 }: {
   category: (typeof comparisonFeatures)[number];
 }) {
-  const { isDark } = useTheme();
   const [open, setOpen] = useState(false);
 
   return (
-    <div
-      className={`rounded-xl border overflow-hidden ${
-        isDark
-          ? "border-white/[0.06] bg-white/[0.02]"
-          : "border-midnight/[0.06] bg-white"
-      }`}
-    >
+    <div className="rounded-xl border overflow-hidden border-white/[0.06] bg-white/[0.02] backdrop-blur-[24px] saturate-[1.4]">
       <button
         onClick={() => setOpen(!open)}
-        className={`w-full flex items-center justify-between px-5 py-4 text-left cursor-pointer ${
-          isDark ? "hover:bg-white/[0.03]" : "hover:bg-mist/50"
-        }`}
+        className="w-full flex items-center justify-between px-[clamp(16px,2vw,20px)] py-[clamp(12px,1.5vw,16px)] text-left cursor-pointer hover:bg-white/[0.03]"
       >
-        <span
-          className={`text-sm font-bold ${
-            isDark ? "text-white" : "text-midnight"
-          }`}
-        >
+        <span className="text-[clamp(14px,1.2vw,16px)] font-bold text-white">
           {category.category}
         </span>
         <motion.div
           animate={{ rotate: open ? 180 : 0 }}
           transition={{ duration: 0.25 }}
         >
-          <ChevronDown
-            className={`w-4 h-4 ${
-              isDark ? "text-white/40" : "text-midnight/40"
-            }`}
-          />
+          <ChevronDown className="w-4 h-4 text-white/40" />
         </motion.div>
       </button>
       <AnimatePresence>
@@ -506,39 +306,37 @@ function MobileComparisonAccordion({
             transition={{ duration: 0.3 }}
             className="overflow-hidden"
           >
-            <div className="px-5 pb-4 space-y-3">
+            <div className="px-[clamp(16px,2vw,20px)] pb-[clamp(12px,1.5vw,16px)] space-y-[clamp(8px,1vw,12px)]">
               {category.features.map((f) => (
                 <div
                   key={f.name}
-                  className={`text-sm ${
-                    isDark ? "text-white/55" : "text-midnight/55"
-                  }`}
+                  className="text-[clamp(12px,1vw,14px)] text-white/55"
                 >
                   <p className="font-medium mb-1">{f.name}</p>
-                  <div className="flex gap-4 text-xs">
+                  <div className="flex flex-wrap gap-[clamp(8px,1vw,16px)] text-[clamp(10px,0.8vw,12px)]">
                     <span>
                       Starter:{" "}
                       {typeof f.starter === "string"
                         ? f.starter
                         : f.starter
-                        ? "✓"
-                        : "—"}
+                          ? "✓"
+                          : "—"}
                     </span>
                     <span>
                       Pro:{" "}
                       {typeof f.pro === "string"
                         ? f.pro
                         : f.pro
-                        ? "✓"
-                        : "—"}
+                          ? "✓"
+                          : "—"}
                     </span>
                     <span>
                       Enterprise:{" "}
                       {typeof f.enterprise === "string"
                         ? f.enterprise
                         : f.enterprise
-                        ? "✓"
-                        : "—"}
+                          ? "✓"
+                          : "—"}
                     </span>
                   </div>
                 </div>
@@ -556,42 +354,41 @@ function MobileComparisonAccordion({
    ═══════════════════════════════════════════════════════════ */
 const faqs = [
   {
-    q: "How does yearly billing work?",
-    a: "Yearly billing is billed as a single annual payment. All plans are available on a yearly basis, giving you the best value for your inventory management needs.",
+    q: "How does value-based pricing work?",
+    a: "Our model is designed for a true partnership. We calculate the measurable value created through waste reduction, increased inventory accuracy, and labor optimization. You pay a percentage (typically 20%–40%) of that created value.",
   },
   {
-    q: "Can I switch plans at any time?",
-    a: "Absolutely. You can upgrade or downgrade your plan at any time. When upgrading, you'll be prorated for the remainder of your billing cycle. Downgrades take effect at the start of the next cycle.",
+    q: "What is the typical monthly cost?",
+    a: "While it depends on the scale of operations and value generated, our partners typically see an average cost of approximately $1,500 per month per location.",
   },
   {
-    q: "Is there a free trial available?",
-    a: "Yes! Every plan comes with a 14-day free trial so you can explore all features risk-free. No credit card required to get started.",
+    q: "Is there an upfront cost?",
+    a: "Yes, there is a one-time installation fee to cover edge hardware setup and system integration. However, your first month of service is completely free to ensure you're seeing value from day one.",
   },
   {
-    q: "What happens if I exceed my location limit?",
-    a: "You'll receive a notification suggesting an upgrade. We won't interrupt your service — we'll work with you to find the right plan as your business grows.",
+    q: "How do you calculate 'Value Created'?",
+    a: "We use a transparent methodology that compares baseline performance with Veratori-optimized metrics. This includes the direct cost of food waste prevented, reduced labor hours in inventory counting, and decreased carrying costs.",
   },
   {
-    q: "Do you offer custom enterprise pricing?",
-    a: "Yes. For businesses with unique requirements, our Enterprise plan is fully customizable. Contact our sales team to discuss tailored pricing, dedicated infrastructure, and custom integrations.",
+    q: "Can I cancel at any time?",
+    a: "Yes. Our partnership is built on delivering continuous value. If you're not satisfied, you can cancel your engagement. We aim to prove our worth every single month.",
   },
 ];
 
 function FAQSection() {
-  const { isDark } = useTheme();
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
 
   return (
-    <section className="relative py-20 sm:py-28 overflow-hidden">
-      <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="relative py-[8%] overflow-hidden">
+      <div className="relative z-10 max-w-3xl mx-auto px-[5.2%]">
         <SectionHeading
           tag="FAQ"
           title="Frequently Asked"
           highlight="Questions"
           tagColor="text-sage"
         />
-        <div ref={ref} className="space-y-3">
+        <div ref={ref} className="space-y-[clamp(12px,1.5vw,16px)]">
           {faqs.map((faq, i) => (
             <motion.div
               key={faq.q}
@@ -609,26 +406,15 @@ function FAQSection() {
 }
 
 function FAQItem({ faq }: { faq: { q: string; a: string } }) {
-  const { isDark } = useTheme();
   const [open, setOpen] = useState(false);
 
   return (
-    <div
-      className={`rounded-xl border overflow-hidden transition-colors duration-300 ${
-        isDark
-          ? "border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04]"
-          : "border-midnight/[0.06] bg-white hover:bg-mist/30"
-      }`}
-    >
+    <div className="rounded-xl border overflow-hidden transition-colors duration-300 border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] backdrop-blur-[24px] saturate-[1.4]">
       <button
         onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between px-6 py-5 text-left cursor-pointer"
+        className="w-full flex items-center justify-between px-[clamp(16px,2vw,24px)] py-[clamp(16px,2vw,20px)] text-left cursor-pointer"
       >
-        <span
-          className={`text-sm sm:text-base font-semibold pr-4 ${
-            isDark ? "text-white" : "text-midnight"
-          }`}
-        >
+        <span className="text-[clamp(14px,1.2vw,16px)] font-semibold pr-4 text-white">
           {faq.q}
         </span>
         <motion.div
@@ -636,11 +422,7 @@ function FAQItem({ faq }: { faq: { q: string; a: string } }) {
           transition={{ duration: 0.3, ease: "easeInOut" }}
           className="flex-shrink-0"
         >
-          <ChevronDown
-            className={`w-5 h-5 ${
-              isDark ? "text-white/30" : "text-midnight/30"
-            }`}
-          />
+          <ChevronDown className="w-[1.2em] h-[1.2em] text-white/30" />
         </motion.div>
       </button>
       <AnimatePresence>
@@ -652,11 +434,7 @@ function FAQItem({ faq }: { faq: { q: string; a: string } }) {
             transition={{ duration: 0.35, ease: "easeInOut" }}
             className="overflow-hidden"
           >
-            <div
-              className={`px-6 pb-5 text-sm leading-relaxed ${
-                isDark ? "text-white/50" : "text-midnight/50"
-              }`}
-            >
+            <div className="px-[clamp(16px,2vw,24px)] pb-[clamp(16px,2vw,20px)] text-[clamp(12px,1vw,14px)] leading-relaxed text-white/50">
               {faq.a}
             </div>
           </motion.div>
@@ -670,62 +448,46 @@ function FAQItem({ faq }: { faq: { q: string; a: string } }) {
    FINAL CTA
    ═══════════════════════════════════════════════════════════ */
 function FinalCTA() {
-  const { isDark } = useTheme();
-
   return (
-    <section className="relative py-24 sm:py-32 overflow-hidden">
+    <section className="relative py-[8%] overflow-hidden">
       {/* Ambient glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full bg-electric/[0.06] blur-[120px]" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[clamp(400px,50vw,600px)] h-[clamp(200px,25vw,300px)] rounded-full bg-electric/[0.06] blur-[120px]" />
 
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6"
+        className="relative z-10 max-w-4xl mx-auto px-[5.2%]"
       >
-        <div
-          className={`rounded-3xl border p-10 sm:p-16 text-center ${
-            isDark
-              ? "border-white/[0.06] bg-white/[0.02]"
-              : "border-midnight/[0.06] bg-white shadow-xl"
-          }`}
-        >
-          <h2
-            className={`text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-5 ${
-              isDark ? "text-white" : "text-midnight"
-            }`}
-          >
+        <div className="rounded-3xl border p-[clamp(24px,4vw,64px)] text-center border-white/[0.06] bg-white/[0.02] backdrop-blur-[24px] saturate-[1.4] shadow-2xl">
+          <h2 className="text-[clamp(28px,3.5vw,48px)] font-bold tracking-tight mb-[clamp(16px,2vw,20px)] text-white">
             Ready to optimize your{" "}
             <span className="bg-gradient-to-r from-electric to-sage bg-clip-text text-transparent">
               inventory?
             </span>
           </h2>
-          <p
-            className={`text-base sm:text-lg mb-10 leading-relaxed max-w-xl mx-auto ${
-              isDark ? "text-white/50" : "text-midnight/50"
-            }`}
-          >
+          <p className="text-[clamp(14px,1.2vw,18px)] mb-[clamp(32px,4vw,40px)] leading-relaxed max-w-xl mx-auto text-white/50">
             Join hundreds of businesses using Veratori to reduce waste, cut
-            costs, and run smarter operations. Start your free trial today.
+            costs, and run smarter operations. Select the perfect plan for your needs.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/contact">
+          <div className="flex flex-col sm:flex-row gap-[clamp(12px,1.5vw,16px)] justify-center">
+            <Link href="#plans">
               <motion.span
                 whileHover={{ scale: 1.03, y: -1 }}
                 whileTap={{ scale: 0.98 }}
-                className="inline-flex items-center gap-2 px-10 py-4 bg-electric text-white font-semibold rounded-xl glow-electric glow-electric-hover transition-all duration-300 cursor-pointer text-base"
+                className="inline-flex items-center gap-[clamp(6px,0.8vw,8px)] px-[clamp(24px,3vw,40px)] py-[clamp(12px,1.5vw,16px)] bg-electric text-white font-semibold rounded-xl glow-electric glow-electric-hover transition-all duration-300 cursor-pointer text-[clamp(14px,1vw,16px)]"
               >
-                Start Free Trial
-                <ArrowRight className="w-4 h-4" />
+                Choose a Plan
+                <ArrowRight className="w-[1em] h-[1em]" />
               </motion.span>
             </Link>
             <Link href="/contact">
               <motion.span
                 whileHover={{ scale: 1.03, y: -1 }}
                 whileTap={{ scale: 0.98 }}
-                className="inline-block px-10 py-4 border border-sage/30 text-sage rounded-xl font-semibold hover:bg-sage/[0.08] transition-all duration-300 cursor-pointer text-base"
+                className="inline-block px-[clamp(24px,3vw,40px)] py-[clamp(12px,1.5vw,16px)] border border-sage/30 text-sage rounded-xl font-semibold hover:bg-sage/[0.08] transition-all duration-300 cursor-pointer text-[clamp(14px,1vw,16px)]"
               >
-                Talk to Sales
+                Get Started
               </motion.span>
             </Link>
           </div>
@@ -739,15 +501,9 @@ function FinalCTA() {
    PAGE ASSEMBLY
    ═══════════════════════════════════════════════════════════ */
 export default function PricingPage() {
-  const { isDark } = useTheme();
-
   return (
-    <div
-      className={`relative ${
-        isDark ? "pricing-bg-dark" : "pricing-bg-light"
-      } pricing-grid-pattern`}
-    >
-      <PricingHero />
+    <div className="relative bg-black text-white min-h-screen">
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" />
       <PricingCards />
       <ComparisonTable />
       <FAQSection />

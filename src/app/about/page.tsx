@@ -3,332 +3,157 @@
 import { useRef, useEffect, useState } from "react";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import Image from "next/image";
-import { useTheme } from "@/components/ThemeProvider";
-import SectionHeading from "@/components/SectionHeading";
+import SectionHeading from "@/components/ui/SectionHeading";
 
 /* ═══════════════════════════════════════════════════════════
    HERO PARTICLES — Lightweight Framer Motion floating dots
    Only rendered inside the hero section for performance
    ═══════════════════════════════════════════════════════════ */
-function HeroParticles({ count = 35 }: { count?: number }) {
-  const [particles, setParticles] = useState<
-    {
-      id: number;
-      x: number;
-      y: number;
-      size: number;
-      dur: number;
-      delay: number;
-      color: string;
-    }[]
-  >([]);
-
-  useEffect(() => {
-    const colors = [
-      "rgba(171,206,225,0.30)",
-      "rgba(38,64,206,0.25)",
-      "rgba(95,151,79,0.18)",
-      "rgba(255,255,255,0.08)",
-    ];
-    setParticles(
-      Array.from({ length: count }, (_, i) => ({
-        id: i,
-        x: Math.random() * 100,
-        y: Math.random() * 100,
-        size: Math.random() * 3.5 + 1,
-        dur: Math.random() * 10 + 8,
-        delay: Math.random() * 6,
-        color: colors[Math.floor(Math.random() * colors.length)],
-      }))
-    );
-  }, [count]);
-
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none z-[2]">
-      {particles.map((p) => (
-        <motion.div
-          key={p.id}
-          className="absolute rounded-full"
-          style={{
-            left: `${p.x}%`,
-            top: `${p.y}%`,
-            width: p.size,
-            height: p.size,
-            background: p.color,
-          }}
-          animate={{
-            y: [0, -20, -8, -28, 0],
-            x: [0, 12, -8, 16, 0],
-            opacity: [0.15, 0.6, 0.3, 0.7, 0.15],
-          }}
-          transition={{
-            duration: p.dur,
-            delay: p.delay,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-      ))}
-    </div>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════
-   HERO — Refined with gradient headline + particles
-   ═══════════════════════════════════════════════════════════ */
 function AboutHero() {
-  const { isDark } = useTheme();
+  const { scrollY } = useScroll();
+  const yBg = useTransform(scrollY, [0, 800], [0, 150]);
+  const opacity = useTransform(scrollY, [0, 500], [1, 0]);
+  const scale = useTransform(scrollY, [0, 500], [1, 1.05]);
 
   return (
-    <section className="relative pt-36 sm:pt-44 pb-24 overflow-hidden">
-      {/* Ambient blurs */}
-      <div className="absolute top-16 left-[-6rem] w-[420px] h-[420px] rounded-full bg-electric/[0.04] blur-[120px]" />
-      <div className="absolute bottom-0 right-[-4rem] w-[350px] h-[350px] rounded-full bg-sage/[0.04] blur-[100px]" />
+    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-black">
+      {/* ── Background Engine ── */}
+      <motion.div className="absolute inset-0 z-0" style={{ y: yBg, scale, opacity }}>
+        <Image
+          src="/images/assets/about-hero.png"
+          alt="Abstract global impact visualization"
+          fill
+          className="object-cover opacity-50 contrast-[1.1] saturate-[1.1]"
+          priority
+          sizes="100vw"
+        />
+        {/* Cinematic Overlays */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,black_100%)] opacity-80" />
+      </motion.div>
 
-      {/* Subtle dot-grid pattern */}
-      <div
-        className="absolute inset-0 z-[1] opacity-[0.04] pointer-events-none"
-        style={{
-          backgroundImage: `radial-gradient(circle at 1px 1px, ${
-            isDark ? "rgba(255,255,255,0.5)" : "rgba(14,21,38,0.4)"
-          } 1px, transparent 0)`,
-          backgroundSize: "32px 32px",
-        }}
-      />
-
-      <HeroParticles count={40} />
-
-      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center">
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-xs sm:text-sm font-semibold text-sage uppercase tracking-[0.2em] mb-5"
-        >
-          About Us
-        </motion.p>
-
-        <motion.h1
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.08 }}
-          className={`text-4xl sm:text-5xl md:text-6xl lg:text-[4.25rem] font-bold tracking-tight leading-[1.08] ${
-            isDark ? "text-white" : "text-midnight"
-          }`}
-        >
-          About{" "}
-          <span className="bg-gradient-to-r from-electric to-sage bg-clip-text text-transparent">
-            Veratori
-          </span>
-        </motion.h1>
-
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className={`mt-6 text-base sm:text-lg md:text-xl max-w-2xl mx-auto leading-relaxed ${
-            isDark ? "text-white/55" : "text-midnight/55"
-          }`}
-        >
-          Building ethical, precise, and waste-free inventory intelligence.
-        </motion.p>
-
-        {/* Scroll indicator */}
+      {/* ── Floating Glows ── */}
+      <div className="absolute inset-0 z-5 pointer-events-none">
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2 }}
-          className="mt-14"
-        >
-          <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-            className={`w-6 h-10 rounded-full border-2 mx-auto flex justify-center pt-2 ${
-              isDark ? "border-white/15" : "border-midnight/15"
-            }`}
-          >
-            <motion.div
-              animate={{ y: [0, 12, 0], opacity: [1, 0.2, 1] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-              className={`w-1.5 h-1.5 rounded-full ${
-                isDark ? "bg-white/40" : "bg-midnight/40"
-              }`}
-            />
-          </motion.div>
-        </motion.div>
+          animate={{ x: [0, 40, 0], opacity: [0.1, 0.25, 0.1] }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-1/3 right-1/4 w-[500px] h-[500px] bg-electric/20 blur-[130px] rounded-full"
+        />
+        <motion.div
+          animate={{ x: [0, -40, 0], opacity: [0.05, 0.15, 0.05] }}
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+          className="absolute bottom-1/3 left-1/4 w-[600px] h-[600px] bg-sage/10 blur-[150px] rounded-full"
+        />
       </div>
-    </section>
-  );
-}
 
-/* ═══════════════════════════════════════════════════════════
-   COMPANY STORY — Parallax images + polished text
-   ═══════════════════════════════════════════════════════════ */
-function CompanyStory() {
-  const { isDark } = useTheme();
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-  const imgY = useTransform(scrollYProgress, [0, 1], [60, -60]);
-  const imgY2 = useTransform(scrollYProgress, [0, 1], [80, -120]);
-
-  return (
-    <section ref={ref} className="relative py-28 sm:py-36 overflow-hidden">
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-        {/* Text */}
+      {/* ── Content ── */}
+      <div className="relative z-10 max-w-5xl mx-auto px-[5.2%] text-center">
         <motion.div
-          initial={{ opacity: 0, x: -40 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, ease: [0.23, 1, 0.32, 1] }}
         >
-          <p className="text-xs sm:text-sm font-semibold text-electric uppercase tracking-[0.2em] mb-4">
-            Our Story
-          </p>
-          <h2
-            className={`text-3xl sm:text-4xl font-bold tracking-tight mb-6 ${
-              isDark ? "text-white" : "text-midnight"
-            }`}
-          >
-            Authority. Security.{" "}
-            <span className="bg-gradient-to-r from-electric to-sage bg-clip-text text-transparent">
-              Sustainability.
+          {/* Tagline Pill */}
+          <div className="relative inline-block mb-[clamp(24px,3vw,32px)]">
+            <span className="text-[clamp(10px,0.8vw,14px)] font-bold text-sage uppercase tracking-[0.4em] bg-white/5 backdrop-blur-xl px-8 py-3 rounded-full border border-white/10 shadow-2xl">
+              Our Visionary Impact
             </span>
-          </h2>
-          <div
-            className={`space-y-5 text-base leading-[1.85] ${
-              isDark ? "text-white/55" : "text-midnight/55"
-            }`}
-          >
-            <p>
-              In 2021, our founding team witnessed first-hand how outdated
-              inventory systems were contributing to massive food waste across
-              the supply chain. They decided to build something different.
-            </p>
-            <p>
-              Veratori combines{" "}
-              <span className="text-electric font-semibold">
-                enterprise-grade security
-              </span>{" "}
-              with intuitive design, enabling teams to manage inventory with
-              surgical precision while minimizing environmental impact.
-            </p>
-            <p>
-              Today, we serve over{" "}
-              <span className="text-sage font-semibold">
-                500 enterprise clients
-              </span>{" "}
-              across 30 countries, helping them reduce waste, optimize space, and
-              operate with the ethical standards the world demands.
-            </p>
+          </div>
+
+          {/* Title */}
+          <h1 className="text-[clamp(44px,7vw,110px)] font-bold tracking-tighter leading-[0.9] text-white">
+            Pioneering the{" "}
+            <span className="bg-gradient-to-r from-electric via-sage to-white bg-clip-text text-transparent">
+              Zero-Waste Era.
+            </span>
+          </h1>
+
+          {/* Glass Card for Subtext + Stats */}
+          <div className="mt-[clamp(40px,5vw,60px)] inline-block p-1 rounded-[34px] bg-gradient-to-b from-white/10 to-transparent">
+            <div className="px-[clamp(32px,4vw,56px)] py-[clamp(24px,3vw,40px)] rounded-[32px] bg-black/40 backdrop-blur-[60px] border border-white/5 max-w-3xl relative group overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.05] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+
+              <p className="text-[clamp(16px,1.4vw,22px)] leading-relaxed text-white/60 text-balance font-medium mb-[clamp(40px,5vw,56px)]">
+                We're on a mission to eliminate food waste through cutting-edge technology,
+                ethical practices, and precision-driven operations that empower businesses worldwide.
+              </p>
+
+              {/* Stats Preview Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 border-t border-white/10 pt-8 mt-4">
+                {[
+                  { value: "500+", label: "Enterprise Clients" },
+                  { value: "30+", label: "Countries" },
+                  { value: "3.2M", label: "Pounds Saved" },
+                ].map((stat, i) => (
+                  <div key={i} className="text-center group/stat">
+                    <div className="text-[clamp(24px,2.5vw,32px)] font-bold mb-1 text-white group-hover/stat:text-sage transition-colors">
+                      {stat.value}
+                    </div>
+                    <div className="text-[clamp(10px,0.8vw,12px)] font-bold uppercase tracking-widest text-white/30 group-hover/stat:text-white/50 transition-colors">
+                      {stat.label}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </motion.div>
-
-        {/* Parallax images */}
-        <div className="relative h-[500px]">
-          <motion.div
-            style={{ y: imgY }}
-            className="absolute top-0 right-0 w-[75%] h-[60%] rounded-2xl overflow-hidden shadow-2xl"
-          >
-            <Image
-              src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=800&q=80"
-              alt="Veratori team collaboration"
-              fill
-              className="object-cover"
-              sizes="40vw"
-              loading="lazy"
-            />
-          </motion.div>
-          <motion.div
-            style={{ y: imgY2 }}
-            className="absolute bottom-0 left-0 w-[65%] h-[55%] rounded-2xl overflow-hidden shadow-2xl border-4 border-electric/20"
-          >
-            <Image
-              src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80"
-              alt="Veratori headquarters"
-              fill
-              className="object-cover"
-              sizes="35vw"
-              loading="lazy"
-            />
-          </motion.div>
-          <motion.div
-            animate={{ y: [0, -12, 0] }}
-            transition={{ duration: 4, repeat: Infinity }}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full bg-sage/10 blur-2xl"
-          />
-        </div>
       </div>
+
+      {/* Continuity Gradient at Bottom */}
+      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-black to-transparent z-10" />
     </section>
   );
 }
+
 
 /* ═══════════════════════════════════════════════════════════
    TIMELINE — Electric Blue dot accent markers, polished
    ═══════════════════════════════════════════════════════════ */
 const timeline = [
   {
-    year: "2021",
-    title: "The Spark",
-    desc: "Founded in San Francisco with a mission to end food waste through technology.",
+    year: "Early 2025",
+    title: "Neural Initialization",
+    desc: "YOLO & Precision Labels: Establishing the product foundation with high-fidelity training data and custom YOLO architectures for near-perfect object recognition.",
     color: "bg-sage",
   },
   {
-    year: "2022",
-    title: "First 100 Clients",
-    desc: "Launched V1 platform; onboarded 100 enterprise clients in 6 months.",
+    year: "Late 2025",
+    title: "The Edge Frontier",
+    desc: "NVIDIA Jetson Orin & Embedded AI: Moving the training process to the edge, enabling our hardware to process millisecond-latency AI decisions without external reliance.",
     color: "bg-electric",
   },
   {
-    year: "2023",
-    title: "AI Integration",
-    desc: "Introduced machine-learning forecasting and object detection features.",
+    year: "Early 2026",
+    title: "Self-Verifying Scale",
+    desc: "LiDAR & Model Auto-Supervision: Integrating 3D spatial mapping into the product while deploying self-correcting AI loops that automate the training of new vision models.",
     color: "bg-sky",
   },
   {
-    year: "2024",
-    title: "Global Expansion",
-    desc: "Expanded to 30 countries; raised Series B to accelerate growth.",
+    year: "2026+",
+    title: "The Technological Zenith",
+    desc: "NVIDIA AGX Thor & Supersonic Weight Cells: Scaling the product to autonomous-grade compute and high-frequency mass sensors for the most demanding global logistics.",
     color: "bg-sage",
-  },
-  {
-    year: "2025",
-    title: "500+ Enterprises",
-    desc: "Surpassed 500 enterprise clients; saved 3.2M pounds of food from waste.",
-    color: "bg-electric",
-  },
-  {
-    year: "2026",
-    title: "The Future",
-    desc: "Launching next-gen spatial intelligence, 3D warehouse mapping, and predictive analytics.",
-    color: "bg-sky",
   },
 ];
 
 function Timeline() {
-  const { isDark } = useTheme();
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section className="relative py-28 sm:py-36 overflow-hidden">
-      <div className={`absolute inset-0 ${isDark ? "bg-midnight" : "bg-mist"}`} />
-      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="relative py-[8%] overflow-hidden">
+      <div className="absolute inset-0 bg-[#080b13]" />
+      <div className="relative z-10 max-w-5xl mx-auto px-[5.2%]">
         <SectionHeading
           tag="Our Journey"
           title="From Idea to"
           highlight="Global Impact"
           tagColor="text-sage"
         />
-        <div ref={ref} className="relative">
+        <div ref={ref} className="relative mt-[clamp(24px,3vw,32px)]">
           {/* Vertical spine */}
-          <div
-            className={`absolute left-[22px] sm:left-1/2 sm:-translate-x-px top-0 bottom-0 w-0.5 ${
-              isDark ? "bg-white/10" : "bg-midnight/10"
-            }`}
-          />
+          <div className="absolute left-[22px] sm:left-1/2 sm:-translate-x-px top-0 bottom-0 w-0.5 bg-white/10" />
 
           {timeline.map((t, i) => (
             <motion.div
@@ -336,58 +161,29 @@ function Timeline() {
               initial={{ opacity: 0, x: i % 2 === 0 ? -40 : 40 }}
               animate={inView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 0.5, delay: i * 0.15 }}
-              className={`relative flex items-start gap-6 mb-14 ${
-                i % 2 === 0 ? "sm:flex-row" : "sm:flex-row-reverse"
-              } flex-row`}
+              className={`relative flex items-start gap-[clamp(16px,2vw,24px)] mb-[clamp(40px,5vw,56px)] ${i % 2 === 0 ? "sm:flex-row" : "sm:flex-row-reverse"} flex-row`}
             >
-              {/* Dot with Electric Blue pulse ring */}
+              {/* Dot with pulse ring */}
               <div className="absolute left-[18px] sm:left-1/2 sm:-translate-x-1/2 top-1 z-10">
-                <div
-                  className={`w-3.5 h-3.5 rounded-full ${t.color} ring-[5px] ${
-                    isDark ? "ring-midnight" : "ring-mist"
-                  }`}
-                />
+                <div className={`w-3.5 h-3.5 rounded-full ${t.color} ring-[5px] ring-[#080b13]`} />
                 {/* Subtle outer glow */}
                 <motion.div
                   initial={{ opacity: 0, scale: 0.5 }}
                   animate={inView ? { opacity: [0, 0.4, 0], scale: [0.5, 1.8, 2] } : {}}
-                  transition={{
-                    delay: i * 0.15 + 0.5,
-                    duration: 1.2,
-                    ease: "easeOut",
-                  }}
+                  transition={{ delay: i * 0.15 + 0.5, duration: 1.2, ease: "easeOut" }}
                   className={`absolute inset-0 rounded-full ${t.color} blur-sm`}
                 />
               </div>
 
               {/* Content */}
-              <div
-                className={`ml-12 sm:ml-0 ${
-                  i % 2 === 0
-                    ? "sm:w-1/2 sm:pr-12 sm:text-right"
-                    : "sm:w-1/2 sm:pl-12"
-                }`}
-              >
-                <span
-                  className={`text-sm font-bold ${t.color.replace(
-                    "bg-",
-                    "text-"
-                  )}`}
-                >
+              <div className={`ml-[clamp(40px,5vw,48px)] sm:ml-0 ${i % 2 === 0 ? "sm:w-1/2 sm:pr-[clamp(32px,4vw,48px)] sm:text-right" : "sm:w-1/2 sm:pl-[clamp(32px,4vw,48px)]"}`}>
+                <span className={`text-[clamp(12px,1vw,14px)] font-bold ${t.color.replace("bg-", "text-")}`}>
                   {t.year}
                 </span>
-                <h3
-                  className={`text-lg font-bold mt-1 ${
-                    isDark ? "text-white" : "text-midnight"
-                  }`}
-                >
+                <h3 className="text-[clamp(18px,2vw,24px)] font-bold mt-1 mb-[clamp(8px,1vw,12px)] text-white">
                   {t.title}
                 </h3>
-                <p
-                  className={`text-sm mt-1.5 leading-relaxed ${
-                    isDark ? "text-white/50" : "text-midnight/50"
-                  }`}
-                >
+                <p className="text-[clamp(14px,1.2vw,16px)] leading-relaxed text-white/50">
                   {t.desc}
                 </p>
               </div>
@@ -402,200 +198,126 @@ function Timeline() {
 /* ═══════════════════════════════════════════════════════════
    VALUES CARDS — Palette-colored with refined hover reveals
    ═══════════════════════════════════════════════════════════ */
-const values = [
-  {
-    name: "Deep Midnight",
-    hex: "#0E1526",
-    desc: "Our foundation — authority, depth, and unwavering reliability in everything we build.",
-    color: "bg-midnight",
-    hoverBg: "group-hover:bg-midnight/90",
-    textColor: "text-white",
-  },
-  {
-    name: "Sage Operation",
-    hex: "#5F974F",
-    desc: "The ethical heartbeat — sustainability, growth, and a commitment to reducing waste at every turn.",
-    color: "bg-sage",
-    hoverBg: "group-hover:bg-sage/90",
-    textColor: "text-white",
-  },
-  {
-    name: "Electric Blue",
-    hex: "#2640CE",
-    desc: "Precision in action — intelligent alerts, data clarity, and the speed to stay ahead.",
-    color: "bg-electric",
-    hoverBg: "group-hover:bg-electric/90",
-    textColor: "text-white",
-  },
-  {
-    name: "Sky Tint",
-    hex: "#ABCEE1",
-    desc: "Approachable innovation — clean interfaces, calm efficiency, and technology that feels human.",
-    color: "bg-sky",
-    hoverBg: "group-hover:bg-sky/90",
-    textColor: "text-midnight",
-  },
-  {
-    name: "Mist",
-    hex: "#F2F6F9",
-    desc: "Transparency and openness — a clear canvas where your data tells the story without noise.",
-    color: "bg-mist",
-    hoverBg: "group-hover:bg-mist/90",
-    textColor: "text-midnight",
-  },
-];
-
-function ValuesCards() {
-  const { isDark } = useTheme();
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-50px" });
-
-  return (
-    <section className="relative py-28 sm:py-36 overflow-hidden">
-      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          tag="Our Values"
-          title="Each Color Tells a"
-          highlight="Story"
-          subtitle="Our palette isn't decoration — it's a living expression of what we stand for."
-        />
-        <div
-          ref={ref}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4"
-        >
-          {values.map((v, i) => (
-            <motion.div
-              key={v.name}
-              initial={{ opacity: 0, y: 30 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="group relative"
-            >
-              <div
-                className={`${v.color} rounded-2xl p-6 h-56 flex flex-col justify-end transition-all duration-300 group-hover:scale-[1.03] group-hover:shadow-xl overflow-hidden`}
-              >
-                {/* Hover darken overlay */}
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-all duration-300 rounded-2xl" />
-                <div className="relative z-10">
-                  <p
-                    className={`text-xs font-mono mb-1 opacity-50 ${v.textColor}`}
-                  >
-                    {v.hex}
-                  </p>
-                  <h3 className={`text-lg font-bold ${v.textColor}`}>
-                    {v.name}
-                  </h3>
-                  <p
-                    className={`text-xs leading-relaxed mt-2 opacity-0 group-hover:opacity-80 transition-opacity duration-300 ${v.textColor}`}
-                  >
-                    {v.desc}
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
 
 /* ═══════════════════════════════════════════════════════════
-   TEAM GRID — Polished hover, consistent spacing
+   TEAM GRID — Professional team showcase with modern design
    ═══════════════════════════════════════════════════════════ */
 const team = [
   {
-    name: "Alex Rivera",
-    role: "CEO & Co-Founder",
-    img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80",
+    name: "Justin Chavez-Meneses",
+    role: "CEO | BBA Finance & Accounting",
+    university: "Emory University",
+    img: "/images/team/justin-meneses.jpeg",
+    accent: "electric",
   },
   {
-    name: "Priya Sharma",
-    role: "CTO & Co-Founder",
-    img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80",
+    name: "Felipe Cardozo",
+    role: "CTO | BS CS, Mathematics, & Finance",
+    university: "Emory University",
+    img: "/images/team/Felipe-Cardozo.jpeg",
+    accent: "sage",
   },
   {
-    name: "Marcus Johnson",
-    role: "Head of Engineering",
-    img: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80",
+    name: "Eduardo Lapa",
+    role: "Software Developer | BS Economics",
+    university: "Fundação Getulio Vargas",
+    img: "/images/team/Eduardo_Lapa.png",
+    accent: "sky",
   },
   {
-    name: "Lena Chen",
-    role: "VP of Product",
-    img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80",
+    name: "Leonardo Affonso",
+    role: "Sr. Hardware Developer | BEng Electrical Engineering",
+    university: "Federal University of Rio de Janeiro",
+    img: "/images/team/LeonardoAffonso.png",
+    accent: "electric",
   },
   {
-    name: "David Okonkwo",
-    role: "Head of Sustainability",
-    img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80",
+    name: "Daniel Gambacorta",
+    role: "Software Developer | BEng Mechanical Engineering",
+    university: "Texas A&M",
+    img: "/images/team/daniel-gambacorta.png",
+    accent: "sage",
   },
   {
-    name: "Sofia Vasquez",
-    role: "Head of Design",
-    img: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&q=80",
+    name: "Milad Khezrefaridi",
+    role: "Hardware Developer | BEng Mechanical Engineering",
+    university: "UT Austin",
+    img: "/images/team/milad-khezrefaridi.png",
+    accent: "sky",
   },
 ];
 
 function TeamGrid() {
-  const { isDark } = useTheme();
+  const accentMap: Record<string, { bg: string; text: string; border: string; hoverBorder: string; dot: string }> = {
+    electric: { bg: "bg-electric/10", text: "text-electric", border: "border-electric/30", hoverBorder: "hover:border-electric/50", dot: "bg-electric" },
+    sage: { bg: "bg-sage/10", text: "text-sage", border: "border-sage/30", hoverBorder: "hover:border-sage/50", dot: "bg-sage" },
+    sky: { bg: "bg-sky/10", text: "text-sky", border: "border-sky/30", hoverBorder: "hover:border-sky/50", dot: "bg-sky" },
+  };
 
   return (
-    <section className="relative py-28 sm:py-36 overflow-hidden">
-      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="relative py-[10%] overflow-hidden">
+      <div className="absolute inset-0 bg-black" />
+      <div className="relative z-10 max-w-7xl mx-auto px-[5.2%]">
         <SectionHeading
-          tag="Team"
-          title="The People Behind"
-          highlight="Veratori"
+          tag="Leadership"
+          title="Meet the Team"
+          highlight="Building Veratori"
+          subtitle="A diverse team of innovators dedicated to eliminating food waste through technology."
         />
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
-          {team.map((m, i) => (
-            <motion.div
-              key={m.name}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className={`group relative rounded-2xl overflow-hidden border transition-all duration-300 ${
-                isDark
-                  ? "bg-white/[0.03] border-white/5 hover:border-white/10"
-                  : "bg-white border-midnight/5 shadow-md hover:shadow-xl"
-              }`}
-            >
-              <div className="relative h-56 overflow-hidden">
-                <Image
-                  src={m.img}
-                  alt={m.name}
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  sizes="(max-width:640px)50vw,33vw"
-                  loading="lazy"
-                />
-                <div
-                  className={`absolute inset-0 bg-gradient-to-t ${
-                    isDark
-                      ? "from-midnight via-transparent"
-                      : "from-white via-transparent"
-                  } opacity-60`}
-                />
-              </div>
-              <div className="p-5">
-                <h3
-                  className={`font-bold ${
-                    isDark ? "text-white" : "text-midnight"
-                  }`}
-                >
-                  {m.name}
-                </h3>
-                <p
-                  className={`text-sm mt-0.5 ${
-                    isDark ? "text-white/50" : "text-midnight/50"
-                  }`}
-                >
-                  {m.role}
-                </p>
-              </div>
-            </motion.div>
-          ))}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[clamp(24px,3vw,32px)] mt-[clamp(32px,4vw,48px)]">
+          {team.map((m, i) => {
+            const accent = accentMap[m.accent];
+            return (
+              <motion.div
+                key={m.name}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: i * 0.1 }}
+                className={`group relative rounded-2xl overflow-hidden border-2 transition-all duration-500 bg-white/[0.03] hover:bg-white/[0.05] ${accent.border} ${accent.hoverBorder} backdrop-blur-[24px] saturate-[1.4]`}
+              >
+                <div className="relative h-[clamp(300px,35vw,360px)] overflow-hidden">
+                  {m.img ? (
+                    <Image
+                      src={m.img}
+                      alt={m.name}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                      sizes="(max-width:640px)100vw,25vw"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className={`w-full h-full ${accent.bg} flex items-center justify-center`}>
+                      <div className="text-center">
+                        <div className={`w-[clamp(80px,8vw,96px)] h-[clamp(80px,8vw,96px)] rounded-full ${accent.bg} ${accent.border} border-2 flex items-center justify-center mx-auto mb-4`}>
+                          <span className={`text-[clamp(32px,3vw,36px)] font-bold ${accent.text}`}>
+                            {m.name.split(' ').map(n => n[0]).join('')}
+                          </span>
+                        </div>
+                        <p className="text-[clamp(12px,1vw,14px)] font-medium text-white/40">
+                          Photo coming soon
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500" />
+                  {/* Accent indicator */}
+                  <div className={`absolute top-[clamp(12px,1.5vw,16px)] right-[clamp(12px,1.5vw,16px)] w-3 h-3 rounded-full ${accent.dot} opacity-0 group-hover:opacity-100 transition-opacity duration-500 shadow-[0_0_12px_rgba(255,255,255,0.2)]`} />
+                </div>
+                <div className="p-[clamp(20px,2vw,24px)] bg-gradient-to-b from-transparent to-current/5 relative z-10">
+                  <h3 className="text-[clamp(18px,1.8vw,20px)] font-bold mb-2 text-white">
+                    {m.name}
+                  </h3>
+                  <p className={`text-[clamp(12px,1vw,14px)] font-semibold ${accent.text}`}>
+                    {m.role}
+                  </p>
+                  <p className="text-[clamp(11px,0.9vw,13px)] text-white/50 mt-1 leading-tight">
+                    {m.university}
+                  </p>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>
@@ -606,16 +328,10 @@ function TeamGrid() {
    PAGE ASSEMBLY — Full-page diagonal gradient + grain
    ═══════════════════════════════════════════════════════════ */
 export default function AboutPage() {
-  const { isDark } = useTheme();
-
   return (
-    <div
-      className={`relative ${isDark ? "about-bg-dark" : "about-bg-light"} about-grain`}
-    >
+    <div className="relative bg-black text-white">
       <AboutHero />
-      <CompanyStory />
       <Timeline />
-      <ValuesCards />
       <TeamGrid />
     </div>
   );
