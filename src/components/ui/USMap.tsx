@@ -145,7 +145,7 @@ export default function USMap() {
           <foreignObject x="-88" y="-58" width="176" height="52" className="overflow-visible pointer-events-none">
             <div className="flex flex-col items-center justify-end h-full">
               <span
-                className={`${labelClass} border border-[#2563eb]/35 bg-[#2563eb]/12 text-[#1d4ed8] dark:text-[#93c5fd]`}
+                className={`${labelClass} border border-[#2563eb]/35 bg-[#2563eb]/12 ${isDark ? "text-[#93c5fd]" : "text-[#1d4ed8]"}`}
               >
                 Researching
               </span>
@@ -167,7 +167,7 @@ export default function USMap() {
           <foreignObject x="-88" y="-58" width="176" height="52" className="overflow-visible pointer-events-none">
             <div className="flex flex-col items-center justify-end h-full">
               <span
-                className={`${labelClass} border border-[#3b82f6]/35 bg-[#3b82f6]/12 text-[#1d4ed8] dark:text-[#93c5fd]`}
+                className={`${labelClass} border border-[#3b82f6]/35 bg-[#3b82f6]/12 ${isDark ? "text-[#93c5fd]" : "text-[#1d4ed8]"}`}
               >
                 Developing
               </span>
@@ -189,7 +189,7 @@ export default function USMap() {
           <foreignObject x="-88" y="-58" width="176" height="52" className="overflow-visible pointer-events-none">
             <div className="flex flex-col items-center justify-end h-full">
               <span
-                className={`${labelClass} border border-[#eab308]/40 bg-[#eab308]/12 text-[#a16207] dark:text-[#fde047]`}
+                className={`${labelClass} border border-[#eab308]/40 bg-[#eab308]/12 ${isDark ? "text-[#fde047]" : "text-[#a16207]"}`}
               >
                 Deploying
               </span>

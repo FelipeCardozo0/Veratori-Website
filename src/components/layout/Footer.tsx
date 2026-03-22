@@ -45,15 +45,15 @@ const locations = [
 export default function Footer() {
   const { isDark } = useTheme();
   return (
-    <footer className="relative border-t bg-midnight border-white/6 text-white">
+    <footer className={`relative border-t text-white ${isDark ? "bg-midnight border-white/6" : "bg-mist border-black/5"}`}>
       <div className="w-full mx-auto px-6 sm:px-10 lg:px-12 pt-16 pb-12">
 
         {/* Operating Locations */}
-        <div className="flex flex-wrap gap-x-8 gap-y-3 mb-12 pb-10 border-b border-white/6">
+        <div className={`flex flex-wrap gap-x-8 gap-y-3 mb-12 pb-10 border-b ${isDark ? "border-white/6" : "border-black/10"}`}>
           {locations.map((loc) => (
             <div key={loc.city} className="flex items-center gap-2">
               <MapPin className="w-3.5 h-3.5 text-sage shrink-0" />
-              <span className="text-sm text-white/60">
+              <span className={`text-sm ${isDark ? "text-white/60" : "text-black/60"}`}>
                 {loc.city}, {loc.state}
                 {loc.hq && <span className="ml-1.5 text-xs font-semibold text-sage bg-sage/10 px-1.5 py-0.5 rounded">HQ</span>}
               </span>
@@ -73,11 +73,11 @@ export default function Footer() {
                 className="h-10 sm:h-12 w-auto object-contain invert"
               />
             </Link>
-            <p className="text-[clamp(16px,1.1vw,18px)] leading-relaxed text-white/60 mb-6">
+            <p className={`text-[clamp(16px,1.1vw,18px)] leading-relaxed mb-6 ${isDark ? "text-white/60" : "text-black/60"}`}>
               Veratori automates inventory management for food service operators using on-device computer vision.
             </p>
-            <p className="mt-4 text-base font-medium text-white/50">
-              <a href="mailto:veratori@veratori.com" className="hover:text-white transition-colors">veratori@veratori.com</a>
+            <p className={`mt-4 text-base font-medium ${isDark ? "text-white/50" : "text-black/50"}`}>
+              <a href="mailto:veratori@veratori.com" className={`hover:text-sage transition-colors ${isDark ? "text-white/70" : "text-black/70"}`}>veratori@veratori.com</a>
             </p>
             <div className="flex gap-4 mt-8">
               {socialIcons.map((s) => (
@@ -88,7 +88,7 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   whileHover={{ y: -2 }}
                   whileTap={{ scale: 0.95 }}
-                  className="w-10 h-10 rounded-lg flex items-center justify-center transition-colors bg-white/5 hover:bg-white/10 text-white/50 hover:text-white"
+                  className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${isDark ? "bg-white/5 hover:bg-white/10 text-white/50 hover:text-white" : "bg-black/5 hover:bg-black/10 text-black/50 hover:text-black"}`}
                   aria-label={s.label}
                 >
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d={s.path} /></svg>
@@ -101,11 +101,11 @@ export default function Footer() {
           <div className="flex gap-20 sm:gap-32 md:mr-10">
             {Object.entries(footerLinks).map(([heading, links]) => (
               <div key={heading}>
-                <h4 className="font-bold text-[clamp(16px,1.1vw,18px)] mb-8 text-white">{heading}</h4>
+                <h4 className={`font-bold text-[clamp(16px,1.1vw,18px)] mb-8 ${isDark ? "text-white" : "text-black"}`}>{heading}</h4>
                 <ul className="space-y-5">
                   {links.map((link) => (
                     <li key={link.label}>
-                      <Link href={link.href} className="text-[clamp(15px,1vw,17px)] font-medium transition-colors text-white/50 hover:text-white">
+                      <Link href={link.href} className={`text-[clamp(15px,1vw,17px)] font-medium transition-colors ${isDark ? "text-white/50 hover:text-white" : "text-black/50 hover:text-black"}`}>
                         {link.label}
                       </Link>
                     </li>
@@ -116,9 +116,9 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t pt-8 border-white/[0.06]">
+        <div className={`border-t pt-8 ${isDark ? "border-white/[0.06]" : "border-black/10"}`}>
           <div className="flex justify-center sm:justify-start items-center">
-            <p className="text-[clamp(12px,0.9vw,14px)] text-white/40">&copy; {new Date().getFullYear()} Veratori Inc. All rights reserved.</p>
+            <p className={`text-[clamp(12px,0.9vw,14px)] ${isDark ? "text-white/40" : "text-black/40"}`}>&copy; {new Date().getFullYear()} Veratori Inc. All rights reserved.</p>
           </div>
         </div>
       </div>
