@@ -29,7 +29,15 @@ export default function ContactPage() {
 
     const firstName = (formData.get("firstName") as string)?.trim() ?? "";
     const lastName = (formData.get("lastName") as string)?.trim() ?? "";
+    const email = (formData.get("email") as string)?.trim() ?? "";
     const inquiryType = (formData.get("inquiryType") as string)?.trim() ?? "General";
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setFormError("Please enter a valid email address.");
+      return;
+    }
 
     formData.append("access_key", accessKey);
     formData.append("name", [firstName, lastName].filter(Boolean).join(" ") || "Website visitor");
@@ -127,14 +135,14 @@ export default function ContactPage() {
                 <h4 className="font-bold mb-4 text-sm uppercase tracking-widest text-sage">What to expect</h4>
                 <ul className="space-y-3">
                   {[
-                    "A 30-minute video call with a member of our team",
-                    "A live demo of the Veratori dashboard",
-                    "A transparent estimate of potential savings for your locations",
-                    "No sales pressure — just an honest conversation about fit",
-                  ].map((item, i) => (
-                    <li key={i} className={`flex items-start gap-3 text-sm ${isDark ? "text-white/60" : "text-black/60"}`}>
+                    { id: "call", text: "A 30-minute video call with a member of our team" },
+                    { id: "demo", text: "A live demo of the Veratori dashboard" },
+                    { id: "estimate", text: "A transparent estimate of potential savings for your locations" },
+                    { id: "pressure", text: "No sales pressure — just an honest conversation about fit" },
+                  ].map((item) => (
+                    <li key={item.id} className={`flex items-start gap-3 text-sm ${isDark ? "text-white/60" : "text-black/60"}`}>
                       <span className="text-sage font-bold mt-0.5">—</span>
-                      {item}
+                      {item.text}
                     </li>
                   ))}
                 </ul>

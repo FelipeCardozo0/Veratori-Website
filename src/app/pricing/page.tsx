@@ -9,28 +9,33 @@ import OrderForm from "@/components/pricing/OrderForm";
 
 const faqs = [
   {
+    id: "pricing-based",
     q: "How does performance-based pricing work?",
     a: "We calculate the measurable value Veratori creates for your business each month — waste reduction, inventory accuracy gains, and labor hours saved. You pay 20–40% of that number. If we don't deliver value, you don't pay.",
   },
   {
+    id: "average-cost",
     q: "What does the average location pay per month?",
     a: "Most locations see an average cost of approximately $1,500 per month, depending on the scale of operations and measured savings. We establish a transparent baseline before billing begins.",
   },
   {
+    id: "upfront-cost",
     q: "Is there an upfront cost?",
     a: "Yes — a one-time hardware and installation fee covers the sensor units, ceiling mount, and system integration. Your first 30 days of service are free so you can verify the value before your first billing cycle.",
   },
   {
+    id: "calculate-savings",
     q: "How do you calculate measurable savings?",
     a: "We use a transparent methodology that compares a pre-installation baseline with Veratori-optimized metrics: cost of food waste prevented, labor hours recovered from manual counting, and reduced carrying costs.",
   },
   {
+    id: "cancel-anytime",
     q: "Can I cancel at any time?",
     a: "Yes. There are no long-term contracts. If Veratori isn't delivering measurable value, you can cancel your engagement at the end of any billing period.",
   },
-];
+] as const;
 
-function FAQItem({ faq }: { faq: { q: string; a: string } }) {
+function FAQItem({ faq }: { faq: { id: string; q: string; a: string } }) {
   const [open, setOpen] = useState(false);
   const { isDark } = useTheme();
 
@@ -95,8 +100,8 @@ export default function PricingPage() {
                 <h2 className="text-4xl font-bold tracking-tight">Common Questions</h2>
               </div>
               <div className="space-y-4">
-                {faqs.map((faq, i) => (
-                  <FAQItem key={i} faq={faq} />
+                {faqs.map((faq) => (
+                  <FAQItem key={faq.id} faq={faq} />
                 ))}
               </div>
             </div>

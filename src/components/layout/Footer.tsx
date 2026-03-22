@@ -70,7 +70,7 @@ export default function Footer() {
                 alt="Veratori Logo"
                 width={200}
                 height={50}
-                className="h-10 sm:h-12 w-auto object-contain invert"
+                className={`h-10 sm:h-12 w-auto object-contain ${isDark ? "invert" : ""}`}
               />
             </Link>
             <p className={`text-[clamp(16px,1.1vw,18px)] leading-relaxed mb-6 ${isDark ? "text-white/60" : "text-black/60"}`}>
