@@ -9,7 +9,6 @@ A modern, production-ready marketing website for Veratori, built with Next.js 16
 - **Tailwind CSS v4** - Utility-first styling with `@theme` tokens
 - **Framer Motion** - Scroll-triggered animations, page transitions, micro-interactions
 - **Three.js / React Three Fiber** - Interactive 3D warehouse visualization
-- **TensorFlow.js + COCO-SSD** - Real-time browser-based object detection demo
 
 ## Project Structure
 
@@ -27,7 +26,7 @@ A modern, production-ready marketing website for Veratori, built with Next.js 16
 │   └── components/
 │       ├── layout/       # Layout components (Header, Footer, PageTransition)
 │       ├── ui/           # Reusable UI components (ThemeProvider, SectionHeading, InfiniteMarquee)
-│       └── features/     # Feature-specific components (ObjectDetection, Warehouse3D)
+│       └── features/     # Feature-specific components (Warehouse3D)
 ├── public/
 │   └── images/           # Static assets
 │       ├── clients/      # Client logos
@@ -52,7 +51,7 @@ A modern, production-ready marketing website for Veratori, built with Next.js 16
 | Route      | Description                                                                                              |
 | ---------- | -------------------------------------------------------------------------------------------------------- |
 | `/`        | Home — Hero with video, feature teasers, stats, scrollytelling, testimonial marquee                      |
-| `/product` | Product — Screenshot carousel, detailed features, 3D warehouse, AI object detection demo, dashboard mock |
+| `/product` | Product — Screenshot carousel, detailed features, 3D warehouse visualization |
 | `/about`   | About Us — Company story, timeline, values cards, team grid                                              |
 | `/mission` | Mission — Company mission, values, impact stories                                                         |
 | `/pricing` | Pricing — Pricing tiers and plans                                                                        |
@@ -89,7 +88,7 @@ The development server will run on `http://localhost:3002` (configured in packag
 
 - **Layout Components** (`src/components/layout/`) - Components that define page structure (Header, Footer, PageTransition)
 - **UI Components** (`src/components/ui/`) - Reusable UI elements (ThemeProvider, SectionHeading, InfiniteMarquee)
-- **Feature Components** (`src/components/features/`) - Feature-specific components (ObjectDetection, Warehouse3D)
+- **Feature Components** (`src/components/features/`) - Feature-specific components (Warehouse3D)
 
 ### Styling
 

@@ -9,9 +9,9 @@ import PageTransition from "@/components/layout/PageTransition";
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
-  title: "Veratori — Ethical Inventory Management | Zero Waste, Maximum Efficiency",
+  title: "Veratori — Automated Inventory for Food Service",
   description:
-    "Veratori provides cutting-edge ethical inventory management software focused on reducing food waste, optimizing space, and delivering precise, reliable digital tools for food retail and logistics.",
+    "Veratori installs computer vision hardware in commercial kitchens and walk-in coolers, delivering real-time inventory tracking, daily manager digests, and automated anomaly alerts — no manual counts required.",
   icons: {
     icon: "/images/Logos/Brand Identity/Logos/Logo_dark.png",
     apple: "/images/Logos/Brand Identity/Logos/Logo_dark.png",

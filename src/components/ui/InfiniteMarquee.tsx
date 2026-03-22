@@ -8,6 +8,8 @@ interface Props {
   direction?: "left" | "right";
   className?: string;
   pauseOnHover?: boolean;
+  /** Tailwind gap between items (e.g. gap-8 md:gap-14) */
+  gapClassName?: string;
 }
 
 export default function InfiniteMarquee({
@@ -16,20 +18,23 @@ export default function InfiniteMarquee({
   direction = "left",
   className = "",
   pauseOnHover = true,
+  gapClassName = "gap-8 md:gap-12",
 }: Props) {
   const style = {
     "--duration": `${speed}s`,
     animationDirection: direction === "right" ? "reverse" : "normal",
   } as React.CSSProperties;
 
+  const row = `flex shrink-0 items-center ${gapClassName}`;
+
   return (
-    <div className={`overflow-hidden ${className}`} aria-hidden="true">
-      <div 
-        className={`flex w-max animate-marquee ${pauseOnHover ? "hover:[animation-play-state:paused]" : ""}`} 
+    <div className={`overflow-hidden ${className}`}>
+      <div
+        className={`flex w-max animate-marquee ${pauseOnHover ? "hover:[animation-play-state:paused]" : ""}`}
         style={style}
       >
-        <div className="flex shrink-0 items-center">{children}</div>
-        <div className="flex shrink-0 items-center">{children}</div>
+        <div className={row}>{children}</div>
+        <div className={row}>{children}</div>
       </div>
     </div>
   );

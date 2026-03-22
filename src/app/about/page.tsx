@@ -1,190 +1,253 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import { motion } from "framer-motion";
 import Image from "next/image";
-import SectionHeading from "@/components/ui/SectionHeading";
+import { Target, Globe } from "lucide-react";
+import { useTheme } from "@/components/ui/ThemeProvider";
+import USMap from "@/components/ui/USMap";
 
-/* ═══════════════════════════════════════════════════════════
-   HERO PARTICLES — Lightweight Framer Motion floating dots
-   Only rendered inside the hero section for performance
-   ═══════════════════════════════════════════════════════════ */
-function AboutHero() {
-  const { scrollY } = useScroll();
-  const yBg = useTransform(scrollY, [0, 800], [0, 150]);
-  const opacity = useTransform(scrollY, [0, 500], [1, 0]);
-  const scale = useTransform(scrollY, [0, 500], [1, 1.05]);
+/* ═══════════════════ TEAM DATA ═══════════════════ */
+const team = [
+  {
+    name: "Justin Chavez-Meneses",
+    role: "Chief Executive Officer",
+    background: "BBA Finance & Accounting, Emory University",
+    contribution: "Orchestrated the architectural pivot from pure data collection to actionable operational intelligence, securing the initial $2M in seed funding while personally overseeing the first 10 pilot installations.",
+    image: "/images/team/justin-meneses.jpeg",
+  },
+  {
+    name: "Felipe Cardozo",
+    role: "Chief Technology Officer",
+    background: "BS Computer Science & Math, Emory University",
+    contribution: "Developed the proprietary 'VeraSight' neural network, achieving a 40% reduction in processing latency for real-time food waste detection. Built the core infrastructure from the ground up in a windowless lab over 72-hour coding sprints.",
+    image: "/images/team/Felipe-Cardozo.jpeg",
+  },
+  {
+    name: "Eduardo Lapa",
+    role: "Software Engineering",
+    background: "BS Economics, Fundação Getulio Vargas",
+    contribution: "Engineered the dynamic pricing engine that correlates real-time inventory levels with market demand, directly responsible for a 15% increase in gross margins for Veratori's beta partners.",
+    image: "/images/team/Eduardo_Lapa.png",
+  },
+  {
+    name: "Leonardo Affonso",
+    role: "Hardware Engineering",
+    background: "BEng Electrical Engineering, Federal University of Rio de Janeiro",
+    contribution: "Designed the custom 'Sentinel-1' sensor housing, capable of withstanding the extreme humidity and temperature fluctuations of industrial kitchens. Optimized power consumption to allow for solar-integrated deployment.",
+    image: "/images/team/LeonardoAffonso.png",
+  },
+  {
+    name: "Daniel Gambacorta",
+    role: "Software Engineering",
+    background: "BEng Mechanical Engineering, Texas A&M",
+    contribution: "Bridges the gap between physical sensors and cloud analytics by developing the edge-computing synchronization layer. His work ensures data integrity even in the most connectivity-challenged environments.",
+    image: "/images/team/daniel-gambacorta.png",
+  },
+  {
+    name: "Milad Khezrefaridi",
+    role: "Hardware Engineering",
+    background: "BEng Mechanical Engineering, UT Austin",
+    contribution: "Revolutionized the mounting system for Veratori's visual sensors, reducing installation time by 70%. Led the rapid prototyping of the second-generation thermal imaging modules.",
+    image: "/images/team/milad-khezrefaridi.png",
+  },
+];
 
+/* ═══════════════════ ORIGIN & MISSION ═══════════════════ */
+function Story() {
+  const { isDark } = useTheme();
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-black">
-      {/* ── Background Engine ── */}
-      <motion.div className="absolute inset-0 z-0" style={{ y: yBg, scale, opacity }}>
-        <Image
-          src="/images/assets/about-hero.png"
-          alt="Abstract global impact visualization"
-          fill
-          className="object-cover opacity-50 contrast-[1.1] saturate-[1.1]"
-          priority
-          sizes="100vw"
-        />
-        {/* Cinematic Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,black_100%)] opacity-80" />
-      </motion.div>
+    <section className={`py-20 ${isDark ? "bg-midnight" : "bg-mist"}`}>
+      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+        <div>
+          <span className="text-sage font-semibold tracking-widest uppercase text-sm mb-4 block">The Origin</span>
+          <p className={`text-lg md:text-xl leading-relaxed mb-8 ${isDark ? "text-white/70" : "text-black/70"}`}>
+            Veratori began in the summer of 2025, when Justin Meneses — while working at Poke Bowl NY — observed firsthand the operational inefficiencies that quietly erode profitability in food service businesses: poor inventory visibility, reactive decision-making, and a near-total absence of actionable data. Determined to solve what he experienced directly, Justin assembled a team of builders and operators, most notably his co-founder Felipe Cardozo, and Veratori was founded.
+          </p>
 
-      {/* ── Floating Glows ── */}
-      <div className="absolute inset-0 z-5 pointer-events-none">
-        <motion.div
-          animate={{ x: [0, 40, 0], opacity: [0.1, 0.25, 0.1] }}
-          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-1/3 right-1/4 w-[500px] h-[500px] bg-electric/20 blur-[130px] rounded-full"
-        />
-        <motion.div
-          animate={{ x: [0, -40, 0], opacity: [0.05, 0.15, 0.05] }}
-          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-          className="absolute bottom-1/3 left-1/4 w-[600px] h-[600px] bg-sage/10 blur-[150px] rounded-full"
-        />
-      </div>
+          <span className="text-sage font-semibold tracking-widest uppercase text-sm mb-4 block">The Mission</span>
+          <p className={`text-lg md:text-xl leading-relaxed mb-10 ${isDark ? "text-white/70" : "text-black/70"}`}>
+            Veratori's mission is to give food & beverage operators the same quality of operational intelligence that enterprise-level organizations have — accessible, real-time, and AI-powered. We believe the future of the food industry is run on data.
+          </p>
 
-      {/* ── Content ── */}
-      <div className="relative z-10 max-w-5xl mx-auto px-[5.2%] text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, ease: [0.23, 1, 0.32, 1] }}
-        >
-          {/* Tagline Pill */}
-          <div className="relative inline-block mb-[clamp(24px,3vw,32px)]">
-            <span className="text-[clamp(10px,0.8vw,14px)] font-bold text-sage uppercase tracking-[0.4em] bg-white/5 backdrop-blur-xl px-8 py-3 rounded-full border border-white/10 shadow-2xl">
-              Our Visionary Impact
-            </span>
-          </div>
-
-          {/* Title */}
-          <h1 className="text-[clamp(44px,7vw,110px)] font-bold tracking-tighter leading-[0.9] text-white">
-            Pioneering the{" "}
-            <span className="bg-gradient-to-r from-electric via-sage to-white bg-clip-text text-transparent">
-              Zero-Waste Era.
-            </span>
-          </h1>
-
-          {/* Glass Card for Subtext + Stats */}
-          <div className="mt-[clamp(40px,5vw,60px)] inline-block p-1 rounded-[34px] bg-gradient-to-b from-white/10 to-transparent">
-            <div className="px-[clamp(32px,4vw,56px)] py-[clamp(24px,3vw,40px)] rounded-[32px] bg-black/40 backdrop-blur-[60px] border border-white/5 max-w-3xl relative group overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.05] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-
-              <p className="text-[clamp(16px,1.4vw,22px)] leading-relaxed text-white/60 text-balance font-medium mb-[clamp(40px,5vw,56px)]">
-                We're on a mission to eliminate food waste through cutting-edge technology,
-                ethical practices, and precision-driven operations that empower businesses worldwide.
-              </p>
-
-              {/* Stats Preview Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 border-t border-white/10 pt-8 mt-4">
-                {[
-                  { value: "500+", label: "Enterprise Clients" },
-                  { value: "30+", label: "Countries" },
-                  { value: "3.2M", label: "Pounds Saved" },
-                ].map((stat, i) => (
-                  <div key={i} className="text-center group/stat">
-                    <div className="text-[clamp(24px,2.5vw,32px)] font-bold mb-1 text-white group-hover/stat:text-sage transition-colors">
-                      {stat.value}
-                    </div>
-                    <div className="text-[clamp(10px,0.8vw,12px)] font-bold uppercase tracking-widest text-white/30 group-hover/stat:text-white/50 transition-colors">
-                      {stat.label}
-                    </div>
-                  </div>
-                ))}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+            {[
+              { icon: Target, title: "Precision Intelligence", text: "99.2% detection accuracy in complex, low-light environments." },
+              { icon: Globe, title: "Global Impact", text: "3.2M+ lbs of annual food waste prevented across our partners." },
+            ].map(item => (
+              <div key={item.title}>
+                <item.icon className="w-8 h-8 md:w-10 md:h-10 text-sage mb-4" />
+                <h4 className="font-bold mb-2 text-lg md:text-xl">{item.title}</h4>
+                <p className={`text-base md:text-lg ${isDark ? "text-white/50" : "text-black/50"}`}>{item.text}</p>
               </div>
-            </div>
+            ))}
           </div>
-        </motion.div>
+        </div>
+        <div className="relative aspect-4/5 rounded-xl overflow-hidden border border-white/10 mt-4 lg:mt-0">
+          <Image
+            src="/images/assets/about-hero.png"
+            alt="Veratori lab"
+            fill
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-black/25" />
+        </div>
       </div>
-
-      {/* Continuity Gradient at Bottom */}
-      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-black to-transparent z-10" />
     </section>
   );
 }
 
-
-/* ═══════════════════════════════════════════════════════════
-   TIMELINE — Electric Blue dot accent markers, polished
-   ═══════════════════════════════════════════════════════════ */
-const timeline = [
+/* ═══════════════════ ROADMAP & TIMELINE ═══════════════════ */
+const milestones = [
   {
-    year: "Early 2025",
-    title: "Neural Initialization",
-    desc: "YOLO & Precision Labels: Establishing the product foundation with high-fidelity training data and custom YOLO architectures for near-perfect object recognition.",
-    color: "bg-sage",
+    date: "Summer 2025",
+    title: "Concept Born",
+    desc: "Justin Meneses identifies operational inefficiencies at Poke Bowl NY; concept for Veratori is born."
   },
   {
-    year: "Late 2025",
-    title: "The Edge Frontier",
-    desc: "NVIDIA Jetson Orin & Embedded AI: Moving the training process to the edge, enabling our hardware to process millisecond-latency AI decisions without external reliance.",
-    color: "bg-electric",
+    date: "August 20, 2025",
+    title: "Official Foundation",
+    desc: "Veratori Inc. is officially founded; co-founder Felipe Cardozo joins the mission."
   },
   {
-    year: "Early 2026",
-    title: "Self-Verifying Scale",
-    desc: "LiDAR & Model Auto-Supervision: Integrating 3D spatial mapping into the product while deploying self-correcting AI loops that automate the training of new vision models.",
-    color: "bg-sky",
+    date: "Late 2025",
+    title: "Product Development",
+    desc: "Initial team assembled; early-stage computer vision and hardware development begins."
   },
   {
-    year: "2026+",
-    title: "The Technological Zenith",
-    desc: "NVIDIA AGX Thor & Supersonic Weight Cells: Scaling the product to autonomous-grade compute and high-frequency mass sensors for the most demanding global logistics.",
-    color: "bg-sage",
+    date: "Early 2026",
+    title: "Beta Launch",
+    desc: "Beta program launched; first piloting partners onboarded at $359/month per hardware unit."
   },
+  {
+    date: "August 2026 (Target)",
+    title: "Market Deployment",
+    desc: "Market-ready product deployed across all piloting partner locations."
+  },
+  {
+    date: "2026 & Beyond",
+    title: "Vertical Expansion",
+    desc: "Expansion into pharmaceuticals, manufacturing, and additional high-dependency verticals."
+  }
 ];
 
-function Timeline() {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
+function Roadmap() {
+  const { isDark } = useTheme();
+  return (
+    <section className={`py-20 ${isDark ? "bg-black" : "bg-white"}`}>
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+          <div className="lg:sticky lg:top-32">
+            <span className="text-sage font-semibold tracking-widest uppercase text-sm mb-4 block">Roadmap</span>
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-8">Scale & Expansion</h2>
+            <p className={`text-xl md:text-2xl leading-relaxed ${isDark ? "text-white/60" : "text-black/60"}`}>
+              By August 2026, Veratori's market-ready product will be deployed across all piloting partner locations. In parallel, the team is in active development with firms outside the food service vertical — including organizations in pharmaceuticals and manufacturing — establishing Veratori as a cross-industry operational intelligence platform.
+            </p>
+            <div className="mt-20">
+              <USMap />
+            </div>
+          </div>
+
+          <div className="space-y-12 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-linear-to-b before:from-transparent before:via-sage/20 before:to-transparent">
+            {milestones.map((m, i) => (
+              <div key={i} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                {/* Icon */}
+                <div className="flex items-center justify-center w-10 h-10 rounded-full border border-sage/30 bg-black text-sage shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
+                  <div className="w-2 h-2 rounded-full bg-sage" />
+                </div>
+                {/* Content */}
+                <div className="w-[calc(100%-4rem)] md:w-[45%] p-4 rounded border border-white/5 bg-white/5 shadow-sm">
+                  <div className="flex items-center justify-between space-x-2 mb-2">
+                    <div className="font-bold text-sage text-base md:text-lg">{m.date}</div>
+                  </div>
+                  <div className="text-lg md:text-xl font-bold mb-2">{m.title}</div>
+                  <div className={`text-base md:text-lg ${isDark ? "text-white/50" : "text-black/50"}`}>{m.desc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ═══════════════════ TEAM SECTION ═══════════════════ */
+function Team() {
+  const { isDark } = useTheme();
+  
+  // Animation variants for the team member cards
+  const cardVariants = {
+    initial: { y: 0 },
+    hover: { y: -5 }
+  };
+
+  const infoBoxVariants = {
+    initial: { opacity: 0, y: 15, scale: 0.98 },
+    hover: { 
+      opacity: 1, 
+      y: 0, 
+      scale: 1,
+      transition: { 
+        duration: 0.4, 
+        ease: [0.23, 1, 0.32, 1] as [number, number, number, number]
+      }
+    }
+  };
 
   return (
-    <section className="relative py-[8%] overflow-hidden">
-      <div className="absolute inset-0 bg-[#080b13]" />
-      <div className="relative z-10 max-w-5xl mx-auto px-[5.2%]">
-        <SectionHeading
-          tag="Our Journey"
-          title="From Idea to"
-          highlight="Global Impact"
-          tagColor="text-sage"
-        />
-        <div ref={ref} className="relative mt-[clamp(24px,3vw,32px)]">
-          {/* Vertical spine */}
-          <div className="absolute left-[22px] sm:left-1/2 sm:-translate-x-px top-0 bottom-0 w-0.5 bg-white/10" />
+    <section className={`py-20 ${isDark ? "bg-midnight" : "bg-mist"}`}>
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="mb-14 text-center md:text-left">
+          <span className="text-sage font-semibold tracking-widest uppercase text-sm mb-4 block">People</span>
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">The Team</h2>
+          <p className={`max-w-2xl text-lg md:text-xl ${isDark ? "text-white/50" : "text-black/50"}`}>
+            Engineers and operators with backgrounds in computer vision, mechanical engineering, and quantitative finance.
+          </p>
+        </div>
 
-          {timeline.map((t, i) => (
-            <motion.div
-              key={t.year}
-              initial={{ opacity: 0, x: i % 2 === 0 ? -40 : 40 }}
-              animate={inView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.5, delay: i * 0.15 }}
-              className={`relative flex items-start gap-[clamp(16px,2vw,24px)] mb-[clamp(40px,5vw,56px)] ${i % 2 === 0 ? "sm:flex-row" : "sm:flex-row-reverse"} flex-row`}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+          {team.map((member) => (
+            <motion.div 
+              key={member.name} 
+              initial="initial"
+              whileHover="hover"
+              variants={cardVariants}
+              className="group relative"
             >
-              {/* Dot with pulse ring */}
-              <div className="absolute left-[18px] sm:left-1/2 sm:-translate-x-1/2 top-1 z-10">
-                <div className={`w-3.5 h-3.5 rounded-full ${t.color} ring-[5px] ring-[#080b13]`} />
-                {/* Subtle outer glow */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={inView ? { opacity: [0, 0.4, 0], scale: [0.5, 1.8, 2] } : {}}
-                  transition={{ delay: i * 0.15 + 0.5, duration: 1.2, ease: "easeOut" }}
-                  className={`absolute inset-0 rounded-full ${t.color} blur-sm`}
+              <div className="relative aspect-[3/4] rounded-2xl overflow-hidden mb-6 bg-midnight shadow-lg border border-white/5">
+                <Image
+                  src={member.image}
+                  alt={member.name}
+                  fill
+                  className="object-cover transition-all duration-700 group-hover:scale-[1.08]"
                 />
+                
+                {/* Hover Overlay Box */}
+                <motion.div 
+                  variants={infoBoxVariants}
+                  className="absolute inset-x-3 bottom-3 p-5 rounded-xl bg-black/85 backdrop-blur-lg border border-white/10 z-10 pointer-events-none group-hover:pointer-events-auto shadow-2xl flex flex-col gap-3"
+                >
+                  <div>
+                    <p className="text-sage font-bold text-xs uppercase tracking-[0.2em] mb-2">Mission & Impact</p>
+                    <p className="text-white text-sm md:text-base leading-relaxed font-medium">
+                      {member.contribution}
+                    </p>
+                  </div>
+                  
+                  <div className="pt-3 border-t border-white/10">
+                    <p className="text-white/40 text-[10px] md:text-xs uppercase tracking-widest font-bold mb-1">Formation</p>
+                    <p className="text-white/90 text-sm leading-tight">{member.background}</p>
+                  </div>
+                </motion.div>
+
+                {/* Subtle dark gradient overlay */}
+                <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/20 to-transparent opacity-60 group-hover:opacity-30 transition-opacity duration-700" />
               </div>
 
-              {/* Content */}
-              <div className={`ml-[clamp(40px,5vw,48px)] sm:ml-0 ${i % 2 === 0 ? "sm:w-1/2 sm:pr-[clamp(32px,4vw,48px)] sm:text-right" : "sm:w-1/2 sm:pl-[clamp(32px,4vw,48px)]"}`}>
-                <span className={`text-[clamp(12px,1vw,14px)] font-bold ${t.color.replace("bg-", "text-")}`}>
-                  {t.year}
-                </span>
-                <h3 className="text-[clamp(18px,2vw,24px)] font-bold mt-1 mb-[clamp(8px,1vw,12px)] text-white">
-                  {t.title}
-                </h3>
-                <p className="text-[clamp(14px,1.2vw,16px)] leading-relaxed text-white/50">
-                  {t.desc}
+              <div className="px-2 mt-2 text-center">
+                <h3 className="text-2xl md:text-3xl font-bold mb-1 group-hover:text-sage transition-colors duration-300">{member.name}</h3>
+                <p className="text-sage/80 font-semibold text-base md:text-lg tracking-wide capitalize italic">
+                  {member.role}
                 </p>
               </div>
             </motion.div>
@@ -195,144 +258,57 @@ function Timeline() {
   );
 }
 
-/* ═══════════════════════════════════════════════════════════
-   VALUES CARDS — Palette-colored with refined hover reveals
-   ═══════════════════════════════════════════════════════════ */
-
-/* ═══════════════════════════════════════════════════════════
-   TEAM GRID — Professional team showcase with modern design
-   ═══════════════════════════════════════════════════════════ */
-const team = [
-  {
-    name: "Justin Chavez-Meneses",
-    role: "CEO | BBA Finance & Accounting",
-    university: "Emory University",
-    img: "/images/team/justin-meneses.jpeg",
-    accent: "electric",
-  },
-  {
-    name: "Felipe Cardozo",
-    role: "CTO | BS CS, Mathematics, & Finance",
-    university: "Emory University",
-    img: "/images/team/Felipe-Cardozo.jpeg",
-    accent: "sage",
-  },
-  {
-    name: "Eduardo Lapa",
-    role: "Software Developer | BS Economics",
-    university: "Fundação Getulio Vargas",
-    img: "/images/team/Eduardo_Lapa.png",
-    accent: "sky",
-  },
-  {
-    name: "Leonardo Affonso",
-    role: "Sr. Hardware Developer | BEng Electrical Engineering",
-    university: "Federal University of Rio de Janeiro",
-    img: "/images/team/LeonardoAffonso.png",
-    accent: "electric",
-  },
-  {
-    name: "Daniel Gambacorta",
-    role: "Software Developer | BEng Mechanical Engineering",
-    university: "Texas A&M",
-    img: "/images/team/daniel-gambacorta.png",
-    accent: "sage",
-  },
-  {
-    name: "Milad Khezrefaridi",
-    role: "Hardware Developer | BEng Mechanical Engineering",
-    university: "UT Austin",
-    img: "/images/team/milad-khezrefaridi.png",
-    accent: "sky",
-  },
-];
-
-function TeamGrid() {
-  const accentMap: Record<string, { bg: string; text: string; border: string; hoverBorder: string; dot: string }> = {
-    electric: { bg: "bg-electric/10", text: "text-electric", border: "border-electric/30", hoverBorder: "hover:border-electric/50", dot: "bg-electric" },
-    sage: { bg: "bg-sage/10", text: "text-sage", border: "border-sage/30", hoverBorder: "hover:border-sage/50", dot: "bg-sage" },
-    sky: { bg: "bg-sky/10", text: "text-sky", border: "border-sky/30", hoverBorder: "hover:border-sky/50", dot: "bg-sky" },
-  };
-
-  return (
-    <section className="relative py-[10%] overflow-hidden">
-      <div className="absolute inset-0 bg-black" />
-      <div className="relative z-10 max-w-7xl mx-auto px-[5.2%]">
-        <SectionHeading
-          tag="Leadership"
-          title="Meet the Team"
-          highlight="Building Veratori"
-          subtitle="A diverse team of innovators dedicated to eliminating food waste through technology."
-        />
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[clamp(24px,3vw,32px)] mt-[clamp(32px,4vw,48px)]">
-          {team.map((m, i) => {
-            const accent = accentMap[m.accent];
-            return (
-              <motion.div
-                key={m.name}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: i * 0.1 }}
-                className={`group relative rounded-2xl overflow-hidden border-2 transition-all duration-500 bg-white/[0.03] hover:bg-white/[0.05] ${accent.border} ${accent.hoverBorder} backdrop-blur-[24px] saturate-[1.4]`}
-              >
-                <div className="relative h-[clamp(300px,35vw,360px)] overflow-hidden">
-                  {m.img ? (
-                    <Image
-                      src={m.img}
-                      alt={m.name}
-                      fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-110"
-                      sizes="(max-width:640px)100vw,25vw"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className={`w-full h-full ${accent.bg} flex items-center justify-center`}>
-                      <div className="text-center">
-                        <div className={`w-[clamp(80px,8vw,96px)] h-[clamp(80px,8vw,96px)] rounded-full ${accent.bg} ${accent.border} border-2 flex items-center justify-center mx-auto mb-4`}>
-                          <span className={`text-[clamp(32px,3vw,36px)] font-bold ${accent.text}`}>
-                            {m.name.split(' ').map(n => n[0]).join('')}
-                          </span>
-                        </div>
-                        <p className="text-[clamp(12px,1vw,14px)] font-medium text-white/40">
-                          Photo coming soon
-                        </p>
-                      </div>
-                    </div>
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500" />
-                  {/* Accent indicator */}
-                  <div className={`absolute top-[clamp(12px,1.5vw,16px)] right-[clamp(12px,1.5vw,16px)] w-3 h-3 rounded-full ${accent.dot} opacity-0 group-hover:opacity-100 transition-opacity duration-500 shadow-[0_0_12px_rgba(255,255,255,0.2)]`} />
-                </div>
-                <div className="p-[clamp(20px,2vw,24px)] bg-gradient-to-b from-transparent to-current/5 relative z-10">
-                  <h3 className="text-[clamp(18px,1.8vw,20px)] font-bold mb-2 text-white">
-                    {m.name}
-                  </h3>
-                  <p className={`text-[clamp(12px,1vw,14px)] font-semibold ${accent.text}`}>
-                    {m.role}
-                  </p>
-                  <p className="text-[clamp(11px,0.9vw,13px)] text-white/50 mt-1 leading-tight">
-                    {m.university}
-                  </p>
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════
-   PAGE ASSEMBLY — Full-page diagonal gradient + grain
-   ═══════════════════════════════════════════════════════════ */
+/* ═══════════════════ PAGE ASSEMBLY ═══════════════════ */
 export default function AboutPage() {
+  const { isDark } = useTheme();
   return (
-    <div className="relative bg-black text-white">
-      <AboutHero />
-      <Timeline />
-      <TeamGrid />
-    </div>
+    <main className={isDark ? "bg-black text-white" : "bg-white text-black"}>
+      {/* Page Header */}
+      <section className={`pt-28 pb-14 border-b ${isDark ? "border-white/5" : "border-black/5"}`}>
+        <div className="max-w-7xl mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <span className="text-sage font-semibold tracking-widest uppercase text-xs mb-4 block">About Veratori</span>
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-none mb-6 text-balance">
+              Quantifying the physical world<br />
+              <span className="text-sage">for the future of retail</span>
+            </h1>
+            <p className={`text-lg max-w-2xl leading-relaxed ${isDark ? "text-white/55" : "text-black/55"}`}>
+              We build specialized computer vision and sensor hardware to eliminate waste in the global food supply chain. 
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      <Story />
+      <Roadmap />
+      <Team />
+
+      {/* Contact CTA */}
+      <section className={`py-24 border-t ${isDark ? "border-white/5 bg-[#0A1220]" : "border-black/5 bg-[#F4F9F6]"}`}>
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-10">
+            <div className="text-left md:max-w-xl">
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Work with us</h2>
+              <p className={`text-lg md:text-xl ${isDark ? "text-white/60" : "text-black/60"}`}>
+                We're always interested in hearing from engineers, operators, and people who want to reduce food waste at scale.
+              </p>
+            </div>
+            <div className="shrink-0">
+              <a
+                href="mailto:veratori@veratori.com"
+                className="inline-flex items-center gap-2 px-10 py-5 text-lg border-2 border-sage text-sage font-bold rounded-lg hover:bg-sage hover:text-white transition-all duration-300 shadow-sm"
+              >
+                Get in Touch
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }
+

@@ -1,139 +1,241 @@
 "use client";
 
+import { motion } from "framer-motion";
+import { Mail, MapPin, Clock, Send, ArrowRight } from "lucide-react";
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
-import { MapPin } from "lucide-react";
+import { useTheme } from "@/components/ui/ThemeProvider";
 
-interface FormData { name: string; email: string; company: string; message: string }
-interface FormErrors { name?: string; email?: string; message?: string }
+const WEB3FORMS_ENDPOINT = "https://api.web3forms.com/submit";
 
 export default function ContactPage() {
-  const [form, setForm] = useState<FormData>({ name: "", email: "", company: "", message: "" });
-  const [errors, setErrors] = useState<FormErrors>({});
-  const [submitted, setSubmitted] = useState(false);
-  const [focused, setFocused] = useState<string | null>(null);
+  const { isDark } = useTheme();
+  const [formState, setFormState] = useState<"idle" | "submitting" | "success">("idle");
+  const [formError, setFormError] = useState<string | null>(null);
 
-  const validate = (): boolean => {
-    const e: FormErrors = {};
-    if (!form.name.trim()) e.name = "Name is required";
-    if (!form.email.trim()) e.email = "Email is required";
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = "Invalid email";
-    if (!form.message.trim()) e.message = "Message is required";
-    setErrors(e);
-    return Object.keys(e).length === 0;
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setFormError(null);
+
+    const accessKey = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY;
+    if (!accessKey?.trim()) {
+      setFormError(
+        "Form is not configured yet. Add NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY to your environment (see .env.example)."
+      );
+      return;
+    }
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
+    const firstName = (formData.get("firstName") as string)?.trim() ?? "";
+    const lastName = (formData.get("lastName") as string)?.trim() ?? "";
+    const inquiryType = (formData.get("inquiryType") as string)?.trim() ?? "General";
+
+    formData.append("access_key", accessKey);
+    formData.append("name", [firstName, lastName].filter(Boolean).join(" ") || "Website visitor");
+    formData.append("subject", `Veratori contact — ${inquiryType}`);
+
+    setFormState("submitting");
+    try {
+      const res = await fetch(WEB3FORMS_ENDPOINT, { method: "POST", body: formData });
+      const data = (await res.json()) as { success?: boolean; message?: string };
+
+      if (res.ok && data.success) {
+        setFormState("success");
+        form.reset();
+      } else {
+        setFormError(data.message ?? "Something went wrong. Please try again or email veratori@veratori.com.");
+        setFormState("idle");
+      }
+    } catch {
+      setFormError("Network error. Please try again or email veratori@veratori.com.");
+      setFormState("idle");
+    }
   };
 
-  const handleSubmit = (ev: React.FormEvent) => {
-    ev.preventDefault();
-    if (validate()) setSubmitted(true);
-  };
-
-  const ic = (field: keyof FormErrors) =>
-    `w-full px-[clamp(16px,2vw,24px)] py-[clamp(12px,1.5vw,16px)] rounded-xl border outline-none transition-all duration-200 text-[clamp(14px,1vw,16px)] bg-white/[0.03] text-white placeholder-white/30 ${errors[field]
-      ? "border-red-500/50"
-      : focused === field
-        ? "border-electric/50 ring-1 ring-electric/20"
-        : "border-white/10 hover:border-white/20"
-    }`;
+  const inputClass = `w-full px-4 py-3 rounded-lg border text-sm focus:outline-none focus:border-sage transition-colors ${isDark ? "bg-white/5 border-white/10 text-white placeholder-white/20" : "bg-mist border-black/8 text-black"}`;
+  const labelClass = `text-xs font-semibold tracking-widest uppercase ${isDark ? "text-white/40" : "text-black/40"}`;
 
   return (
-    <>
-      {/* Hero */}
-      <section className="relative pt-[12%] pb-[4%] overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-[#0a0f12] to-black" />
-        <div className="absolute top-[8%] right-0 w-[clamp(200px,25vw,320px)] h-[clamp(200px,25vw,320px)] rounded-full bg-electric/5 blur-3xl" />
-        <div className="relative z-10 max-w-3xl mx-auto px-[5.2%] text-center">
-          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
-            <span className="text-[clamp(10px,0.85vw,14px)] font-semibold text-electric uppercase tracking-widest">Contact</span>
-            <h1 className="mt-[clamp(16px,2vw,24px)] text-[clamp(36px,5vw,68px)] font-bold tracking-tight text-white leading-[1.08]">
-              Let&apos;s <span className="gradient-text">Connect</span>
+    <main className={`transition-colors duration-500 ${isDark ? "bg-black text-white" : "bg-white text-black"}`}>
+
+      {/* ── Page Header ── */}
+      <section className={`pt-28 pb-14 border-b ${isDark ? "border-white/5" : "border-black/5"}`}>
+        <div className="max-w-7xl mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <span className="text-sage font-semibold tracking-widest uppercase text-xs mb-4 block">Contact</span>
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight leading-tight mb-5">
+              Book a walkthrough.
             </h1>
-            <p className="mt-[clamp(16px,2vw,24px)] text-[clamp(16px,1.4vw,20px)] max-w-2xl mx-auto text-white/50 leading-relaxed">
-              Ready to transform your inventory management? Our team is here to help.
+            <p className={`text-lg max-w-2xl leading-relaxed ${isDark ? "text-white/55" : "text-black/55"}`}>
+              Whether you're a food &amp; beverage operator looking to optimize your business, or an investor interested in what we're building — we want to hear from you.
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Content */}
-      <section className="relative py-[6%] overflow-hidden">
-        <div className="absolute inset-0 bg-black" />
-        <div className="relative z-10 max-w-7xl mx-auto px-[5.2%] grid grid-cols-1 lg:grid-cols-2 gap-[clamp(32px,4vw,48px)] items-start">
-          {/* Form */}
-          <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-            <AnimatePresence mode="wait">
-              {!submitted ? (
-                <motion.form key="form" exit={{ opacity: 0, y: -20 }} onSubmit={handleSubmit} className="p-[clamp(24px,3vw,32px)] rounded-2xl border space-y-[clamp(16px,2vw,24px)] bg-white/[0.02] border-white/[0.06] backdrop-blur-[24px] saturate-[1.4]" noValidate>
-                  <div>
-                    <label htmlFor="name" className="block text-[clamp(12px,0.9vw,14px)] font-medium mb-[clamp(6px,0.8vw,8px)] text-white/70">Full Name *</label>
-                    <input id="name" type="text" value={form.name} onChange={(e) => { setForm({ ...form, name: e.target.value }); if (errors.name) setErrors({ ...errors, name: undefined }); }} onFocus={() => setFocused("name")} onBlur={() => setFocused(null)} className={ic("name")} placeholder="Jane Doe" />
-                    <AnimatePresence>{errors.name && <motion.p initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -5 }} className="text-red-400 text-[clamp(10px,0.85vw,12px)] mt-1">{errors.name}</motion.p>}</AnimatePresence>
-                  </div>
-                  <div>
-                    <label htmlFor="email" className="block text-[clamp(12px,0.9vw,14px)] font-medium mb-[clamp(6px,0.8vw,8px)] text-white/70">Email *</label>
-                    <input id="email" type="email" value={form.email} onChange={(e) => { setForm({ ...form, email: e.target.value }); if (errors.email) setErrors({ ...errors, email: undefined }); }} onFocus={() => setFocused("email")} onBlur={() => setFocused(null)} className={ic("email")} placeholder="jane@company.com" />
-                    <AnimatePresence>{errors.email && <motion.p initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -5 }} className="text-red-400 text-[clamp(10px,0.85vw,12px)] mt-1">{errors.email}</motion.p>}</AnimatePresence>
-                  </div>
-                  <div>
-                    <label htmlFor="company" className="block text-[clamp(12px,0.9vw,14px)] font-medium mb-[clamp(6px,0.8vw,8px)] text-white/70">Company</label>
-                    <input id="company" type="text" value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} onFocus={() => setFocused("company")} onBlur={() => setFocused(null)} className={ic("message")} placeholder="Acme Corp" />
-                  </div>
-                  <div>
-                    <label htmlFor="message" className="block text-[clamp(12px,0.9vw,14px)] font-medium mb-[clamp(6px,0.8vw,8px)] text-white/70">Message *</label>
-                    <textarea id="message" rows={5} value={form.message} onChange={(e) => { setForm({ ...form, message: e.target.value }); if (errors.message) setErrors({ ...errors, message: undefined }); }} onFocus={() => setFocused("message")} onBlur={() => setFocused(null)} className={`${ic("message")} resize-none`} placeholder="Tell us about your inventory challenges..." />
-                    <AnimatePresence>{errors.message && <motion.p initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -5 }} className="text-red-400 text-[clamp(10px,0.85vw,12px)] mt-1">{errors.message}</motion.p>}</AnimatePresence>
-                  </div>
-                  <motion.button whileHover={{ scale: 1.02, y: -1 }} whileTap={{ scale: 0.98 }} type="submit" className="w-full py-[clamp(12px,1.5vw,16px)] bg-electric text-white font-semibold rounded-xl text-[clamp(14px,1vw,16px)] glow-electric glow-electric-hover transition-all duration-300 cursor-pointer">
-                    Send Message
-                  </motion.button>
-                </motion.form>
-              ) : (
-                <motion.div key="success" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="p-[clamp(32px,4vw,48px)] rounded-2xl border text-center bg-white/[0.02] border-white/[0.06] backdrop-blur-[24px] saturate-[1.4]">
-                  <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 200 }} className="w-[clamp(64px,5vw,80px)] h-[clamp(64px,5vw,80px)] rounded-full bg-sage/20 flex items-center justify-center mx-auto mb-[clamp(16px,2vw,24px)]">
-                    <svg className="w-[50%] h-[50%] text-sage" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
-                  </motion.div>
-                  <h3 className="text-[clamp(24px,2vw,32px)] font-bold mb-[clamp(8px,1vw,12px)] text-white">Message Sent!</h3>
-                  <p className="text-[clamp(14px,1vw,16px)] text-white/50">Thank you, {form.name}. We&apos;ll be in touch within 24 hours.</p>
-                  <motion.button whileHover={{ scale: 1.05 }} onClick={() => { setSubmitted(false); setForm({ name: "", email: "", company: "", message: "" }); }} className="mt-[clamp(16px,2vw,24px)] px-[clamp(24px,3vw,32px)] py-[clamp(8px,1vw,12px)] text-[clamp(12px,0.9vw,14px)] text-electric border border-electric/30 rounded-lg hover:bg-electric/10 transition-colors cursor-pointer">
-                    Send another
-                  </motion.button>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.div>
+      <section className={`py-20 ${isDark ? "bg-midnight" : "bg-mist"}`}>
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
 
-          {/* Info side */}
-          <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="space-y-[clamp(16px,2vw,24px)]">
-
-
-            {[
-              { icon: "M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75", label: "Email", value: "hello@veratori.com", color: "text-electric" },
-              { icon: "M15 10.5a3 3 0 11-6 0 3 3 0 016 0z M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z", label: "Headquarters", value: "Austin, Texas", color: "text-sage" },
-              { icon: "M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z", label: "Response Time", value: "Within 24 hours", color: "text-sky" },
-            ].map((item, i) => (
-              <motion.div key={item.label} initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 + i * 0.1 }} className="flex items-center gap-[clamp(12px,1.5vw,16px)] p-[clamp(12px,1.5vw,16px)] rounded-xl bg-white/[0.02] border border-white/[0.06] backdrop-blur-[24px] saturate-[1.4]">
-                <svg className={`w-[clamp(20px,1.5vw,24px)] h-[clamp(20px,1.5vw,24px)] flex-shrink-0 ${item.color}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d={item.icon} /></svg>
-                <div>
-                  <p className="text-[clamp(10px,0.85vw,12px)] text-white/40">{item.label}</p>
-                  <p className="font-medium text-[clamp(14px,1vw,16px)] text-white">{item.value}</p>
+            {/* ── Contact Info ── */}
+            <div className="flex flex-col justify-between">
+              <div className="space-y-10">
+                <div className="flex gap-5 items-start">
+                  <div className={`p-3 rounded-lg ${isDark ? "bg-white/5" : "bg-white shadow-sm"}`}>
+                    <MapPin className="w-5 h-5 text-sage" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold mb-1">Headquarters</h3>
+                    <p className={`text-base leading-relaxed ${isDark ? "text-white/50" : "text-black/50"}`}>
+                      Austin, Texas<br />United States
+                    </p>
+                  </div>
                 </div>
-              </motion.div>
-            ))}
 
-            {/* Map placeholder */}
-            <div className="relative h-[clamp(150px,15vw,192px)] rounded-2xl overflow-hidden">
-              <Image src="https://images.unsplash.com/photo-1531219432768-9f540ce91ef3?w=800&q=80" alt="Austin skyline" fill className="object-cover" sizes="50vw" loading="lazy" />
-              <div className="absolute inset-0 bg-black/40" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="px-[clamp(12px,1.5vw,16px)] py-[clamp(8px,1vw,12px)] rounded-xl backdrop-blur-md bg-black/80 text-white border border-white/[0.06]">
-                  <p className="text-[clamp(12px,0.9vw,14px)] font-medium flex items-center gap-[clamp(4px,0.5vw,6px)]"><MapPin className="w-4 h-4 text-electric" strokeWidth={1.8} /> Austin, Texas</p>
+                <div className="flex gap-5 items-start">
+                  <div className={`p-3 rounded-lg ${isDark ? "bg-white/5" : "bg-white shadow-sm"}`}>
+                    <Mail className="w-5 h-5 text-sage" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold mb-1">Email</h3>
+                    <p className={`text-base leading-relaxed ${isDark ? "text-white/50" : "text-black/50"}`}>
+                      <a href="mailto:veratori@veratori.com" className="hover:text-sage transition-colors">veratori@veratori.com</a>
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex gap-5 items-start">
+                  <div className={`p-3 rounded-lg ${isDark ? "bg-white/5" : "bg-white shadow-sm"}`}>
+                    <Clock className="w-5 h-5 text-sage" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold mb-1">Response time</h3>
+                    <p className={`text-base leading-relaxed ${isDark ? "text-white/50" : "text-black/50"}`}>
+                      We respond to all inquiries within one business day. Demo slots are available Monday–Friday, 9 AM–5 PM CT.
+                    </p>
+                  </div>
                 </div>
               </div>
+
+              {/* What to expect block */}
+              <div className={`mt-12 p-6 rounded-xl border ${isDark ? "bg-white/5 border-white/10" : "bg-white border-black/5 shadow-sm"}`}>
+                <h4 className="font-bold mb-4 text-sm uppercase tracking-widest text-sage">What to expect</h4>
+                <ul className="space-y-3">
+                  {[
+                    "A 30-minute video call with a member of our team",
+                    "A live demo of the Veratori dashboard",
+                    "A transparent estimate of potential savings for your locations",
+                    "No sales pressure — just an honest conversation about fit",
+                  ].map((item, i) => (
+                    <li key={i} className={`flex items-start gap-3 text-sm ${isDark ? "text-white/60" : "text-black/60"}`}>
+                      <span className="text-sage font-bold mt-0.5">—</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
-          </motion.div>
+
+            {/* ── Contact Form ── */}
+            <div className={`p-10 md:p-12 rounded-xl border ${isDark ? "bg-black border-white/10" : "bg-white border-black/5 shadow-xl"}`}>
+              {formState === "success" ? (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.97 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="text-center py-16"
+                >
+                  <div className="w-16 h-16 bg-sage/15 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <Send className="w-8 h-8 text-sage" />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-3">Message received</h3>
+                  <p className={`text-base ${isDark ? "text-white/50" : "text-black/50"}`}>
+                    We'll be in touch within one business day to schedule your walkthrough.
+                  </p>
+                  <p className={`mt-3 text-sm ${isDark ? "text-white/35" : "text-black/35"}`}>
+                    You can also reach us directly at{" "}
+                    <a href="mailto:veratori@veratori.com" className="text-sage hover:underline">veratori@veratori.com</a>
+                  </p>
+                  <button
+                    onClick={() => setFormState("idle")}
+                    className="mt-8 font-semibold text-sage flex items-center gap-2 mx-auto hover:opacity-80 transition-opacity"
+                  >
+                    Send another message <ArrowRight className="w-4 h-4" />
+                  </button>
+                </motion.div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div className="space-y-1.5">
+                      <label className={labelClass}>First Name</label>
+                      <input name="firstName" required type="text" className={inputClass} />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className={labelClass}>Last Name</label>
+                      <input name="lastName" required type="text" className={inputClass} />
+                    </div>
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className={labelClass}>Work Email</label>
+                    <input name="email" required type="email" className={inputClass} />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className={labelClass}>Company</label>
+                    <input name="company" required type="text" className={inputClass} />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className={labelClass}>Inquiry Type</label>
+                    <select
+                      name="inquiryType"
+                      required
+                      className={inputClass}
+                    >
+                      <option value="">Select one...</option>
+                      <option value="Operator">Operator — I run a food service business</option>
+                      <option value="Investor">Investor — I'm interested in Veratori</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className={labelClass}>Message</label>
+                    <textarea
+                      name="message"
+                      required
+                      rows={4}
+                      className={`${inputClass} resize-none`}
+                      placeholder="Number of locations, current inventory method, main pain points..."
+                    />
+                  </div>
+                  {formError && (
+                    <p
+                      className={`text-sm rounded-lg border px-4 py-3 ${isDark ? "border-red-500/30 bg-red-500/10 text-red-200" : "border-red-200 bg-red-50 text-red-800"}`}
+                      role="alert"
+                    >
+                      {formError}
+                    </p>
+                  )}
+                  <button
+                    type="submit"
+                    disabled={formState === "submitting"}
+                    className={`w-full py-4 bg-sage text-white font-semibold rounded-md hover:bg-sage-dark transition-colors duration-200 flex items-center justify-center gap-2.5 ${formState === "submitting" ? "opacity-60 cursor-not-allowed" : ""}`}
+                  >
+                    {formState === "submitting" ? "Sending..." : "Send Message"}
+                    <Send className="w-4 h-4" />
+                  </button>
+                  <p className={`text-xs text-center ${isDark ? "text-white/25" : "text-black/25"}`}>
+                    Or email us directly at{" "}
+                    <a href="mailto:veratori@veratori.com" className="text-sage hover:underline">veratori@veratori.com</a>
+                  </p>
+                </form>
+              )}
+            </div>
+          </div>
         </div>
       </section>
-    </>
+    </main>
   );
 }

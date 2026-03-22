@@ -11,8 +11,8 @@ import { useTheme } from "@/components/ui/ThemeProvider";
 const navLinks = [
   { label: "Home", href: "/" },
   { label: "Product", href: "/product" },
-  { label: "About Us", href: "/about" },
-  { label: "Mission", href: "/mission" },
+  { label: "About", href: "/about" },
+  { label: "Impact", href: "/mission" },
   { label: "Pricing", href: "/pricing" },
   { label: "Contact", href: "/contact" },
 ];
@@ -50,46 +50,42 @@ export default function Header() {
           : "bg-transparent"
           }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 sm:h-[72px]">
+        <div className="w-full mx-auto px-6 sm:px-10 lg:px-12">
+          <div className="flex items-center justify-between h-20 sm:h-[88px]">
             {/* ── Logo ── */}
             <Link href="/" className="flex items-center" aria-label="Veratori Home">
               <Image
                 src="/images/Logos/Brand Identity/Logos/Logo_name_dark_nobg.png"
                 alt="Veratori Logo"
-                width={160}
-                height={40}
-                className={`h-8 sm:h-10 w-auto object-contain transition-all duration-300 ${isDark ? "brightness-0 invert" : ""}`}
+                width={180}
+                height={45}
+                className={`h-11 sm:h-[48px] w-auto object-contain transition-all duration-300 ${isDark ? "invert" : ""}`}
                 priority
               />
             </Link>
 
             {/* ── Desktop Navigation (center) ── */}
             <nav
-              className="hidden md:flex items-center gap-1"
+              className="hidden md:flex items-center gap-8"
               aria-label="Main navigation"
             >
-              {navLinks.map((link) => {
+              {navLinks.filter(link => !["Home", "Contact"].includes(link.label)).map((link) => {
                 const active = pathname === link.href;
                 return (
                   <Link
                     key={link.href}
                     href={link.href}
-                    className={`relative px-4 py-2 text-[clamp(12px,0.9vw,14px)] font-medium tracking-wide uppercase transition-colors duration-200 ${active
-                      ? "text-electric"
-                      : isDark ? "text-white/60 hover:text-white" : "text-black/60 hover:text-black"
+                    className={`relative text-[clamp(17px,1.2vw,19px)] font-semibold transition-colors duration-200 py-1 ${active
+                      ? "text-sage"
+                      : isDark ? "text-white/80 hover:text-white" : "text-black/80 hover:text-black"
                       }`}
                   >
                     {link.label}
                     {active && (
-                      <motion.span
-                        layoutId="activeNav"
-                        className="absolute bottom-0 left-3 right-3 h-[2px] bg-electric rounded-full"
-                        transition={{
-                          type: "spring",
-                          stiffness: 400,
-                          damping: 30,
-                        }}
+                      <motion.div
+                        layoutId="nav-underline"
+                        className="absolute -bottom-1 left-0 right-0 h-0.5 bg-sage rounded-full"
+                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
                       />
                     )}
                   </Link>
@@ -98,21 +94,31 @@ export default function Header() {
             </nav>
 
             {/* ── Actions ── */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-4">
               <button
                 onClick={toggleTheme}
-                className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors cursor-pointer ${isDark ? "text-white/70 hover:text-white hover:bg-white/5" : "text-black/70 hover:text-black hover:bg-black/5"}`}
+                className={`w-9 h-9 rounded-lg flex items-center justify-center transition-colors cursor-pointer ${isDark ? "text-white/70 hover:text-white hover:bg-white/5" : "text-black/70 hover:text-black hover:bg-black/5"}`}
                 aria-label="Toggle theme"
               >
                 {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
               </button>
+
+              <Link
+                href="/contact"
+                className={`hidden md:inline-flex items-center justify-center px-7 py-3 rounded-full text-[clamp(16px,1.1vw,18px)] font-bold transition-all duration-300 ${isDark
+                  ? "bg-sage text-white hover:bg-sage-light"
+                  : "bg-sage text-white hover:opacity-90 shadow-lg"
+                  }`}
+              >
+                Contact
+              </Link>
 
               <button
                 onClick={() => setDrawerOpen(true)}
                 className={`md:hidden w-10 h-10 rounded-lg flex items-center justify-center transition-colors cursor-pointer ${isDark ? "text-white/70 hover:text-white hover:bg-white/5" : "text-black/70 hover:text-black hover:bg-black/5"}`}
                 aria-label="Open menu"
               >
-                <Menu className="w-5 h-5" strokeWidth={1.8} />
+                <Menu className="w-5 h-5" strokeWidth={2} />
               </button>
             </div>
           </div>
@@ -177,7 +183,7 @@ export default function Header() {
                       href={link.href}
                       onClick={() => setDrawerOpen(false)}
                       className={`block px-[clamp(16px,2vw,24px)] py-[clamp(12px,1.5vw,16px)] rounded-xl text-[clamp(14px,1vw,16px)] font-medium transition-colors ${pathname === link.href
-                        ? "text-electric bg-electric/[0.08]"
+                        ? "text-sage bg-sage/10"
                         : isDark ? "text-white/70 hover:text-white hover:bg-white/5" : "text-black/70 hover:text-black hover:bg-black/5"
                         }`}
                     >

@@ -1,247 +1,34 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  Leaf,
-  BarChart3,
-  ShieldCheck,
-  Bell,
-  LayoutDashboard,
-  Globe,
-  ArrowRight,
-  Target,
-  Recycle,
-  FileBarChart,
-  Handshake,
-} from "lucide-react";
+import { Leaf, Clock, ShieldCheck, ArrowRight, FileText, BookOpen, ExternalLink, Microscope, X } from "lucide-react";
+import { useTheme } from "@/components/ui/ThemeProvider";
 import SectionHeading from "@/components/ui/SectionHeading";
-import InfiniteMarquee from "@/components/ui/InfiniteMarquee";
 
-/* ═══════════════════════════════════════════════════════
-   HERO — Clean immersive video, professional text
-   ═══════════════════════════════════════════════════════ */
-function MissionHero() {
-  const { scrollY } = useScroll();
-  const yBg = useTransform(scrollY, [0, 800], [0, 180]);
-  const opacity = useTransform(scrollY, [0, 400], [1, 0]);
-  const scale = useTransform(scrollY, [0, 400], [1, 1.05]);
-
-  return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
-      {/* ── Background Engine ── */}
-      <motion.div className="absolute inset-0 z-0" style={{ y: yBg, scale, opacity }}>
-        <Image
-          src="/images/assets/mission-hero.png"
-          alt="Abstract mission visualization"
-          fill
-          className="object-cover opacity-60"
-          priority
-          sizes="100vw"
-        />
-        {/* Cinematic Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,black_100%)] opacity-70" />
-
-        {/* Animated Digital Grid Overlay */}
-        <div
-          className="absolute inset-0 opacity-[0.1]"
-          style={{
-            backgroundImage: `linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)`,
-            backgroundSize: "40px 40px"
-          }}
-        />
-      </motion.div>
-
-      {/* ── Floating Decorative Elements ── */}
-      <div className="absolute inset-0 z-5 pointer-events-none">
-        <motion.div
-          animate={{ y: [0, -20, 0], opacity: [0.1, 0.3, 0.1] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-electric/20 blur-[120px] rounded-full"
-        />
-        <motion.div
-          animate={{ y: [0, 20, 0], opacity: [0.05, 0.2, 0.05] }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-          className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-sage/10 blur-[140px] rounded-full"
-        />
-      </div>
-
-      {/* ── Content ── */}
-      <div className="relative z-10 max-w-5xl mx-auto px-[5.2%] text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-        >
-          {/* Tagline */}
-          <div className="relative inline-block mb-[clamp(24px,3vw,32px)]">
-            <span className="text-[clamp(10px,0.8vw,14px)] font-bold text-sage uppercase tracking-[0.4em] bg-white/5 backdrop-blur-md px-6 py-2 rounded-full border border-white/10">
-              Operational Ethics
-            </span>
-          </div>
-
-          {/* Main Title */}
-          <h1 className="text-[clamp(40px,6vw,96px)] font-bold tracking-tighter leading-[0.95] text-white">
-            Beyond Efficiency. <br />
-            <span className="bg-gradient-to-r from-electric via-sage to-sky bg-clip-text text-transparent">
-              Towards Impact.
-            </span>
-          </h1>
-
-          {/* Subtext with Glass Backdrop */}
-          <div className="mt-[clamp(32px,4vw,48px)] p-[clamp(24px,3vw,40px)] rounded-[32px] bg-white/[0.03] backdrop-blur-[40px] border border-white/[0.08] max-w-3xl mx-auto relative group overflow-hidden">
-            {/* Subtle light sweep */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.03] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-
-            <p className="text-[clamp(16px,1.4vw,22px)] leading-relaxed text-white/50 text-balance">
-              We engineer technology that proves <span className="text-white font-medium">precision</span> and <span className="text-sage font-medium">responsibility</span> are not opposing forces — they are the foundation of the modern enterprise.
-            </p>
-          </div>
-
-          {/* Scroll Indicator */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.4 }}
-            transition={{ delay: 1.5, duration: 1 }}
-            className="absolute bottom-[-20vh] left-1/2 -translate-x-1/2 flex flex-col items-center gap-4"
-          >
-            <span className="text-[10px] uppercase tracking-[0.3em] font-medium text-white/40">Scroll to Explore</span>
-            <div className="w-px h-16 bg-gradient-to-b from-white/40 to-transparent" />
-          </motion.div>
-        </motion.div>
-      </div>
-    </section>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════
-   SECTION 1 — Core Mission Statement
-   ═══════════════════════════════════════════════════════ */
-function MissionStatement() {
-  return (
-    <section className="relative py-[8%] overflow-hidden">
-      <div className="absolute inset-0 bg-[#080b13]" />
-      <div className="relative z-10 max-w-3xl mx-auto px-[5.2%]">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center"
-        >
-          <p className="text-[clamp(10px,0.8vw,14px)] font-semibold text-electric uppercase tracking-[0.2em] mb-[clamp(16px,2vw,20px)]">
-            Why We Exist
-          </p>
-          <h2 className="text-[clamp(28px,3.5vw,48px)] font-bold tracking-tight mb-[clamp(24px,3vw,32px)] text-white">
-            A Conviction, Not a Feature
-          </h2>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.15 }}
-          className="text-[clamp(14px,1.2vw,18px)] leading-[1.85] space-y-[clamp(20px,2vw,24px)] text-white/55"
-        >
-          <p>
-            Every year, roughly{" "}
-            <span className="text-sage font-semibold">
-              1.3 billion tons of food
-            </span>{" "}
-            are lost or wasted globally — one-third of everything produced for
-            human consumption. This waste is not only an economic failure; it is
-            an ethical one.
-          </p>
-          <p>
-            Veratori was founded on the belief that inventory management
-            technology should be a force for good. Our platform combines{" "}
-            <span className="font-semibold text-white/80">
-              precision, security, and sustainability
-            </span>{" "}
-            to give food retail and logistics teams the visibility they need to
-            make waste unacceptable — and preventable.
-          </p>
-          <p>
-            We measure success not only in efficiency gains but in the
-            measurable reduction of spoilage, the extension of product
-            lifecycles, and the communities we help feed instead of landfills.
-          </p>
-        </motion.div>
-      </div>
-    </section>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════
-   SECTION 2 — Impact Stats Grid
-   ═══════════════════════════════════════════════════════ */
-const impactStats = [
-  { value: 40, suffix: "%", label: "Average Waste Reduction" },
-  { value: 3.2, suffix: "M", label: "Pounds of Food Saved" },
-  { value: 94, suffix: "%", label: "Optimized Space Utilization" },
-  { value: 680, suffix: "K", label: "Tons of CO\u2082 Prevented" },
-  { value: 500, suffix: "+", label: "Enterprise Clients Worldwide" },
-  { value: 99.9, suffix: "%", label: "Platform Uptime SLA" },
+/* ═══════════════════ IMPACT STATS ═══════════════════ */
+const stats = [
+  { value: "3.2M+", label: "lbs. of food waste prevented", sub: "Across active US pilot partners" },
+  { value: "40%", label: "reduction in food cost variance", sub: "Average across pilot locations" },
+  { value: "99.2%", label: "detection accuracy", sub: "In low-light cooler environments" },
 ];
 
-function CountUp({ target, suffix, inView }: { target: number; suffix: string; inView: boolean }) {
-  const [val, setVal] = useState(0);
-  useEffect(() => {
-    if (!inView) return;
-    let start = 0;
-    const dur = 2000;
-    const step = (ts: number) => {
-      if (!start) start = ts;
-      const p = Math.min((ts - start) / dur, 1);
-      const eased = 1 - Math.pow(1 - p, 3);
-      setVal(Number((eased * target).toFixed(target % 1 === 0 ? 0 : 1)));
-      if (p < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  }, [inView, target]);
+function Impact() {
+  const { isDark } = useTheme();
   return (
-    <span>
-      {val}
-      {suffix}
-    </span>
-  );
-}
-
-function ImpactStats() {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
-
-  return (
-    <section className="relative py-[8%] overflow-hidden">
-      <div className="absolute inset-0 bg-black" />
-      <div className="relative z-10 max-w-6xl mx-auto px-[5.2%]">
-        <SectionHeading
-          tag="Impact"
-          title="Numbers That"
-          highlight="Matter"
-          tagColor="text-sage"
-          subtitle="Real data from real operations — the measurable difference Veratori delivers."
-        />
-        <div ref={ref} className="grid grid-cols-2 md:grid-cols-3 gap-[clamp(16px,2vw,24px)] mt-[clamp(32px,4vw,48px)]">
-          {impactStats.map((s, i) => (
-            <motion.div
-              key={s.label}
-              initial={{ opacity: 0, y: 24 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: i * 0.08, duration: 0.5 }}
-              className="p-[clamp(16px,2vw,24px)] rounded-2xl text-center border bg-white/[0.02] border-white/[0.06] backdrop-blur-[24px] saturate-[1.4]"
-            >
-              <p className="text-sage text-[clamp(28px,3vw,36px)] font-bold">
-                <CountUp target={s.value} suffix={s.suffix} inView={inView} />
-              </p>
-              <p className="mt-2 text-[clamp(12px,1vw,14px)] leading-snug text-white/40">
-                {s.label}
-              </p>
-            </motion.div>
+    <section className={`py-20 ${isDark ? "bg-midnight" : "bg-mist"}`}>
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+          {stats.map((s, i) => (
+            <div key={i} className="text-center">
+              <span className="text-sage font-black text-5xl md:text-6xl tracking-tighter block mb-3">
+                {s.value}
+              </span>
+              <h3 className="text-base font-bold mb-1">{s.label}</h3>
+              <p className={`text-sm ${isDark ? "text-white/40" : "text-black/40"}`}>{s.sub}</p>
+            </div>
           ))}
         </div>
       </div>
@@ -249,87 +36,41 @@ function ImpactStats() {
   );
 }
 
-/* ═══════════════════════════════════════════════════════
-   SECTION 3 — How We Achieve It (Staggered Cards)
-   ═══════════════════════════════════════════════════════ */
+/* ═══════════════════ PILLARS SECTION ═══════════════════ */
 const pillars = [
   {
-    title: "Ethical Core",
-    desc: "Every algorithm and feature is designed with sustainability as the primary constraint, not an afterthought.",
-    Icon: Leaf,
-    color: "text-sage",
-    bg: "bg-sage/10",
+    icon: Leaf,
+    title: "Built for Zero Waste",
+    text: "Every feature is evaluated against one question: does this reduce the amount of food that ends up in the trash? If not, we don't build it."
   },
   {
-    title: "Real-Time Alerts",
-    desc: "High-contrast, visually distinct notifications ensure no expiration date or threshold is ever missed.",
-    Icon: Bell,
-    color: "text-electric",
-    bg: "bg-electric/10",
+    icon: Clock,
+    title: "12 Hours Back Per Week",
+    text: "Manual inventory counting averages 90 minutes per shift per location. Veratori brings that to zero, letting staff focus on guests instead of clipboards."
   },
   {
-    title: "Decluttered Interfaces",
-    desc: "Clean workflows eliminate noise and cognitive load, letting teams focus entirely on precision operations.",
-    Icon: LayoutDashboard,
-    color: "text-sky",
-    bg: "bg-sky/10",
-  },
-  {
-    title: "Predictive Analytics",
-    desc: "Machine learning models forecast demand, spoilage risk, and optimal reorder points before problems arise.",
-    Icon: BarChart3,
-    color: "text-sage",
-    bg: "bg-sage/10",
-  },
-  {
-    title: "Enterprise Security",
-    desc: "End-to-end encryption, role-based access, and full GDPR compliance protect your data at every layer.",
-    Icon: ShieldCheck,
-    color: "text-electric",
-    bg: "bg-electric/10",
-  },
-  {
-    title: "Global Scale",
-    desc: "Multi-region infrastructure and localized workflows serve 500+ enterprises across 30 countries seamlessly.",
-    Icon: Globe,
-    color: "text-sky",
-    bg: "bg-sky/10",
-  },
+    icon: ShieldCheck,
+    title: "Your Data, Encrypted",
+    text: "Operational data stays on your edge device and is encrypted in transit. We have no access to your raw footage. GDPR and SOC 2 Type II compliant."
+  }
 ];
 
-function HowWeAchieveIt() {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
-
+function Pillars() {
+  const { isDark } = useTheme();
   return (
-    <section className="relative py-[8%] overflow-hidden">
-      <div className="absolute inset-0 bg-[#080b13]" />
-      <div className="relative z-10 max-w-6xl mx-auto px-[5.2%]">
-        <SectionHeading
-          tag="Approach"
-          title="How We"
-          highlight="Achieve It"
-          subtitle="Six pillars that define how Veratori turns ethical ambition into operational reality."
-        />
-        <div ref={ref} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[clamp(16px,2vw,24px)] mt-[clamp(32px,4vw,48px)]">
+    <section className="py-20">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="mb-14 text-center">
+          <span className="text-sage font-semibold tracking-widest uppercase text-xs mb-4 block">How We Operate</span>
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Our Operating Principles</h2>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {pillars.map((p, i) => (
-            <motion.div
-              key={p.title}
-              initial={{ opacity: 0, y: 30 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: i * 0.08, duration: 0.5 }}
-              className="p-[clamp(20px,2vw,24px)] rounded-2xl border transition-all duration-300 hover:translate-y-[-4px] bg-white/[0.02] border-white/[0.06] hover:bg-white/[0.04] hover:shadow-lg backdrop-blur-[24px] saturate-[1.4]"
-            >
-              <div className={`w-[clamp(40px,4vw,48px)] h-[clamp(40px,4vw,48px)] rounded-xl flex items-center justify-center mb-[clamp(12px,1.5vw,16px)] ${p.bg} ${p.color}`}>
-                <p.Icon className="w-[1.25em] h-[1.25em]" strokeWidth={1.8} />
-              </div>
-              <h3 className="text-[clamp(16px,1.5vw,18px)] font-bold mb-2 text-white">
-                {p.title}
-              </h3>
-              <p className="text-[clamp(12px,1.1vw,14px)] leading-relaxed text-white/45">
-                {p.desc}
-              </p>
-            </motion.div>
+            <div key={i} className={`p-8 rounded-xl border ${isDark ? "bg-white/5 border-white/10" : "bg-white border-black/5 shadow-sm"}`}>
+              <p.icon className="w-7 h-7 text-sage mb-5" />
+              <h3 className="text-lg font-bold mb-3">{p.title}</h3>
+              <p className={`text-base leading-relaxed ${isDark ? "text-white/50" : "text-black/50"}`}>{p.text}</p>
+            </div>
           ))}
         </div>
       </div>
@@ -337,385 +78,278 @@ function HowWeAchieveIt() {
   );
 }
 
-/* ═══════════════════════════════════════════════════════
-   SECTION 4 — Sustainability Commitment
-   ═══════════════════════════════════════════════════════ */
-const commitments = [
-  { Icon: Target, label: "Carbon Neutral Operations" },
-  { Icon: Recycle, label: "Zero-Waste Supply Chain Goal" },
-  { Icon: FileBarChart, label: "Transparent Impact Reporting" },
-  { Icon: Handshake, label: "Community Food Bank Partnerships" },
-];
-
-function SustainabilityCommitment() {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-  const imgY = useTransform(scrollYProgress, [0, 1], [40, -40]);
+function Research() {
+  const { isDark } = useTheme();
+  const [isPaperOpen, setIsPaperOpen] = useState(false);
 
   return (
-    <section ref={ref} className="relative py-[8%] overflow-hidden">
-      <div className="absolute inset-0 bg-[#080b13]" />
-      <div className="relative z-10 max-w-7xl mx-auto px-[5.2%] grid grid-cols-1 lg:grid-cols-2 gap-[clamp(32px,4vw,64px)] items-center">
-        {/* Text */}
-        <motion.div
-          initial={{ opacity: 0, x: -24 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <p className="text-[clamp(10px,0.8vw,14px)] font-semibold text-sage uppercase tracking-[0.2em] mb-[clamp(12px,1.5vw,16px)]">
-            Sustainability
-          </p>
-          <h2 className="text-[clamp(28px,3vw,48px)] font-bold tracking-tight mb-[clamp(16px,2vw,24px)] text-white">
-            Responsibility Is{" "}
-            <span className="text-sage">Non-Negotiable</span>
-          </h2>
-          <div className="space-y-[clamp(16px,2vw,24px)] text-[clamp(14px,1.2vw,18px)] leading-[1.85] text-white/55">
-            <p>
-              Food waste generates{" "}
-              <span className="text-electric font-semibold">
-                8% of global greenhouse gas emissions
-              </span>
-              . If it were a country, it would be the third-largest emitter on
-              Earth.
-            </p>
-            <p>
-              At Veratori, every line of code is written with one question:{" "}
-              <em className="font-medium text-white/75">
-                does this help reduce waste?
-              </em>{" "}
-              Our commitment to sustainability is embedded in our architecture,
-              our algorithms, and our culture.
-            </p>
-          </div>
-
-          <div className="mt-[clamp(24px,3vw,32px)] grid grid-cols-2 gap-[clamp(8px,1vw,12px)]">
-            {commitments.map((c, i) => (
-              <motion.div
-                key={c.label}
-                initial={{ opacity: 0, y: 12 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 + i * 0.08 }}
-                className="flex items-center gap-[clamp(8px,1vw,12px)] p-[clamp(12px,1.5vw,16px)] rounded-xl bg-white/[0.04] backdrop-blur-sm"
-              >
-                <c.Icon className="w-[1.2em] h-[1.2em] flex-shrink-0 text-sage" strokeWidth={1.8} />
-                <span className="text-[clamp(10px,0.85vw,14px)] font-medium text-white/65">
-                  {c.label}
-                </span>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Shocking Impact Metric Card */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="relative group"
-        >
-          <div className="relative p-[clamp(24px,4vw,48px)] rounded-[32px] bg-white/[0.03] border border-white/[0.08] backdrop-blur-[40px] shadow-2xl overflow-hidden">
-            {/* Spectral Background Glow */}
-            <div className="absolute -top-24 -right-24 w-64 h-64 bg-electric/20 blur-[100px] rounded-full" />
-            <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-sage/10 blur-[100px] rounded-full" />
-
-            <div className="relative z-10">
-              <div className="flex justify-between items-center mb-10">
-                <span className="text-[clamp(10px,0.8vw,12px)] font-bold text-white/40 uppercase tracking-[0.3em]">
-                  Global Carbon Ranking
-                </span>
-                <span className="flex items-center gap-2 text-[clamp(10px,0.8vw,12px)] font-bold text-sage/80 uppercase tracking-widest">
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sage opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-sage"></span>
-                  </span>
-                  Critical Scale
-                </span>
-              </div>
-
-              {/* Data Rows */}
-              <div className="space-y-8">
-                {/* China */}
-                <div className="space-y-3">
-                  <div className="flex justify-between text-[13px] font-medium">
-                    <span className="text-white/60">1. China</span>
-                    <span className="text-white/30">10.7B Tons</span>
-                  </div>
-                  <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      whileInView={{ width: "95%" }}
-                      transition={{ duration: 1.5, delay: 0.2 }}
-                      className="h-full bg-white/10"
-                    />
-                  </div>
-                </div>
-
-                {/* USA */}
-                <div className="space-y-3">
-                  <div className="flex justify-between text-[13px] font-medium">
-                    <span className="text-white/60">2. United States</span>
-                    <span className="text-white/30">5.1B Tons</span>
-                  </div>
-                  <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      whileInView={{ width: "55%" }}
-                      transition={{ duration: 1.5, delay: 0.4 }}
-                      className="h-full bg-white/10"
-                    />
-                  </div>
-                </div>
-
-                {/* THE SHOCKER: FOOD WASTE */}
-                <motion.div
-                  initial={{ x: 20, opacity: 0 }}
-                  whileInView={{ x: 0, opacity: 1 }}
-                  transition={{ duration: 0.6, delay: 0.8 }}
-                  className="relative p-6 rounded-2xl bg-gradient-to-br from-electric/20 to-sage/10 border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.3)] ring-1 ring-white/10"
-                >
-                  <div className="flex justify-between items-end">
-                    <div>
-                      <span className="text-electric text-[10px] font-bold uppercase tracking-[0.3em] mb-2 block">
-                        The Invisible Crisis
-                      </span>
-                      <h3 className="text-white text-[clamp(24px,2.5vw,32px)] font-bold tracking-tighter">
-                        3. Food Waste
-                      </h3>
-                    </div>
-                    <div className="text-right">
-                      <span className="text-sage text-[clamp(32px,3.5vw,48px)] font-bold leading-none block">
-                        3.3B
-                      </span>
-                      <span className="text-white/40 text-[clamp(10px,0.8vw,12px)] font-bold uppercase tracking-widest mt-1 block">
-                        Annual Tons CO₂e
-                      </span>
-                    </div>
-                  </div>
-                </motion.div>
-              </div>
-
-              <p className="mt-8 text-[clamp(11px,1vw,13px)] text-white/30 leading-relaxed italic text-center">
-                *If Food Waste were a nation, it would be the third largest greenhouse gas emitter on Earth, driving 8% of anthropogenic warming.
-              </p>
-            </div>
-          </div>
-        </motion.div>
+    <section className={`py-28 overflow-hidden relative transition-colors duration-500 ${isDark ? "bg-[#0A0F1E]" : "bg-[#F8FAFC]"}`}>
+      {/* Abstract Background Decoration */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-20">
+        <div className={`absolute -top-1/4 -right-1/4 w-1/2 h-full rounded-full blur-[120px] ${isDark ? "bg-sage/20" : "bg-sage/10"}`} />
+        <div className={`absolute -bottom-1/4 -left-1/4 w-1/2 h-full rounded-full blur-[120px] ${isDark ? "bg-blue-500/10" : "bg-blue-500/5"}`} />
       </div>
-    </section>
-  );
-}
 
-/* ═══════════════════════════════════════════════════════
-   SECTION 3.5 — Investment Request
-   ═══════════════════════════════════════════════════════ */
-const investmentData = [
-  { label: "Hardware", percentage: 49 },
-  { label: "Business Setup", percentage: 38 },
-  { label: "Software Support", percentage: 13 },
-];
-
-function InvestmentSection() {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-100px" });
-
-  return (
-    <section ref={ref} className="relative py-[8%] overflow-hidden">
-      <div className="absolute inset-0 bg-black" />
-      {/* Subtle grid pattern background to match the image */}
-      <div
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage: `linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)`,
-          backgroundSize: '40px 40px'
-        }}
-      />
-
-      <div className="relative z-10 max-w-6xl mx-auto px-[5.2%]">
-        <SectionHeading
-          tag="Expansion"
-          title="Fueling Our"
-          highlight="Next Phase"
-          tagColor="text-electric"
-          subtitle="We are currently seeking $16,000 to accelerate our infrastructure and establish local operations."
-        />
-
-        <div className="mt-[clamp(40px,5vw,60px)] flex flex-col lg:flex-row items-center justify-between gap-[clamp(40px,6vw,80px)]">
-          {/* Left Side: The "Frame" with the amount */}
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8 }}
-            className="relative p-[clamp(40px,5vw,60px)] border-2 border-white/10 rounded-3xl group overflow-hidden"
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
           >
-            {/* Corner Decorative Elements */}
-            <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-electric rounded-tl-lg" />
-            <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-electric rounded-br-lg" />
+            <span className={`inline-flex items-center gap-3 px-6 py-2 rounded-full text-xs md:text-base font-bold uppercase tracking-widest mb-8 ${isDark ? "bg-sage/10 text-sage border border-sage/20" : "bg-sage/10 text-sage-dark border border-sage/20"}`}>
+              <Microscope className="w-6 h-6 md:w-8 md:h-8" />
+              Research & Development
+            </span>
+            <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-8 leading-tight text-balance">
+              The Science of <br />
+              <span className="text-sage">Zero Waste</span>
+            </h2>
+            <p className={`text-xl md:text-2xl leading-relaxed mb-12 ${isDark ? "text-white/60" : "text-black/60"}`}>
+              Our mission isn't just operational—it's scientific. We conduct internal research to push the limits of computer vision and spatial computing in commercial environments.
+            </p>
 
-            <div className="text-center relative z-10">
-              <span className="text-white/40 text-[clamp(14px,1vw,18px)] font-medium mb-4 block uppercase tracking-widest">
-                Investment Target
-              </span>
-              <h3 className="text-[clamp(48px,6vw,88px)] font-bold text-white tracking-tighter flex items-center justify-center">
-                <span className="text-electric">≈</span>$16,000
-              </h3>
+            <div className="space-y-8 mb-12">
+              <div className="flex gap-5 items-start">
+                <div className={`w-14 h-14 rounded-xl flex items-center justify-center shrink-0 ${isDark ? "bg-white/5" : "bg-black/5"}`}>
+                  <ShieldCheck className="w-7 h-7 text-sage" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-lg md:text-xl mb-2">Precision Inventory Modeling</h4>
+                  <p className={`text-base md:text-lg ${isDark ? "text-white/40" : "text-black/40"}`}>Using LiDAR to map volumetric changes in stock with millimeter accuracy.</p>
+                </div>
+              </div>
+              <div className="flex gap-5 items-start">
+                <div className={`w-14 h-14 rounded-xl flex items-center justify-center shrink-0 ${isDark ? "bg-white/5" : "bg-black/5"}`}>
+                  <Leaf className="w-7 h-7 text-sage" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-lg md:text-xl mb-2">Predictive Waste Mitigation</h4>
+                  <p className={`text-base md:text-lg ${isDark ? "text-white/40" : "text-black/40"}`}>Algorithmic approaches to identifying shelf-life anomalies before they occur.</p>
+                </div>
+              </div>
             </div>
 
-            {/* Background blur/gradient */}
-            <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-electric/10 blur-[60px] rounded-full group-hover:bg-electric/20 transition-colors duration-700" />
-            <div className="absolute -top-10 -left-10 w-40 h-40 bg-sage/10 blur-[60px] rounded-full group-hover:bg-sage/20 transition-colors duration-700" />
           </motion.div>
 
-          {/* Right Side: Breakdown List */}
-          <div className="flex-1 w-full max-w-md">
-            <h4 className="text-white/60 text-[clamp(14px,1vw,18px)] font-semibold uppercase tracking-widest mb-8 text-center lg:text-left">
-              Allocation Breakdown
-            </h4>
-            <div className="space-y-8">
-              {investmentData.map((item, idx) => (
-                <motion.div
-                  key={item.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={inView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ delay: 0.2 + idx * 0.1, duration: 0.5 }}
-                  className="group"
-                >
-                  <div className="flex justify-between items-end mb-2">
-                    <span className="text-white text-[clamp(18px,1.5vw,22px)] font-medium">
-                      {item.label}
-                    </span>
-                    <span className="text-electric font-bold text-[clamp(18px,1.5vw,22px)]">
-                      ≈{item.percentage}%
-                    </span>
-                  </div>
-                  <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={inView ? { width: `${item.percentage}%` } : {}}
-                      transition={{ delay: 0.4 + idx * 0.15, duration: 1.2, ease: "easeOut" }}
-                      className="h-full bg-gradient-to-r from-electric to-sage"
+          {/* Interactive Paper Preview */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, rotate: 2 }}
+            whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, type: "spring" }}
+            className="relative group w-full"
+          >
+            <div
+              onClick={() => setIsPaperOpen(true)}
+              className={[
+                "relative aspect-[3/4] w-full max-w-sm mx-auto rounded-xl overflow-hidden border p-6 sm:p-8 cursor-pointer",
+                "transition-[transform,box-shadow] duration-300 ease-out will-change-transform",
+                "hover:-translate-y-1 active:translate-y-0 active:scale-[0.99]",
+                isDark
+                  ? "bg-white/10 border-white/10 backdrop-blur-md shadow-[0_4px_6px_rgba(0,0,0,0.2),0_12px_32px_rgba(0,0,0,0.45)] hover:shadow-[0_8px_16px_rgba(0,0,0,0.25),0_24px_56px_rgba(0,0,0,0.5),0_0_0_1px_rgba(91,151,79,0.15)]"
+                  : "bg-white border-black/[0.06] shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.06),0_24px_48px_rgba(91,151,79,0.07)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.06),0_16px_40px_rgba(0,0,0,0.08),0_32px_64px_-8px_rgba(91,151,79,0.14)]",
+              ].join(" ")}
+            >
+              {/* Paper Header Mockup */}
+              <div className="border-b border-sage/30 pb-6 mb-8">
+                <div className="flex justify-between items-start mb-4">
+                  <div className="h-1 w-12 rounded-full bg-sage" />
+                  <FileText className="w-6 h-6 text-sage/40" />
+                </div>
+                <h3 className="text-xl font-bold font-serif mb-2">Volumetric Inventory Analysis via LiDAR Depth Sensing</h3>
+                <div className="flex gap-3 text-[10px] font-mono text-sage/60 uppercase tracking-tighter">
+                  <span>Veratori Labs</span>
+                  <span>•</span>
+                  <span>March 2024</span>
+                </div>
+              </div>
+
+              {/* Paper Content Mockup */}
+              <div className="space-y-4 relative">
+                <div className="h-3 w-full bg-current opacity-10 rounded-full" />
+                <div className="h-3 w-[90%] bg-current opacity-10 rounded-full" />
+                <div className="h-3 w-[95%] bg-current opacity-10 rounded-full" />
+                <div className="h-3 w-[85%] bg-current opacity-10 rounded-full" />
+                <div className="pt-4 flex flex-col gap-2">
+                    <span className="text-[10px] font-bold text-sage uppercase tracking-widest">Abstract Snippet</span>
+                    <p className={`text-xs leading-relaxed italic line-clamp-6 ${isDark ? "text-white/40" : "text-black/40"}`}>
+                        "This paper presents a novel approach to commercial kitchen inventory management utilizing time-of-flight (ToF) LiDAR for volumetric analysis of food containers..."
+                    </p>
+                </div>
+                <div className="h-3 w-[40%] bg-current opacity-10 rounded-full mt-6" />
+                <div className="h-30 w-full bg-sage/5 rounded-lg border border-sage/10 flex items-center justify-center mt-6">
+                    <div className="text-center px-4">
+                        <BookOpen className="w-8 h-8 text-sage/30 mx-auto mb-2" />
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-sage/60">Tap to Visualize</span>
+                    </div>
+                </div>
+              </div>
+
+              {/* Shine effect on hover */}
+              <div className="absolute inset-0 bg-linear-to-tr from-transparent via-white/5 to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+            </div>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* ── Paper Visualization Modal ── */}
+      <AnimatePresence mode="wait">
+        {isPaperOpen && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 lg:p-8">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsPaperOpen(false)}
+              className="absolute inset-0 bg-black/80 backdrop-blur-xl"
+            />
+            
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="relative w-full max-w-5xl bg-white text-black rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+            >
+              {/* Modal Header (Logo Bar) */}
+              <div className="px-8 py-6 flex items-center justify-between border-b border-gray-100 bg-white sticky top-0 z-10">
+                <div className="flex items-center gap-4">
+                  <div className="relative h-8 w-32">
+                    <Image
+                      src="/images/Logos/Brand Identity/Logos/Logo_name_white_nobg.png"
+                      alt="Veratori"
+                      fill
+                      className="object-contain invert"
                     />
                   </div>
-                </motion.div>
-              ))}
-            </div>
+                  <div className="h-4 w-px bg-gray-200" />
+                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">Labs Research</span>
+                </div>
+                <button
+                  onClick={() => setIsPaperOpen(false)}
+                  className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors cursor-pointer"
+                >
+                  <X className="w-5 h-5 text-gray-500" />
+                </button>
+              </div>
 
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={inView ? { opacity: 1 } : {}}
-              transition={{ delay: 1, duration: 1 }}
-              className="mt-12 text-white/40 text-sm leading-relaxed text-center lg:text-left italic"
-            >
-              * Estimated allocation based on current market rates and strategic operational requirements for Q3 2026.
-            </motion.p>
+              {/* Modal Content */}
+              <div className="flex-1 overflow-y-auto bg-[#F9FAFB] p-8 sm:p-12">
+                <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+                  {/* Top Banner (Similar to image) */}
+                  <div className="relative bg-[#EBEDF0] p-10 sm:p-16 border-r-[12px] border-sage overflow-hidden">
+                    <div className="relative z-10 text-left">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-4 block">White Paper</span>
+                      <h3 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#2D3139] leading-[1.1] mb-8 max-w-2xl">
+                        Volumetric Inventory Analysis via LiDAR Depth Sensing: A Multi-Modal Edge Architecture
+                      </h3>
+                    </div>
+                    {/* Abstract background shape */}
+                    <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-white/40 skew-x-[-12deg] translate-x-12" />
+                  </div>
+
+                  {/* Body Content */}
+                  <div className="p-10 sm:p-16 grid grid-cols-1 lg:grid-cols-5 gap-12 text-left">
+                    <div className="lg:col-span-2">
+                      <h4 className="text-sm font-bold border-b border-gray-200 pb-2 mb-4">Abstract</h4>
+                      <p className="text-sm leading-relaxed text-gray-500 italic">
+                        "Modern commercial kitchens demand more than simple count-based inventory; they require true spatial awareness. Veratori's LiDAR-based depth sensing architecture embodies this shift, moving beyond traditional computer vision by integrating volumetric data points with YOLO-v8 object detection. By logically bonding these domains at the edge, the system guarantees 99%+ accuracy even in moisture-rich and low-light industrial refrigeration environments."
+                      </p>
+                    </div>
+                    <div className="lg:col-span-3">
+                      <p className="text-sm leading-relaxed text-gray-600 mb-6 font-medium">
+                        Built on proven NVIDIA Jetson Orin compute modules and Veratori's proprietary V1 Sensor housing, this approach ensures operational continuity during planned or unplanned kitchen outages. By bonding these spatial domains, it guarantees seamless failover and uninterrupted inventory updates.
+                      </p>
+                      <p className="text-sm leading-relaxed text-gray-600 mb-8">
+                        With this blueprint, food service operators, franchise owners, and supply chain architects can move beyond basic counts and design workflows that guarantee zero-waste production.
+                      </p>
+                      
+                      <div className="flex flex-col sm:flex-row gap-4">
+                        <Link
+                          href="/documents/lidar-paper.pdf"
+                          target="_blank"
+                          className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-sage text-white font-bold rounded-lg hover:bg-sage-dark transition-all shadow-md group"
+                        >
+                          Read Full Research <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        </Link>
+                        <button
+                          onClick={() => setIsPaperOpen(false)}
+                          className="px-6 py-3 border border-gray-200 text-gray-500 font-bold rounded-lg hover:bg-gray-50 transition-all cursor-pointer"
+                        >
+                          Collapse Preview
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+    </section>
+  );
+}
+
+/* ═══════════════════ PAGE ASSEMBLY ═══════════════════ */
+export default function MissionPage() {
+  const { isDark } = useTheme();
+  return (
+    <main className={isDark ? "bg-black text-white" : "bg-white text-black"}>
+
+      {/* Page Header */}
+      <section className={`pt-28 pb-14 border-b ${isDark ? "border-white/5" : "border-black/5"}`}>
+        <div className="max-w-7xl mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <span className="text-sage font-semibold tracking-widest uppercase text-xs mb-4 block">Impact</span>
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-none mb-6">
+              Food waste is a<br />
+              <span className="text-sage">solvable problem</span>
+            </h1>
+            <p className={`text-lg max-w-2xl leading-relaxed ${isDark ? "text-white/55" : "text-black/55"}`}>
+              One-third of all food produced globally is wasted. For restaurants, the number is even higher. We're building the infrastructure to change that, starting with the cooler.
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      <Impact />
+      <Pillars />
+
+      {/* Context section */}
+      <section className={`py-20 ${isDark ? "bg-midnight" : "bg-mist"}`}>
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div className="relative aspect-video rounded-xl overflow-hidden border border-white/10">
+            <Image
+              src="/images/assets/mission-hero.png"
+              alt="Environmental impact"
+              fill
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-midnight/30" />
+          </div>
+          <div>
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-6">
+              If food waste were a country, it would be the third-largest greenhouse gas emitter on Earth.
+            </h2>
+            <p className={`text-base leading-relaxed mb-5 ${isDark ? "text-white/55" : "text-black/55"}`}>
+              Food waste generates 8% of global greenhouse gas emissions — more than the entire aviation industry. At the restaurant level, that waste starts in the walk-in cooler.
+            </p>
+            <p className={`text-base leading-relaxed ${isDark ? "text-white/55" : "text-black/55"}`}>
+              At Veratori, every line of code is written with one question in mind: <em>does this help reduce waste?</em>
+            </p>
           </div>
         </div>
-      </div>
-    </section>
-  );
-}
+      </section>
 
-/* ═══════════════════════════════════════════════════════
-   QUOTE CAROUSEL — Minimal, tasteful
-   ═══════════════════════════════════════════════════════ */
-const quotes = [
-  { text: "The greatest threat to our planet is the belief that someone else will save it.", author: "Robert Swan" },
-  { text: "Waste is a design flaw.", author: "Kate Krebs" },
-  { text: "Sustainability is no longer about doing less harm. It\u2019s about doing more good.", author: "Jochen Zeitz" },
-  { text: "The best way to predict the future is to create it.", author: "Peter Drucker" },
-];
+      <Research />
 
-function QuoteCarousel() {
-  return (
-    <section className="relative py-[5%] overflow-hidden">
-      <div className="absolute inset-0 bg-[#080b13]" />
-      <div className="relative z-10">
-        <InfiniteMarquee speed={50}>
-          {quotes.map((q, i) => (
-            <div key={i} className="flex-shrink-0 mx-[clamp(24px,3vw,40px)] max-w-sm">
-              <blockquote className="text-[clamp(16px,1.4vw,18px)] italic leading-relaxed text-white/40">
-                &ldquo;{q.text}&rdquo;
-              </blockquote>
-              <p className="text-[clamp(12px,1vw,14px)] font-medium mt-[clamp(8px,1vw,12px)] text-white/30">
-                — {q.author}
-              </p>
-            </div>
-          ))}
-        </InfiniteMarquee>
-      </div>
-    </section>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════
-   FINAL CTA
-   ═══════════════════════════════════════════════════════ */
-function FinalCTA() {
-  return (
-    <section className="relative py-[8%] overflow-hidden">
-      <div className="absolute inset-0 bg-black" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[clamp(300px,40vw,500px)] h-[clamp(300px,40vw,500px)] rounded-full bg-sage/[0.06] blur-[120px]" />
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="relative z-10 max-w-3xl mx-auto px-[5.2%] text-center"
-      >
-        <h2 className="text-[clamp(28px,3.5vw,48px)] font-bold tracking-tight mb-[clamp(16px,2vw,24px)] text-white">
-          Join the Movement for{" "}
-          <span className="bg-gradient-to-r from-electric to-sage bg-clip-text text-transparent">
-            Zero Waste
-          </span>
-        </h2>
-        <p className="text-[clamp(14px,1.2vw,18px)] mb-[clamp(32px,4vw,40px)] leading-relaxed text-white/50">
-          Every business that joins Veratori makes the global food system more
-          efficient and more ethical.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-[clamp(12px,1.5vw,16px)] justify-center">
-          <Link href="/contact">
-            <motion.span
-              whileHover={{ scale: 1.03, y: -1 }}
-              whileTap={{ scale: 0.98 }}
-              className="inline-flex items-center gap-[clamp(6px,0.8vw,8px)] px-[clamp(24px,3vw,32px)] py-[clamp(12px,1.5vw,16px)] bg-electric text-white font-semibold rounded-xl transition-all duration-300 shadow-[0_0_24px_rgba(38,64,206,0.2)] hover:shadow-[0_0_32px_rgba(38,64,206,0.4)] cursor-pointer text-[clamp(14px,1vw,16px)]"
-            >
-              Get Started
-              <ArrowRight className="w-[1em] h-[1em]" />
-            </motion.span>
-          </Link>
-          <Link href="/product">
-            <motion.span
-              whileHover={{ scale: 1.03, y: -1 }}
-              whileTap={{ scale: 0.98 }}
-              className="inline-block px-[clamp(24px,3vw,32px)] py-[clamp(12px,1.5vw,16px)] border border-white/10 bg-white/5 text-white rounded-xl font-semibold hover:bg-white/10 hover:border-white/20 transition-all duration-300 cursor-pointer backdrop-blur-[24px] saturate-[1.4] text-[clamp(14px,1vw,16px)]"
-            >
-              Explore the Platform
-            </motion.span>
-          </Link>
-        </div>
-      </motion.div>
-    </section>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════
-   PAGE ASSEMBLY
-   ═══════════════════════════════════════════════════════ */
-export default function MissionPage() {
-  return (
-    <div className="relative bg-black text-white min-h-screen">
-      <MissionHero />
-      <MissionStatement />
-      <ImpactStats />
-      <HowWeAchieveIt />
-      <SustainabilityCommitment />
-      <InvestmentSection />
-      <QuoteCarousel />
-      <FinalCTA />
-    </div>
+    </main>
   );
 }
