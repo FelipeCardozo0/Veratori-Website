@@ -7,6 +7,7 @@ import { useTheme } from "@/components/ui/ThemeProvider";
 import SectionHeading from "@/components/ui/SectionHeading";
 import YOLODemo from "@/components/features/YOLODemo";
 import HardwareIntegrationViz from "@/components/product/HardwareIntegrationViz";
+import RLTrainer from "@/components/product/RLTrainer";
 
 const steps = [
   {
@@ -163,6 +164,9 @@ export default function ProductPage() {
           </div>
         </div>
       </section>
+
+      {/* ── RL Training Lab ── */}
+      <RLTrainer />
 
       {/* ── Live Demo Sandbox ── */}
       <section className="py-20 border-y border-black/5 dark:border-white/5 bg-white/2 dark:bg-black/2">

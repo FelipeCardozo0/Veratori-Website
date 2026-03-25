@@ -144,9 +144,7 @@ export default function USMap() {
           <motion.circle r="5" fill={AUSTIN} variants={pulseVariant} animate="animate" />
           <foreignObject x="-88" y="-58" width="176" height="52" className="overflow-visible pointer-events-none">
             <div className="flex flex-col items-center justify-end h-full">
-              <span
-                className={`${labelClass} border border-[#2563eb]/35 bg-[#2563eb]/12 text-[#1d4ed8] dark:text-[#93c5fd]`}
-              >
+              <span className={`${labelClass} border-2 border-[#2563eb] ${isDark ? "bg-[#2563eb]/12 text-[#93c5fd]" : "bg-white text-[#1d4ed8] shadow-md"}`}>
                 Researching
               </span>
             </div>
@@ -166,9 +164,7 @@ export default function USMap() {
           <motion.circle r="5" fill={ATLANTA} variants={pulseVariant} animate="animate" />
           <foreignObject x="-88" y="-58" width="176" height="52" className="overflow-visible pointer-events-none">
             <div className="flex flex-col items-center justify-end h-full">
-              <span
-                className={`${labelClass} border border-[#3b82f6]/35 bg-[#3b82f6]/12 text-[#1d4ed8] dark:text-[#93c5fd]`}
-              >
+              <span className={`${labelClass} border-2 border-[#3b82f6] ${isDark ? "bg-[#3b82f6]/12 text-[#93c5fd]" : "bg-white text-[#1d4ed8] shadow-md"}`}>
                 Developing
               </span>
             </div>
@@ -188,9 +184,7 @@ export default function USMap() {
           <motion.circle r="5" fill={NEWYORK} variants={pulseVariant} animate="animate" />
           <foreignObject x="-88" y="-58" width="176" height="52" className="overflow-visible pointer-events-none">
             <div className="flex flex-col items-center justify-end h-full">
-              <span
-                className={`${labelClass} border border-[#eab308]/40 bg-[#eab308]/12 text-[#a16207] dark:text-[#fde047]`}
-              >
+              <span className={`${labelClass} border-2 border-[#eab308] ${isDark ? "bg-[#eab308]/12 text-[#fde047]" : "bg-white text-[#92400e] shadow-md"}`}>
                 Deploying
               </span>
             </div>

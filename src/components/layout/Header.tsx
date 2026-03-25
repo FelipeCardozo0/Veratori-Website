@@ -56,8 +56,8 @@ export default function Header() {
             <Link href="/" className="flex items-center" aria-label="Veratori Home">
               <Image
                 src={isDark
-                  ? "/images/Logos/Brand Identity/Logos/Logo_name_white_nobg.png"
-                  : "/images/Logos/Brand Identity/Logos/Logo_name_dark_nobg.png"
+                  ? "/images/Logos/Brand Identity/Logos/Logo_name_dark-nobg.png"
+                  : "/images/Logos/Brand Identity/Logos/Logo_name_light_nobg.png"
                 }
                 alt="Veratori Logo"
                 width={180}

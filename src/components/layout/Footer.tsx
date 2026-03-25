@@ -26,7 +26,6 @@ const footerLinks = {
   Pricing: [
     { label: "Plans", href: "/pricing" },
     { label: "Order Beta Access", href: "/pricing#order" },
-    { label: "FAQ", href: "/pricing#faq" },
   ],
   Company: [
     { label: "Contact", href: "/contact" },
@@ -75,7 +74,7 @@ export default function Footer() {
           >
             <Link href="/" className="flex items-center mb-8">
               <Image
-                src="/images/Logos/Brand Identity/Logos/Logo_name_white_nobg.png"
+                src="/images/Logos/Brand Identity/Logos/Logo_name_dark-nobg.png"
                 alt="Veratori Logo"
                 width={200}
                 height={50}
@@ -105,7 +104,7 @@ export default function Footer() {
               ))}
             </div>
             {/* Locations below social icons */}
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-wrap gap-4">
               {locations.map((loc) => (
                 <div key={loc.city} className="flex items-center gap-2">
                   <MapPin className="w-3.5 h-3.5 text-sage shrink-0" />

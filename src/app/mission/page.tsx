@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { Leaf, Clock, ShieldCheck, ArrowRight, FileText, BookOpen, ExternalLink, Microscope, X } from "lucide-react";
+import DataFlowSection from "@/components/mission/DataFlowSection";
+import ROICalculator from "@/components/mission/ROICalculator";
 import { useTheme } from "@/components/ui/ThemeProvider";
 import SectionHeading from "@/components/ui/SectionHeading";
 
@@ -111,24 +113,72 @@ function Research() {
             whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, type: "spring" }}
-            className="relative group w-full"
+            className="relative w-full"
+            style={{ perspective: 900 }}
           >
-            <div
+            <motion.div
               onClick={() => setIsPaperOpen(true)}
+              whileHover="hovered"
+              whileTap={{ scale: 0.97 }}
+              initial="idle"
+              animate="idle"
+              variants={{
+                idle: { y: 0, rotateX: 0, rotateY: 0, scale: 1 },
+                hovered: { y: -14, rotateX: 4, rotateY: -3, scale: 1.03 },
+              }}
+              transition={{ type: "spring", stiffness: 260, damping: 20 }}
+              style={{ transformStyle: "preserve-3d" }}
               className={[
-                "relative aspect-[3/4] w-full max-w-sm mx-auto rounded-xl overflow-hidden border p-6 sm:p-8 cursor-pointer",
-                "transition-[transform,box-shadow] duration-300 ease-out will-change-transform",
-                "hover:-translate-y-1 active:translate-y-0 active:scale-[0.99]",
+                "relative aspect-[3/4] w-full max-w-sm mx-auto rounded-2xl overflow-hidden border p-6 sm:p-8 cursor-pointer",
+                "will-change-transform",
                 isDark
-                  ? "bg-white/10 border-white/10 backdrop-blur-md shadow-[0_4px_6px_rgba(0,0,0,0.2),0_12px_32px_rgba(0,0,0,0.45)] hover:shadow-[0_8px_16px_rgba(0,0,0,0.25),0_24px_56px_rgba(0,0,0,0.5),0_0_0_1px_rgba(91,151,79,0.15)]"
-                  : "bg-white border-black/[0.06] shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.06),0_24px_48px_rgba(91,151,79,0.07)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.06),0_16px_40px_rgba(0,0,0,0.08),0_32px_64px_-8px_rgba(91,151,79,0.14)]",
+                  ? "bg-white/[0.07] border-white/10 backdrop-blur-md shadow-[0_6px_18px_rgba(0,0,0,0.35),0_18px_48px_rgba(0,0,0,0.55)]"
+                  : "bg-white border-black/[0.06] shadow-[0_2px_8px_rgba(0,0,0,0.05),0_12px_32px_rgba(91,151,79,0.08)]",
               ].join(" ")}
             >
+              {/* Glow halo that shows on hover */}
+              <motion.div
+                variants={{
+                  idle: { opacity: 0, scale: 0.85 },
+                  hovered: { opacity: 1, scale: 1 },
+                }}
+                transition={{ duration: 0.35 }}
+                className="absolute -inset-px rounded-2xl pointer-events-none"
+                style={{
+                  background: "radial-gradient(ellipse at 60% 20%, rgba(91,151,79,0.35) 0%, transparent 65%)",
+                  filter: "blur(2px)",
+                }}
+              />
+
+              {/* Shine sweep */}
+              <motion.div
+                variants={{
+                  idle: { opacity: 0, x: "-100%" },
+                  hovered: { opacity: 1, x: "120%" },
+                }}
+                transition={{ duration: 0.55, ease: "easeOut" }}
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background: "linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.12) 50%, transparent 70%)",
+                  zIndex: 10,
+                }}
+              />
+
               {/* Paper Header Mockup */}
               <div className="border-b border-sage/30 pb-6 mb-8">
-                <div className="flex justify-between items-start mb-4">
-                  <div className="h-1 w-12 rounded-full bg-sage" />
-                  <FileText className="w-6 h-6 text-sage/40" />
+                <div className="flex justify-between items-start mb-4 relative">
+                  <motion.div
+                    variants={{ idle: { width: "12%" }, hovered: { width: "82%" } }}
+                    transition={{ type: "spring", stiffness: 200, damping: 18 }}
+                    className="h-1 rounded-full bg-sage absolute top-[11px] left-0"
+                  />
+                  <div className="h-1 w-[12%]" />
+                  <motion.div
+                    variants={{ idle: { rotate: 0, color: "rgba(91,151,79,0.4)" }, hovered: { rotate: -8, color: "rgba(91,151,79,0.9)" } }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    <FileText className="w-6 h-6" />
+                  </motion.div>
                 </div>
                 <h3 className="text-xl font-bold font-serif mb-2">Volumetric Inventory Analysis via LiDAR Depth Sensing</h3>
                 <div className="flex gap-3 text-[10px] font-mono text-sage/60 uppercase tracking-tighter">
@@ -148,19 +198,36 @@ function Research() {
                 </div>
                 <div className="h-3 w-[85%] bg-current opacity-10 rounded-full" />
                 <div className="h-3 w-[70%] bg-current opacity-10 rounded-full" />
+
+                {/* CTA reveal on hover */}
                 <div className="pt-2">
-                  <div className="w-full bg-sage/5 rounded-lg border border-sage/10 flex items-center justify-center py-5">
+                  <motion.div
+                    variants={{
+                      idle: { backgroundColor: "rgba(91,151,79,0.04)", borderColor: "rgba(91,151,79,0.1)" },
+                      hovered: { backgroundColor: "rgba(91,151,79,0.14)", borderColor: "rgba(91,151,79,0.4)" },
+                    }}
+                    transition={{ duration: 0.25 }}
+                    className="w-full rounded-lg border flex items-center justify-center py-5"
+                  >
                     <div className="text-center px-4">
-                      <BookOpen className="w-8 h-8 text-sage/30 mx-auto mb-2" />
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-sage/60">Tap to Read</span>
+                      <motion.div
+                        variants={{ idle: { scale: 1, rotate: 0 }, hovered: { scale: 1.2, rotate: -6 } }}
+                        transition={{ type: "spring", stiffness: 300 }}
+                      >
+                        <BookOpen className="w-8 h-8 text-sage mx-auto mb-2" />
+                      </motion.div>
+                      <motion.span
+                        variants={{ idle: { opacity: 0.5, letterSpacing: "0.15em" }, hovered: { opacity: 1, letterSpacing: "0.22em" } }}
+                        transition={{ duration: 0.2 }}
+                        className="text-[10px] font-bold uppercase text-sage block"
+                      >
+                        Read Full Paper
+                      </motion.span>
                     </div>
-                  </div>
+                  </motion.div>
                 </div>
               </div>
-
-              {/* Shine effect on hover */}
-              <div className="absolute inset-0 bg-linear-to-tr from-transparent via-white/5 to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-            </div>
+            </motion.div>
           </motion.div>
         </div>
       </div>
@@ -317,6 +384,10 @@ export default function MissionPage() {
           </div>
         </div>
       </section>
+
+      <DataFlowSection />
+
+      <ROICalculator />
 
       <Research />
 

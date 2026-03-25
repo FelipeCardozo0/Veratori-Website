@@ -14,6 +14,7 @@ const clients = [
   { name: "Hatchery", logo: "/images/clients/Hatchery%20no%20BG.png", invertOnDark: true },
   { name: "Goizueta Business School", logo: "/images/clients/Goizueta%20no%20BG.png", invertOnDark: true },
   { name: "Tacos Barios", logo: "/images/clients/Tacos%20Barios-nobg.png" },
+  { name: "ATV", logo: "/images/clients/ATV-nobg.png", invertOnDark: true },
 ];
 
 function LogoSlide({
