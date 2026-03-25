@@ -38,9 +38,9 @@ export default function Hero() {
             transition={{ duration: 0.55 }}
           >
             <span className="text-sage font-semibold tracking-widest uppercase text-xs mb-6 block">For Food Service Operators</span>
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-none text-balance mb-8">
+            <h1 className="text-5xl md:text-7xl lg:text-7xl font-bold tracking-tight leading-none mb-8">
               Your inventory, counted.{" "}
-              <span className="text-sage">Every shift, automatically</span>
+              <span className="text-sage block mt-1">Every shift, automatically</span>
             </h1>
             <p className={`text-xl md:text-2xl max-w-2xl leading-relaxed mb-12 ${isDark ? "text-white/55" : "text-black/55"}`}>
               Veratori installs computer vision hardware in your walk-in coolers and storage rooms. From that point on, stock levels are tracked in real time — no manual counts, no clipboards, no guesswork.

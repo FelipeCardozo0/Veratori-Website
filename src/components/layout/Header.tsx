@@ -55,11 +55,14 @@ export default function Header() {
             {/* ── Logo ── */}
             <Link href="/" className="flex items-center" aria-label="Veratori Home">
               <Image
-                src="/images/Logos/Brand Identity/Logos/Logo_name_dark_nobg.png"
+                src={isDark
+                  ? "/images/Logos/Brand Identity/Logos/Logo_name_white_nobg.png"
+                  : "/images/Logos/Brand Identity/Logos/Logo_name_dark_nobg.png"
+                }
                 alt="Veratori Logo"
                 width={180}
                 height={45}
-                className={`h-11 sm:h-[48px] w-auto object-contain transition-all duration-300 ${isDark ? "invert" : ""}`}
+                className="h-11 sm:h-[48px] w-auto object-contain transition-all duration-300"
                 priority
               />
             </Link>

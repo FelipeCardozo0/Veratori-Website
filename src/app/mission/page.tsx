@@ -8,34 +8,6 @@ import { Leaf, Clock, ShieldCheck, ArrowRight, FileText, BookOpen, ExternalLink,
 import { useTheme } from "@/components/ui/ThemeProvider";
 import SectionHeading from "@/components/ui/SectionHeading";
 
-/* ═══════════════════ IMPACT STATS ═══════════════════ */
-const stats = [
-  { value: "3.2M+", label: "lbs. of food waste prevented", sub: "Across active US pilot partners" },
-  { value: "40%", label: "reduction in food cost variance", sub: "Average across pilot locations" },
-  { value: "99.2%", label: "detection accuracy", sub: "In low-light cooler environments" },
-];
-
-function Impact() {
-  const { isDark } = useTheme();
-  return (
-    <section className={`py-20 ${isDark ? "bg-midnight" : "bg-mist"}`}>
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-          {stats.map((s, i) => (
-            <div key={i} className="text-center">
-              <span className="text-sage font-black text-5xl md:text-6xl tracking-tighter block mb-3">
-                {s.value}
-              </span>
-              <h3 className="text-base font-bold mb-1">{s.label}</h3>
-              <p className={`text-sm ${isDark ? "text-white/40" : "text-black/40"}`}>{s.sub}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 /* ═══════════════════ PILLARS SECTION ═══════════════════ */
 const pillars = [
   {
@@ -167,23 +139,22 @@ function Research() {
               </div>
 
               {/* Paper Content Mockup */}
-              <div className="space-y-4 relative">
-                <div className="h-3 w-full bg-current opacity-10 rounded-full" />
-                <div className="h-3 w-[90%] bg-current opacity-10 rounded-full" />
-                <div className="h-3 w-[95%] bg-current opacity-10 rounded-full" />
-                <div className="h-3 w-[85%] bg-current opacity-10 rounded-full" />
-                <div className="pt-4 flex flex-col gap-2">
-                    <span className="text-[10px] font-bold text-sage uppercase tracking-widest">Abstract Snippet</span>
-                    <p className={`text-xs leading-relaxed italic line-clamp-6 ${isDark ? "text-white/40" : "text-black/40"}`}>
-                        "This paper presents a novel approach to commercial kitchen inventory management utilizing time-of-flight (ToF) LiDAR for volumetric analysis of food containers..."
-                    </p>
+              <div className="space-y-6 relative">
+                <div>
+                  <span className="text-[10px] font-bold text-sage uppercase tracking-widest block mb-3">Abstract</span>
+                  <blockquote className={`text-sm leading-relaxed italic border-l-2 border-sage/40 pl-4 ${isDark ? "text-white/70" : "text-black/70"}`}>
+                    "Modern commercial kitchens demand more than simple count-based inventory; they require true spatial awareness. Veratori's LiDAR-based depth sensing architecture embodies this shift, moving beyond traditional computer vision by integrating volumetric data points with YOLO-v8 object detection."
+                  </blockquote>
                 </div>
-                <div className="h-3 w-[40%] bg-current opacity-10 rounded-full mt-6" />
-                <div className="h-30 w-full bg-sage/5 rounded-lg border border-sage/10 flex items-center justify-center mt-6">
+                <div className="h-3 w-[85%] bg-current opacity-10 rounded-full" />
+                <div className="h-3 w-[70%] bg-current opacity-10 rounded-full" />
+                <div className="pt-2">
+                  <div className="w-full bg-sage/5 rounded-lg border border-sage/10 flex items-center justify-center py-5">
                     <div className="text-center px-4">
-                        <BookOpen className="w-8 h-8 text-sage/30 mx-auto mb-2" />
-                        <span className="text-[10px] font-bold uppercase tracking-widest text-sage/60">Tap to Visualize</span>
+                      <BookOpen className="w-8 h-8 text-sage/30 mx-auto mb-2" />
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-sage/60">Tap to Read</span>
                     </div>
+                  </div>
                 </div>
               </div>
 
@@ -319,7 +290,6 @@ export default function MissionPage() {
         </div>
       </section>
 
-      <Impact />
       <Pillars />
 
       {/* Context section */}

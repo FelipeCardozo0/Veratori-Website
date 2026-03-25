@@ -12,42 +12,36 @@ const team = [
     name: "Justin Chavez-Meneses",
     role: "Chief Executive Officer",
     background: "BBA Finance & Accounting, Emory University",
-    contribution: "Orchestrated the architectural pivot from pure data collection to actionable operational intelligence, securing the initial $2M in seed funding while personally overseeing the first 10 pilot installations.",
     image: "/images/team/justin-meneses.jpeg",
   },
   {
     name: "Felipe Cardozo",
     role: "Chief Technology Officer",
     background: "BS Computer Science & Math, Emory University",
-    contribution: "Developed the proprietary 'VeraSight' neural network, achieving a 40% reduction in processing latency for real-time food waste detection. Built the core infrastructure from the ground up in a windowless lab over 72-hour coding sprints.",
     image: "/images/team/Felipe-Cardozo.jpeg",
   },
   {
     name: "Eduardo Lapa",
     role: "Software Engineering",
     background: "BS Economics, Fundação Getulio Vargas",
-    contribution: "Engineered the dynamic pricing engine that correlates real-time inventory levels with market demand, directly responsible for a 15% increase in gross margins for Veratori's beta partners.",
     image: "/images/team/Eduardo_Lapa.png",
   },
   {
     name: "Leonardo Affonso",
     role: "Hardware Engineering",
     background: "BEng Electrical Engineering, Federal University of Rio de Janeiro",
-    contribution: "Designed the custom 'Sentinel-1' sensor housing, capable of withstanding the extreme humidity and temperature fluctuations of industrial kitchens. Optimized power consumption to allow for solar-integrated deployment.",
     image: "/images/team/LeonardoAffonso.png",
   },
   {
     name: "Daniel Gambacorta",
-    role: "Software Engineering",
+    role: "AI Director",
     background: "BEng Mechanical Engineering, Texas A&M",
-    contribution: "Bridges the gap between physical sensors and cloud analytics by developing the edge-computing synchronization layer. His work ensures data integrity even in the most connectivity-challenged environments.",
     image: "/images/team/daniel-gambacorta.png",
   },
   {
     name: "Milad Khezrefaridi",
-    role: "Hardware Engineering",
+    role: "Lead Hardware Engineer",
     background: "BEng Mechanical Engineering, UT Austin",
-    contribution: "Revolutionized the mounting system for Veratori's visual sensors, reducing installation time by 70%. Led the rapid prototyping of the second-generation thermal imaging modules.",
     image: "/images/team/milad-khezrefaridi.png",
   },
 ];
@@ -71,8 +65,8 @@ function Story() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
             {[
-              { icon: Target, title: "Precision Intelligence", text: "99.2% detection accuracy in complex, low-light environments." },
-              { icon: Globe, title: "Global Impact", text: "3.2M+ lbs of annual food waste prevented across our partners." },
+              { icon: Target, title: "Precision Intelligence", text: "Real-time computer vision running on-device, identifying inventory changes as they happen." },
+              { icon: Globe, title: "Built for Operators", text: "Designed from direct experience in food service — no enterprise complexity, no IT required." },
             ].map(item => (
               <div key={item.title}>
                 <item.icon className="w-8 h-8 md:w-10 md:h-10 text-sage mb-4" />
@@ -151,11 +145,11 @@ function Roadmap() {
             {milestones.map((m, i) => (
               <div key={i} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
                 {/* Icon */}
-                <div className="flex items-center justify-center w-10 h-10 rounded-full border border-sage/30 bg-black text-sage shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
+                <div className={`flex items-center justify-center w-10 h-10 rounded-full border border-sage/30 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 ${isDark ? "bg-black" : "bg-white"}`}>
                   <div className="w-2 h-2 rounded-full bg-sage" />
                 </div>
                 {/* Content */}
-                <div className="w-[calc(100%-4rem)] md:w-[45%] p-4 rounded border border-white/5 bg-white/5 shadow-sm">
+                <div className={`w-[calc(100%-4rem)] md:w-[45%] p-4 rounded border shadow-sm ${isDark ? "border-white/10 bg-white/5" : "border-black/10 bg-white"}`}>
                   <div className="flex items-center justify-between space-x-2 mb-2">
                     <div className="font-bold text-sage text-base md:text-lg">{m.date}</div>
                   </div>
@@ -223,21 +217,12 @@ function Team() {
                 />
                 
                 {/* Hover Overlay Box */}
-                <motion.div 
+                <motion.div
                   variants={infoBoxVariants}
-                  className="absolute inset-x-3 bottom-3 p-5 rounded-xl bg-black/85 backdrop-blur-lg border border-white/10 z-10 pointer-events-none group-hover:pointer-events-auto shadow-2xl flex flex-col gap-3"
+                  className="absolute inset-x-3 bottom-3 p-5 rounded-xl bg-black/85 backdrop-blur-lg border border-white/10 z-10 pointer-events-none group-hover:pointer-events-auto shadow-2xl"
                 >
-                  <div>
-                    <p className="text-sage font-bold text-xs uppercase tracking-[0.2em] mb-2">Mission & Impact</p>
-                    <p className="text-white text-sm md:text-base leading-relaxed font-medium">
-                      {member.contribution}
-                    </p>
-                  </div>
-                  
-                  <div className="pt-3 border-t border-white/10">
-                    <p className="text-white/40 text-[10px] md:text-xs uppercase tracking-widest font-bold mb-1">Formation</p>
-                    <p className="text-white/90 text-sm leading-tight">{member.background}</p>
-                  </div>
+                  <p className="text-white/40 text-[10px] md:text-xs uppercase tracking-widest font-bold mb-1">Education</p>
+                  <p className="text-white/90 text-sm leading-tight">{member.background}</p>
                 </motion.div>
 
                 {/* Subtle dark gradient overlay */}

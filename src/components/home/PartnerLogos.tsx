@@ -11,19 +11,21 @@ const clients = [
   { name: "Black Burger", logo: "/images/clients/black-burger-nobg.png" },
   { name: "Los Tacos Hermanos", logo: "/images/clients/los-tacos-hermanos-nobg.png" },
   { name: "Poke Bowl", logo: "/images/clients/poke-bowl-nobg.png" },
-  { name: "Hatchery", logo: "/images/clients/Hatchery%20no%20BG.png" },
-  { name: "Goizueta Business School", logo: "/images/clients/Goizueta%20no%20BG.png" },
+  { name: "Hatchery", logo: "/images/clients/Hatchery%20no%20BG.png", invertOnDark: true },
+  { name: "Goizueta Business School", logo: "/images/clients/Goizueta%20no%20BG.png", invertOnDark: true },
   { name: "Tacos Barios", logo: "/images/clients/Tacos%20Barios-nobg.png" },
-] as const;
+];
 
 function LogoSlide({
   name,
   logo,
   isDark,
+  invertOnDark = false,
 }: {
   name: string;
   logo: string;
   isDark: boolean;
+  invertOnDark?: boolean;
 }) {
   return (
     <div
@@ -31,9 +33,8 @@ function LogoSlide({
         "group relative flex h-[72px] w-[200px] shrink-0 items-center justify-center md:h-[96px] md:w-[260px]",
         "transition-[filter,opacity,transform] duration-300 ease-out",
         "hover:scale-[1.03]",
-        /* Idle: muted; hover: full color — same idea in light & dark (no invert: it hides many PNGs in dark mode). */
         isDark
-          ? "opacity-[0.55] grayscale-[0.35] hover:opacity-100 hover:grayscale-0 hover:brightness-110"
+          ? `opacity-[0.55] grayscale-[0.35] hover:opacity-100 hover:grayscale-0 hover:brightness-110${invertOnDark ? " invert" : ""}`
           : "opacity-[0.5] grayscale hover:opacity-100 hover:grayscale-0",
       ].join(" ")}
     >
@@ -65,6 +66,7 @@ export default function PartnerLogos() {
             name={client.name}
             logo={client.logo}
             isDark={isDark}
+            invertOnDark={client.invertOnDark}
           />
         ))}
       </InfiniteMarquee>

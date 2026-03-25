@@ -9,12 +9,28 @@ import { MapPin } from "lucide-react";
 const footerLinks = {
   Product: [
     { label: "Overview", href: "/product" },
+    { label: "How It Works", href: "/product#how-it-works" },
+    { label: "Key Capabilities", href: "/product#capabilities" },
     { label: "Pricing", href: "/pricing" },
   ],
+  About: [
+    { label: "Our Story", href: "/about" },
+    { label: "The Team", href: "/about#team" },
+    { label: "Scale & Expansion", href: "/about#scale" },
+  ],
+  Impact: [
+    { label: "Our Mission", href: "/mission" },
+    { label: "Operating Principles", href: "/mission#principles" },
+    { label: "Research", href: "/mission#research" },
+  ],
+  Pricing: [
+    { label: "Plans", href: "/pricing" },
+    { label: "Order Beta Access", href: "/pricing#order" },
+    { label: "FAQ", href: "/pricing#faq" },
+  ],
   Company: [
-    { label: "About Us", href: "/about" },
-    { label: "Impact", href: "/mission" },
     { label: "Contact", href: "/contact" },
+    { label: "Legal Rights", href: "/legal" },
   ],
 };
 
@@ -48,38 +64,31 @@ export default function Footer() {
     <footer className="relative border-t bg-midnight border-white/6 text-white">
       <div className="w-full mx-auto px-6 sm:px-10 lg:px-12 pt-16 pb-12">
 
-        {/* Operating Locations */}
-        <div className="flex flex-wrap gap-x-8 gap-y-3 mb-12 pb-10 border-b border-white/6">
-          {locations.map((loc) => (
-            <div key={loc.city} className="flex items-center gap-2">
-              <MapPin className="w-3.5 h-3.5 text-sage shrink-0" />
-              <span className="text-sm text-white/60">
-                {loc.city}, {loc.state}
-                {loc.hq && <span className="ml-1.5 text-xs font-semibold text-sage bg-sage/10 px-1.5 py-0.5 rounded">HQ</span>}
-              </span>
-            </div>
-          ))}
-        </div>
-
         <div className="flex flex-col md:flex-row justify-between gap-12 mb-[clamp(48px,5vw,64px)]">
           {/* Brand */}
-          <div className="max-w-md">
+          <motion.div
+            className="max-w-xs"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
+          >
             <Link href="/" className="flex items-center mb-8">
               <Image
-                src="/images/Logos/Brand Identity/Logos/Logo_name_dark_nobg.png"
+                src="/images/Logos/Brand Identity/Logos/Logo_name_white_nobg.png"
                 alt="Veratori Logo"
                 width={200}
                 height={50}
-                className="h-10 sm:h-12 w-auto object-contain invert"
+                className="h-10 sm:h-12 w-auto object-contain"
               />
             </Link>
-            <p className="text-[clamp(16px,1.1vw,18px)] leading-relaxed text-white/60 mb-6">
+            <p className="text-[clamp(14px,1vw,16px)] leading-relaxed text-white/60 mb-6">
               Veratori automates inventory management for food service operators using on-device computer vision.
             </p>
-            <p className="mt-4 text-base font-medium text-white/50">
+            <p className="text-base font-medium text-white/50">
               <a href="mailto:veratori@veratori.com" className="hover:text-white transition-colors">veratori@veratori.com</a>
             </p>
-            <div className="flex gap-4 mt-8">
+            <div className="flex gap-4 mt-6 mb-6">
               {socialIcons.map((s) => (
                 <motion.a
                   key={s.label}
@@ -95,17 +104,35 @@ export default function Footer() {
                 </motion.a>
               ))}
             </div>
-          </div>
+            {/* Locations below social icons */}
+            <div className="flex flex-col gap-2">
+              {locations.map((loc) => (
+                <div key={loc.city} className="flex items-center gap-2">
+                  <MapPin className="w-3.5 h-3.5 text-sage shrink-0" />
+                  <span className="text-sm text-white/50">
+                    {loc.city}, {loc.state}
+                    {loc.hq && <span className="ml-1.5 text-xs font-semibold text-sage bg-sage/10 px-1.5 py-0.5 rounded">HQ</span>}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </motion.div>
 
           {/* Link columns */}
-          <div className="flex gap-20 sm:gap-32 md:mr-10">
+          <motion.div
+            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-10 gap-y-10 md:mr-4"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+          >
             {Object.entries(footerLinks).map(([heading, links]) => (
               <div key={heading}>
-                <h4 className="font-bold text-[clamp(16px,1.1vw,18px)] mb-8 text-white">{heading}</h4>
-                <ul className="space-y-5">
+                <h4 className="font-bold text-[clamp(14px,1vw,16px)] mb-6 text-white">{heading}</h4>
+                <ul className="space-y-4">
                   {links.map((link) => (
                     <li key={link.label}>
-                      <Link href={link.href} className="text-[clamp(15px,1vw,17px)] font-medium transition-colors text-white/50 hover:text-white">
+                      <Link href={link.href} className="text-[clamp(13px,0.9vw,15px)] font-medium transition-colors text-white/50 hover:text-white">
                         {link.label}
                       </Link>
                     </li>
@@ -113,14 +140,20 @@ export default function Footer() {
                 </ul>
               </div>
             ))}
-          </div>
+          </motion.div>
         </div>
 
-        <div className="border-t pt-8 border-white/[0.06]">
+        <motion.div
+          className="border-t pt-8 border-white/[0.06]"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, margin: "-20px" }}
+          transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
+        >
           <div className="flex justify-center sm:justify-start items-center">
             <p className="text-[clamp(12px,0.9vw,14px)] text-white/40">&copy; {new Date().getFullYear()} Veratori Inc. All rights reserved.</p>
           </div>
-        </div>
+        </motion.div>
       </div>
     </footer>
   );

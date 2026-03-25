@@ -67,6 +67,10 @@ export default function OrderForm() {
           <span className={`text-base font-medium ${isDark ? "text-white/60" : "text-black/60"}`}>Monthly Total</span>
           <span className="text-4xl font-black tracking-tight">${total}</span>
         </div>
+        <div className={`flex items-center justify-between px-2 pt-1 ${isDark ? "text-white/35" : "text-black/35"}`}>
+          <span className="text-sm">+ One-time installation fee</span>
+          <span className="text-sm font-semibold">Contact us</span>
+        </div>
         <div className={`h-px w-full ${isDark ? "bg-white/10" : "bg-black/10"}`} />
       </div>
 
@@ -99,7 +103,7 @@ export default function OrderForm() {
           onClick={() => handleCheckout("phantom")}
           className="w-full flex items-center justify-between px-6 py-4 bg-[#AB9FF2] hover:bg-[#978AE8] text-white rounded-xl font-semibold transition-colors shadow-sm cursor-pointer"
         >
-          <span className="flex items-center gap-3"><Wallet className="w-5 h-5" /> Phantom Wallet (Solana)</span>
+          <span className="flex items-center gap-3"><Wallet className="w-5 h-5" /> Phantom Wallet (Bitcoin)</span>
           <ArrowRight className="w-4 h-4 opacity-50" />
         </button>
       </div>

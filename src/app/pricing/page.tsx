@@ -9,24 +9,20 @@ import OrderForm from "@/components/pricing/OrderForm";
 
 const faqs = [
   {
-    q: "How does performance-based pricing work?",
-    a: "We calculate the measurable value Veratori creates for your business each month — waste reduction, inventory accuracy gains, and labor hours saved. You pay 20–40% of that number. If we don't deliver value, you don't pay.",
-  },
-  {
-    q: "What does the average location pay per month?",
-    a: "Most locations see an average cost of approximately $1,500 per month, depending on the scale of operations and measured savings. We establish a transparent baseline before billing begins.",
-  },
-  {
     q: "Is there an upfront cost?",
-    a: "Yes — a one-time hardware and installation fee covers the sensor units, ceiling mount, and system integration. Your first 30 days of service are free so you can verify the value before your first billing cycle.",
+    a: "Yes — a one-time hardware and installation fee covers the sensor units, ceiling mount, and system integration. Contact us for an installation quote. Your first 30 days of service are free so you can verify the value before your first billing cycle.",
   },
   {
-    q: "How do you calculate measurable savings?",
-    a: "We use a transparent methodology that compares a pre-installation baseline with Veratori-optimized metrics: cost of food waste prevented, labor hours recovered from manual counting, and reduced carrying costs.",
+    q: "What is included in the $359/month per unit?",
+    a: "Each sensor unit subscription includes continuous inventory monitoring, the Veratori dashboard, daily manager digests, anomaly alerts, and ongoing software updates. Hardware support is included for the duration of your subscription.",
+  },
+  {
+    q: "How many sensor units do I need?",
+    a: "Typically one unit per walk-in cooler or storage room. Most single-location restaurants deploy 1–3 units depending on how many separate storage areas they operate.",
   },
   {
     q: "Can I cancel at any time?",
-    a: "Yes. There are no long-term contracts. If Veratori isn't delivering measurable value, you can cancel your engagement at the end of any billing period.",
+    a: "Yes. There are no long-term contracts. You can cancel your subscription at the end of any billing period.",
   },
 ];
 
@@ -68,11 +64,11 @@ export default function PricingPage() {
           >
             <span className="text-sage font-semibold tracking-widest uppercase text-xs mb-4 block">Pricing</span>
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-none mb-6">
-              You pay for what<br />
-              <span className="text-sage">we actually save you</span>
+              Simple pricing.<br />
+              <span className="text-sage">Per unit, per month.</span>
             </h1>
             <p className={`text-lg max-w-2xl leading-relaxed ${isDark ? "text-white/55" : "text-black/55"}`}>
-              No flat subscription. No per-seat fees. We calculate the value Veratori creates for your business each month, and charge a percentage of that number.
+              $359 per sensor unit, per month. A one-time installation fee covers hardware, ceiling mount, and system setup. Your first 30 days are free.
             </p>
           </motion.div>
         </div>

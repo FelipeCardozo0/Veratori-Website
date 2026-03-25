@@ -2,8 +2,7 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import Link from "next/link";
-import { ArrowRight, Eye, AlarmClock, BellRing } from "lucide-react";
+import { Eye, AlarmClock, BellRing } from "lucide-react";
 import { useTheme } from "@/components/ui/ThemeProvider";
 import SectionHeading from "@/components/ui/SectionHeading";
 
@@ -12,19 +11,16 @@ const capabilities = [
     title: "Automatic Stock Tracking",
     desc: "YOLO-based object detection runs at 15–30 FPS on an NVIDIA Jetson edge device, identifying and counting items continuously without any manual input from staff.",
     Icon: Eye,
-    href: "/product",
   },
   {
     title: "Manager Digest, Every Morning",
     desc: "A plain-English summary lands in your inbox before service begins — quantities on hand, items running low, and anything that expired overnight.",
     Icon: AlarmClock,
-    href: "/product",
   },
   {
     title: "Anomaly Alerts",
     desc: "If a walk-in door is left open, an item disappears unexpectedly, or stock drops below a configured threshold, your team gets notified before it becomes a problem.",
     Icon: BellRing,
-    href: "/product",
   },
 ];
 
@@ -49,20 +45,15 @@ export default function KeyCapabilities() {
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.45, delay: i * 0.1 }}
           >
-            <Link href={c.href} className="block group h-full">
-              <div className={`relative h-full overflow-hidden rounded-xl border p-8 transition-all duration-200 ${isDark ? "bg-white/5 border-white/10 hover:bg-white/8" : "bg-mist border-black/5 shadow-sm hover:shadow-md"}`}>
-                <div className={`w-10 h-10 rounded-lg flex items-center justify-center mb-6 ${isDark ? "bg-sage/15" : "bg-sage/10"}`}>
-                  <c.Icon className="w-5 h-5 text-sage" strokeWidth={1.8} />
-                </div>
-                <h3 className="text-xl font-bold mb-3">{c.title}</h3>
-                <p className={`text-base leading-relaxed mb-7 ${isDark ? "text-white/50" : "text-black/50"}`}>
-                  {c.desc}
-                </p>
-                <span className={`inline-flex items-center gap-2 text-sm font-semibold text-sage group-hover:gap-3 transition-all`}>
-                  Learn more <ArrowRight className="w-4 h-4" />
-                </span>
+            <div className={`relative h-full overflow-hidden rounded-xl border p-8 ${isDark ? "bg-white/5 border-white/10" : "bg-mist border-black/5 shadow-sm"}`}>
+              <div className={`w-10 h-10 rounded-lg flex items-center justify-center mb-6 ${isDark ? "bg-sage/15" : "bg-sage/10"}`}>
+                <c.Icon className="w-5 h-5 text-sage" strokeWidth={1.8} />
               </div>
-            </Link>
+              <h3 className="text-xl font-bold mb-3">{c.title}</h3>
+              <p className={`text-base leading-relaxed ${isDark ? "text-white/50" : "text-black/50"}`}>
+                {c.desc}
+              </p>
+            </div>
           </motion.div>
         ))}
       </div>
