@@ -152,18 +152,18 @@ export default function ResourcesPage() {
                   isDark ? "bg-white/[0.03] border-white/[0.08]" : "bg-white border-black/[0.07] shadow-sm"
                 }`}
               >
-                <div className="relative h-40 w-full">
+                <div className="relative h-40 w-full bg-gray-100">
                   <ImagePlaceholder
                     text={paper.image ? "Whitepaper cover or research visual" : "Document or research image"}
-                    className="h-40 w-full border-0 border-b rounded-0"
+                    className="h-40 w-full border-0 rounded-0 absolute inset-0"
                   />
-                  <div className="absolute top-4 left-4">
+                  <div className="absolute top-4 left-4 z-10">
                     <Image
                       src="/images/Logos/Brand Identity/Logos/Logo_symbol_dark-nobg.png"
                       alt="Veratori"
-                      width={40}
-                      height={40}
-                      className="opacity-80"
+                      width={48}
+                      height={48}
+                      className="drop-shadow-sm"
                     />
                   </div>
                 </div>
