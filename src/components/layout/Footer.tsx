@@ -93,15 +93,27 @@ export default function Footer() {
 
   return (
     <footer className="relative border-t bg-midnight border-white/6 text-white">
-      <div className="w-full mx-auto px-6 sm:px-10 lg:px-12 pt-16 pb-8">
 
-        {/* ── Row 1: Brand + Newsletter ── */}
+      {/* ── Row 1: Brand + Newsletter — NYC background ── */}
+      <div className="relative overflow-hidden border-b border-white/[0.06]">
+        {/* Background image */}
+        <Image
+          src="/images/assets/nyc-skyline.jpg"
+          alt=""
+          fill
+          className="object-cover object-center"
+          aria-hidden="true"
+        />
+        {/* Dark blue overlay */}
+        <div className="absolute inset-0 bg-[#0B1526]/80" />
+
+        <div className="relative z-10 w-full mx-auto px-6 sm:px-10 lg:px-12 pt-16 pb-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-40px" }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="flex flex-col lg:flex-row justify-between gap-10 pb-12 border-b border-white/[0.06]"
+          className="flex flex-col lg:flex-row justify-between gap-10"
         >
           {/* Brand */}
           <div className="max-w-xs">
@@ -173,7 +185,11 @@ export default function Footer() {
             )}
           </div>
         </motion.div>
+        </div>
+      </div>
 
+      {/* ── Rows 2–4: plain dark background ── */}
+      <div className="w-full mx-auto px-6 sm:px-10 lg:px-12 pb-8">
         {/* ── Row 2: Link Columns ── */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
