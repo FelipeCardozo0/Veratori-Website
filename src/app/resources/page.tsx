@@ -29,6 +29,7 @@ const whitepapers = [
     href: "/documents/lidar-paper.pdf",
     tag: "Research Paper",
     external: true,
+    image: "/images/assets/whitepaper-lidar.png",
   },
   {
     title: "ROI Guide: Calculating Your Food Waste Savings",
@@ -38,6 +39,7 @@ const whitepapers = [
     href: "/mission#roi",
     tag: "Operator Guide",
     external: false,
+    image: "/images/assets/roi-guide.png",
   },
 ];
 
@@ -145,28 +147,34 @@ export default function ResourcesPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
-                className={`p-8 rounded-2xl border flex flex-col gap-4 ${
+                className={`rounded-2xl border overflow-hidden flex flex-col gap-0 ${
                   isDark ? "bg-white/[0.03] border-white/[0.08]" : "bg-white border-black/[0.07] shadow-sm"
                 }`}
               >
-                <span className="inline-block px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-sage/10 text-sage w-fit">
-                  {paper.tag}
-                </span>
-                <div>
-                  <h3 className="text-lg font-bold mb-1">{paper.title}</h3>
-                  <p className={`text-xs mb-3 ${isDark ? "text-white/35" : "text-black/35"}`}>{paper.subtitle}</p>
-                  <p className={`text-sm leading-relaxed ${isDark ? "text-white/50" : "text-black/50"}`}>{paper.description}</p>
+                <ImagePlaceholder
+                  text={paper.image ? "Whitepaper cover or research visual" : "Document or research image"}
+                  className="h-40 w-full border-0 border-b rounded-0"
+                />
+                <div className="p-8 flex flex-col gap-4">
+                  <span className="inline-block px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-sage/10 text-sage w-fit">
+                    {paper.tag}
+                  </span>
+                  <div>
+                    <h3 className="text-lg font-bold mb-1">{paper.title}</h3>
+                    <p className={`text-xs mb-3 ${isDark ? "text-white/35" : "text-black/35"}`}>{paper.subtitle}</p>
+                    <p className={`text-sm leading-relaxed ${isDark ? "text-white/50" : "text-black/50"}`}>{paper.description}</p>
+                  </div>
+                  <Link
+                    href={paper.href}
+                    target={paper.external ? "_blank" : undefined}
+                    rel={paper.external ? "noopener noreferrer" : undefined}
+                    className="inline-flex items-center gap-2 font-bold text-sage text-sm hover:gap-3 transition-all mt-auto"
+                  >
+                    {paper.external ? <Download className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
+                    {paper.external ? "Download PDF" : "Open in Site"}
+                    {paper.external && <ExternalLink className="w-3.5 h-3.5" />}
+                  </Link>
                 </div>
-                <Link
-                  href={paper.href}
-                  target={paper.external ? "_blank" : undefined}
-                  rel={paper.external ? "noopener noreferrer" : undefined}
-                  className="inline-flex items-center gap-2 font-bold text-sage text-sm hover:gap-3 transition-all mt-auto"
-                >
-                  {paper.external ? <Download className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
-                  {paper.external ? "Download PDF" : "Open in Site"}
-                  {paper.external && <ExternalLink className="w-3.5 h-3.5" />}
-                </Link>
               </motion.div>
             ))}
           </div>
